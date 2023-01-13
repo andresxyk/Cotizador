@@ -1,5 +1,7 @@
 package com.gda.cotizador.dao.implement;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
@@ -9,6 +11,13 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
+import com.gda.cotizador.dao.mapper.ConvenioMapper;
+import com.gda.cotizador.dao.mapper.ExamenConfigMapper;
+import com.gda.cotizador.dao.mapper.SucursalMapper;
+import com.gda.cotizador.dto.ExamenConfigDto;
+import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
+import com.gda.cotizador.dto.requestConvenio.FiltroDto;
+import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 
 @Repository("consultasDaoImpl")
 public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
@@ -25,6 +34,87 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		setDataSource(dataSource);
 	}
 	
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<ConvenioDto> getListConvenioDto(FiltroDto filtro){
+		List<ConvenioDto> list;		
+		logger.info("ejecutando getListConvenioDto");
+		logger.info(filtro.toString());
+		String complemento = "";
+		if(filtro.getCconvenio() != null && filtro.getCconvenio()>-1) {
+			complemento = "cc.cconvenio = "+filtro.getCconvenio()+"\r\n";
+		}else {
+			complemento = "cc.sconvenio like '%"+filtro.getSconvenio()+"%'\r\n";
+		}
+		String query = "select cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio\r\n"
+				+ "from cotizador.c_convenio cc\r\n"
+				+ "inner join cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n"
+				+ "where "+complemento ;
+		list = this.getJdbcTemplate().query(query, new Object[] {}, new ConvenioMapper());		
+		return list;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroDto filtro){
+		List<ExamenConfigDto> list;
+		logger.info("ejecutando getListSearchExamenDto");	
+		logger.info(filtro.toString());
+		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
+				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
+				+ "eec.bdomingo, eec.utiemporespuestadiasprint, elcd.mpreciosiniva	\r\n"
+				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
+				+ "inner join cotizador.c_examen ce on elcd.cexamen = ce.cexamen\r\n"
+				+ "inner join cotizador.e_convenio ec on ec.clistacorporativa = elcd.clistacorporativa\r\n"
+				+ "inner join cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen\r\n"
+				+ "where ce.sexamen like '%"+filtro.getSexamen()+"%'\r\n"
+				+ "and ec.cconvenio = ? " ;
+		list = this.getJdbcTemplate().query(query, new Object[] {filtro.getCconvenio()}, new ExamenConfigMapper());		
+		return list;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<ExamenConfigDto> getListSearchExamenDto(Integer cexamen, Integer cconvenio){
+		List<ExamenConfigDto> list;
+		logger.info("ejecutando getListSearchExamenDto");	
+		logger.info(cexamen);
+		logger.info(cconvenio);
+		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
+				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
+				+ "eec.bdomingo, eec.utiemporespuestadiasprint , elcd.mpreciosiniva	\r\n"
+				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
+				+ "inner join cotizador.c_examen ce on elcd.cexamen = ce.cexamen\r\n"
+				+ "inner join cotizador.e_convenio ec on ec.clistacorporativa = elcd.clistacorporativa\r\n"
+				+ "inner join cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen\r\n"
+				+ "where ce.cexamen = ?\r\n"
+				+ "and ec.cconvenio = ? " ;
+		list = this.getJdbcTemplate().query(query, new Object[] {cexamen,cconvenio}, new ExamenConfigMapper());		
+		return list;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<SucursalDto> getListSearchSucursalDto(com.gda.cotizador.dto.requestSucursal.FiltroDto filtro, Integer cmarca){
+		List<SucursalDto> list;
+		logger.info("ejecutando getListSearchSucursalDto");	
+		logger.info(filtro.toString());
+		String complemento = "";
+		if(filtro.getCsucursal()!="") {
+			complemento += "and csucursal in ("+filtro.getCsucursal()+") \r\n";
+		}
+		if(filtro.getSsucursal()!="") {
+			complemento += "and snombresucursal like '%"+filtro.getSsucursal()+"%' \r\n";
+		}
+		
+		String query = "select csucursal, ssucursal, snombresucursal \r\n"
+				+ "from cotizador.c_sucursal\r\n"
+				+ "where cmarca = ?\r\n"
+				+ complemento;
+		list = this.getJdbcTemplate().query(query, new Object[] {cmarca}, new SucursalMapper());		
+		return list;
+	}
 	
 	
 }
