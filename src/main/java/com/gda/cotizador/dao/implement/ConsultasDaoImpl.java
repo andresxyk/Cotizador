@@ -14,7 +14,9 @@ import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dao.mapper.ConvenioMapper;
 import com.gda.cotizador.dao.mapper.ExamenConfigMapper;
 import com.gda.cotizador.dao.mapper.SucursalMapper;
+import com.gda.cotizador.dao.mapper.db.EConvenioDetalleMapper;
 import com.gda.cotizador.dto.ExamenConfigDto;
+import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
@@ -115,6 +117,20 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		list = this.getJdbcTemplate().query(query, new Object[] {cmarca}, new SucursalMapper());		
 		return list;
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<EConvenioDetalleDto> getListEConvenioDetalle(Integer cconvenio, Integer cexamen){
+		List<EConvenioDetalleDto> list;
+		logger.info("ejecutando getListEConvenioDetalle");
+		String query = "select * from cotizador.e_convenio_detalle \r\n"
+				+ "where cconvenio = ?\r\n"
+				+ "and cexamen = ?" ;
+		list = this.getJdbcTemplate().query(query, new Object[] {cconvenio,cexamen}, new EConvenioDetalleMapper());		
+		return list;
+	}
+	
+	
 	
 	
 }

@@ -21,7 +21,7 @@ public class EConvenioDetalleMapper implements RowMapper<EConvenioDetalleDto>{
 		dto.setMpreciofacturarconiva(rs.getBigDecimal("mpreciofacturarconiva"));
 		dto.setCestadoregistro(rs.getInt("cestadoregistro"));
 		dto.setClistacorporativa(rs.getInt("clistacorporativa"));
-		dto.setUseridchange(rs.getInt("useridchange"));
+		dto.setUseridchange(rs.getInt("user_id_change"));
 		
 		return dto;
 	}
