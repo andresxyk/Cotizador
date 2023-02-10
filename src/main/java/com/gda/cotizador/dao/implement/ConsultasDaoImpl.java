@@ -63,6 +63,12 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		List<ExamenConfigDto> list;
 		logger.info("ejecutando getListSearchExamenDto");	
 		logger.info(filtro.toString());
+		String complemento = "";
+		if(filtro.getSexamen()!=null) {
+			if(filtro.getSexamen().length()>0) {
+				complemento = "and ce.sexamen like '%"+filtro.getSexamen()+"%' ";
+			}
+		}
 		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
 				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
 				+ "eec.bdomingo, eec.utiemporespuestadiasprint, elcd.mpreciosiniva	\r\n"
@@ -70,8 +76,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ "inner join cotizador.c_examen ce on elcd.cexamen = ce.cexamen\r\n"
 				+ "inner join cotizador.e_convenio ec on ec.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen\r\n"
-				+ "where ce.sexamen like '%"+filtro.getSexamen()+"%'\r\n"
-				+ "and ec.cconvenio = ? " ;
+				+ "where ec.cconvenio = ? \r\n"
+				+ complemento;
 		list = this.getJdbcTemplate().query(query, new Object[] {filtro.getCconvenio()}, new ExamenConfigMapper());		
 		return list;
 	}
