@@ -25,6 +25,8 @@ public class ExamenConfigMapper implements RowMapper<ExamenConfigDto>{
 		dto.setBdomingo(rs.getBoolean("bdomingo"));
 		dto.setUtiemporespuestadiasprint(rs.getInt("utiemporespuestadiasprint"));
 		dto.setMpreciosiniva(rs.getBigDecimal("mpreciosiniva"));
+		dto.setCdepartamento(rs.getInt("cdepartamento"));
+		dto.setSdepartamento(rs.getString("sdepartamento"));
 		return dto;
 	}
 

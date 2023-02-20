@@ -26,5 +26,7 @@ public class ExamenConfigDto {
 	private Boolean bdomingo;
 	private Integer utiemporespuestadiasprint;
 	private BigDecimal mpreciosiniva;
+	private Integer cdepartamento;
+	private String sdepartamento;
 	
 }

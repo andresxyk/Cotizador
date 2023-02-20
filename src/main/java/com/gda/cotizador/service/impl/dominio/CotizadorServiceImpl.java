@@ -62,6 +62,8 @@ public class CotizadorServiceImpl implements Cotizador{
 				examenDto.setPrecio(examenConfigDto.getMprecio());
 				examenDto.setIndicacionespaciente(examenConfigDto.getScondicionpreanalitica());
 				examenDto.setFechaentrega(generalUtil.calcularFechaPromesa(examenConfigDto));
+				examenDto.setCdepartamento(examenConfigDto.getCdepartamento());
+				examenDto.setSdepartamento(examenConfigDto.getSdepartamento());
 				examenes.add(examenDto);
 			}
 			request.setExamenes(examenes);			

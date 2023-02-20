@@ -71,11 +71,12 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		}
 		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
 				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
-				+ "eec.bdomingo, eec.utiemporespuestadiasprint, elcd.mpreciosiniva	\r\n"
+				+ "eec.bdomingo, eec.utiemporespuestadiasprint, elcd.mpreciosiniva, ce.cdepartamento, cd.sdepartamento	\r\n"
 				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
 				+ "inner join cotizador.c_examen ce on elcd.cexamen = ce.cexamen\r\n"
 				+ "inner join cotizador.e_convenio ec on ec.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen\r\n"
+				+ "inner join cotizador.c_departamento cd on ce.cdepartamento = cd.cdepartamento\r\n"
 				+ "where ec.cconvenio = ? \r\n"
 				+ complemento;
 		list = this.getJdbcTemplate().query(query, new Object[] {filtro.getCconvenio()}, new ExamenConfigMapper());		
@@ -91,11 +92,12 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		logger.info(cconvenio);
 		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
 				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
-				+ "eec.bdomingo, eec.utiemporespuestadiasprint , elcd.mpreciosiniva	\r\n"
+				+ "eec.bdomingo, eec.utiemporespuestadiasprint , elcd.mpreciosiniva, ce.cdepartamento, cd.sdepartamento	\r\n"
 				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
 				+ "inner join cotizador.c_examen ce on elcd.cexamen = ce.cexamen\r\n"
 				+ "inner join cotizador.e_convenio ec on ec.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen\r\n"
+				+ "inner join cotizador.c_departamento cd on ce.cdepartamento = cd.cdepartamento\r\n"
 				+ "where ce.cexamen = ?\r\n"
 				+ "and ec.cconvenio = ? " ;
 		list = this.getJdbcTemplate().query(query, new Object[] {cexamen,cconvenio}, new ExamenConfigMapper());		

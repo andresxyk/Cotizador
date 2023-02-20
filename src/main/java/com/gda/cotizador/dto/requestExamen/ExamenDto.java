@@ -16,5 +16,7 @@ public class ExamenDto {
 	private BigDecimal precio;
 	private String indicacionespaciente;
 	private String fechaentrega;
+	private Integer cdepartamento;
+	private String sdepartamento;
 		
 }
