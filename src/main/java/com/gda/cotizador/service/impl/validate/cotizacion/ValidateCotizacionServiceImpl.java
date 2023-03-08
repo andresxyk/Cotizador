@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.gda.cotizador.dto.cotizador.RequestCotizacionDto;
+import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
 import com.gda.cotizador.service.validate.cotizacion.ValidateCotizacion;
 import com.gda.cotizador.utils.Validacion;

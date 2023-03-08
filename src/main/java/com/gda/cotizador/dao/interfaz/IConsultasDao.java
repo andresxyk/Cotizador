@@ -1,8 +1,12 @@
 package com.gda.cotizador.dao.interfaz;
-
 import java.util.List;
 
+
+import com.gda.cotizador.dto.requestExamen.ExamenDto;
+import com.gda.cotizador.dto.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
+import com.gda.cotizador.dto.PerfilDto;
+import com.gda.cotizador.dto.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroDto;
@@ -21,5 +25,18 @@ public interface IConsultasDao {
 	List<ExamenConfigDto> getListSearchExamenDto(Integer cexamen, Integer cconvenio);
 
 	List<EConvenioDetalleDto> getListEConvenioDetalle(Integer cconvenio, Integer cexamen);
-
+	
+	List<ExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio);
+	
+	Integer insertTOrdenSucursalCotizacion(SucursalDto dto)throws Exception;
+	
+	String getSSucursal(Integer csucursal);
+	
+	Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception;
+	
+	Integer getCmarcaOfConvenio(Integer cconvenio); 
+	
+	Integer insertTOrdenExamenSucursalCotizacion(TOrdenExamenSucursalCotizacionDto dto)throws Exception;
+	
+	List<PerfilDto> getListExamenesPerfil(Integer cperfil, Integer cconvenio);
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gda.cotizador.dto.cotizador.RequestCotizacionDto;
+import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.db.CConvenioDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
@@ -132,7 +132,6 @@ public class CotizadorController {
 		request.setGDA_menssage(msg);
 		try {
 			request = cotizador.procesarRequestCotizacion(request);
-			request.getBase64();
 			request.getGDA_menssage().setMenssage("success");
 			request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
 			request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());

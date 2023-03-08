@@ -1,4 +1,4 @@
-package com.gda.cotizador.dto.cotizador;
+package com.gda.cotizador.dto.cotizadorRequest;
 
 import java.math.BigDecimal;
 
