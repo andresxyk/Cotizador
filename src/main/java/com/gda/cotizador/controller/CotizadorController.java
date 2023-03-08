@@ -132,6 +132,7 @@ public class CotizadorController {
 		request.setGDA_menssage(msg);
 		try {
 			request = cotizador.procesarRequestCotizacion(request);
+			request.getBase64();
 			request.getGDA_menssage().setMenssage("success");
 			request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
 			request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
