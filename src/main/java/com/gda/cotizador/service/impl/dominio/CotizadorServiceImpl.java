@@ -141,11 +141,11 @@ public class CotizadorServiceImpl implements Cotizador {
 				}
 				return request;
 			}
-			// TOrdenSucursalCotizacionDto tosc = toolDominio.saveTOrdenSucursalCotizacion(cotizacionDto, listAcceso.get(0));
-			// 		cotizacionDto = toolDominio.saveTordenExamenSucursalCotizacion(cotizacionDto, tosc);
-			// 		cotizacionDto.setId(tosc.getKordensucursalcotizacion());
-			// 		cotizacionDto.setStatus("completed");
-			// 		cotizacionDto.setBase64(base64ejemplo);
+			TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+			request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+			request.setId(tosc.getKordensucursalcotizacion());
+			request.setStatus("completed");
+			request.setBase64(base64.base64);
 			request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
 					"La transacción fue exitosa."));
 			//logger.info(gson.toJson(request));
