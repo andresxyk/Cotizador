@@ -40,7 +40,7 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 	private Gson gson = new Gson();
 		
 	@Autowired
-	private RequestCotizacionDto cotizacion;
+	private Cotizador cotizador;
 	
 	@Autowired
 	private Environment env;
@@ -54,11 +54,11 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 			+ "para generar la Cotizacion.")
 	@ApiResponses({ @ApiResponse(code = HttpServletResponse.SC_CREATED, message = "CREATED",response = Cotizador.class),
 		@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "BAD_REQUEST",response = Cotizador.class)})
-	public ResponseEntity<?> serviceRequest(@ApiParam(value = "Objeto ServiceRequest", required = true) @RequestBody RequestCotizacionDto cotizacion) throws Exception {
+	public ResponseEntity<?> serviceRequest(@ApiParam(value = "Objeto ServiceRequest", required = true) @RequestBody RequestCotizacionDto cotizacionDto) throws Exception {
 		logger.info("serviceRequest");
 		try{
-			if(cotizacion.getStatus().equals("active")){
-				//String response = gson.toJson(cotizacion.procesarNewCotizacion("cotizacion"));
+			if(cotizacionDto.getStatus().equals("active")){
+				//String response = gson.toJson(cotizador.procesarNewCotizacion("cotizacion"));
 				
 				return new ResponseEntity<String>(
 						//response,
@@ -67,31 +67,31 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 				
 				GDAMenssageDto gdaMessage = new GDAMenssageDto();
 				gdaMessage.setAcuse(generalUtil.getAcuseUUID());
-				cotizacion.setGDA_menssage(gdaMessage);
+				cotizacionDto.setGDA_menssage(gdaMessage);
 				//cotizacion = cotizacion.procesarRequestConvenio();
-				cotizacion.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-				cotizacion.getGDA_menssage().setMenssage("error");
-				cotizacion.getGDA_menssage().setDescripcion("Status Incorrecto, Status disponibles: active [crear nueva cotizacion]");
-				cotizacion.getGDA_menssage().setAcuse(generalUtil.getAcuseUUID());
-				cotizacion.setGDA_menssage(gdaMessage);
-				String response = gson.toJson(cotizacion);
+				cotizacionDto.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+				cotizacionDto.getGDA_menssage().setMenssage("error");
+				cotizacionDto.getGDA_menssage().setDescripcion("Status Incorrecto, Status disponibles: active [crear nueva cotizacion]");
+				cotizacionDto.getGDA_menssage().setAcuse(generalUtil.getAcuseUUID());
+				cotizacionDto.setGDA_menssage(gdaMessage);
+				String response = gson.toJson(cotizacionDto);
 				
 				return new ResponseEntity<String>(
-						gson.toJson(cotizacion), HttpStatus.BAD_REQUEST);
+						gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			logger.error("Error inesperado", e);
-			String request = gson.toJson(cotizacion);
+			String request = gson.toJson(cotizacionDto);
 			GDAMenssageDto gdaMessage = new GDAMenssageDto();
 				gdaMessage.setCodeHttp(HttpStatus.BAD_REQUEST.value());
 				gdaMessage.setMenssage("error");
 				gdaMessage.setDescripcion("error:" + e.getMessage()!=null?e.getMessage():e.getCause().getMessage());
 				gdaMessage.setAcuse(generalUtil.getAcuseUUID());
-				cotizacion.setGDA_menssage(gdaMessage);
-			String response = gson.toJson(cotizacion);
+				cotizacionDto.setGDA_menssage(gdaMessage);
+			String response = gson.toJson(cotizacionDto);
 			
 			return new ResponseEntity<String>(
-					gson.toJson(cotizacion), HttpStatus.BAD_REQUEST);
+					gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 		}
 
 	}
