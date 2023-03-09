@@ -17,7 +17,8 @@ import com.gda.cotizador.dto.cotizasion.CodingDto;
 import com.gda.cotizador.dto.cotizadorRequest.Coding;
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.CotizacionDto;
-
+import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.general.Base64Const;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
@@ -46,6 +47,8 @@ public class CotizadorServiceImpl implements Cotizador {
 	private Environment env;
 	@Autowired
 	private SetsDtosImpl setsDtosImpl;
+	@Autowired
+	private Base64Const base64;
 
 	@Override
 	public RequestConvenioDto procesarRequestConvenio(RequestConvenioDto request) throws Exception {
@@ -125,12 +128,11 @@ public class CotizadorServiceImpl implements Cotizador {
 					}
 				}
 				if (procesarOrden) {
-					// RequestSucursalDto tosc =
-					// toolServiceImpl.saveTOrdenSucursalCotizacion(request, listAcceso.get(0));
-					// request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
-					// request.setId(tosc.getKordensucursalcotizacion());
+					TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+					request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request,tosc);
+					request.setId(tosc.getKordensucursalcotizacion());
 					request.setStatus("completed");
-					request.getBase64();
+					request.setBase64(base64.base64);
 					request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.OK.value(), "success",
 							"La transacción fue exitosa." + request.getGDA_menssage()));
 				} else {
@@ -139,10 +141,11 @@ public class CotizadorServiceImpl implements Cotizador {
 				}
 				return request;
 			}
-			//TOrdenSucursalrequest tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request, listAcceso.get(0));
-			//request = toolDominio.saveTordenExamenSucursalCotizacion(request, tosc);
-			//request.setId(tosc.getKordensucursalcotizacion());
-			request.setStatus("completed");
+			// TOrdenSucursalCotizacionDto tosc = toolDominio.saveTOrdenSucursalCotizacion(cotizacionDto, listAcceso.get(0));
+			// 		cotizacionDto = toolDominio.saveTordenExamenSucursalCotizacion(cotizacionDto, tosc);
+			// 		cotizacionDto.setId(tosc.getKordensucursalcotizacion());
+			// 		cotizacionDto.setStatus("completed");
+			// 		cotizacionDto.setBase64(base64ejemplo);
 			request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
 					"La transacción fue exitosa."));
 			//logger.info(gson.toJson(request));

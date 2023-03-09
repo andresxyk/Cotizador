@@ -142,13 +142,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		list = this.getJdbcTemplate().query(query, new Object[] {cconvenio,cexamen}, new EConvenioDetalleMapper());		
 		return list;
 	}
-	@Override
-	public Integer insertTOrdenSucursalCotizacion(SucursalDto dto)throws Exception{
-		logger.info("entra insertTOrdenSucursalCotizacion");
-		
-		Integer insert = 0;
-		return insert;
-	}
+	
 	@Override
 	public List<ExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio){
 		List<ExamenDto> list ;
@@ -179,6 +173,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		logger.info("getCmarcaOfConvenio ejecutado: " + marca);
 		return marca;
 	}
+	
 	@Override
 	public Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception{
 		logger.info("entra insertTOrdenSucursalCotizacion");

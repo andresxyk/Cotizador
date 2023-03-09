@@ -28,11 +28,10 @@ public interface IConsultasDao {
 	
 	List<ExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio);
 	
-	Integer insertTOrdenSucursalCotizacion(SucursalDto dto)throws Exception;
+	Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception;
 	
 	String getSSucursal(Integer csucursal);
 	
-	Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception;
 	
 	Integer getCmarcaOfConvenio(Integer cconvenio); 
 	
