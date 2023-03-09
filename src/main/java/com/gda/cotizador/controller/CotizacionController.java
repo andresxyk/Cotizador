@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
+import com.gda.cotizador.dto.cotizasion.CotizacionDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.service.dominio.Cotizador;
+import com.gda.cotizador.service.impl.dominio.SetsDtosImpl;
 import com.gda.cotizador.utils.GeneralUtil;
 import com.google.gson.Gson;
 
@@ -44,52 +46,39 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 	
 	@Autowired
 	private Environment env;
-	
+
 	@Autowired
-	private GeneralUtil generalUtil;
+	private SetsDtosImpl setsDtosImpl;
 	
 	
 	@RequestMapping(value = "/service-request-cotizacion", method = { RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "Procesar Service Request Cotizacion", notes = "Método que se encarga de procesar la información del service request cotizacion, "
 			+ "para generar la Cotizacion.")
-	@ApiResponses({ @ApiResponse(code = HttpServletResponse.SC_CREATED, message = "CREATED",response = Cotizador.class),
-		@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "BAD_REQUEST",response = Cotizador.class)})
-	public ResponseEntity<?> serviceRequest(@ApiParam(value = "Objeto ServiceRequest", required = true) @RequestBody RequestCotizacionDto cotizacionDto) throws Exception {
+	@ApiResponses({ @ApiResponse(code = HttpServletResponse.SC_CREATED, message = "CREATED",response = CotizacionDto.class),
+		@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "BAD_REQUEST",response = CotizacionDto.class)})
+	public ResponseEntity<?> serviceRequest(@ApiParam(value = "Objeto ServiceRequest", required = true) @RequestBody CotizacionDto cotizacionDto) throws Exception {
 		logger.info("serviceRequest");
 		try{
 			if(cotizacionDto.getStatus().equals("active")){
-				//String response = gson.toJson(cotizador.procesarNewCotizacion("cotizacion"));
+				String response = gson.toJson(cotizador.procesarNewCotizacion(cotizacionDto));
 				
 				return new ResponseEntity<String>(
-						//response,
+						response,
 						HttpStatus.CREATED);				
 			}else{
-				
-				GDAMenssageDto gdaMessage = new GDAMenssageDto();
-				gdaMessage.setAcuse(generalUtil.getAcuseUUID());
-				cotizacionDto.setGDA_menssage(gdaMessage);
+				// String request = gson.toJson(cotizacionDto);
 				//cotizacion = cotizacion.procesarRequestConvenio();
-				cotizacionDto.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-				cotizacionDto.getGDA_menssage().setMenssage("error");
-				cotizacionDto.getGDA_menssage().setDescripcion("Status Incorrecto, Status disponibles: active [crear nueva cotizacion]");
-				cotizacionDto.getGDA_menssage().setAcuse(generalUtil.getAcuseUUID());
-				cotizacionDto.setGDA_menssage(gdaMessage);
-				String response = gson.toJson(cotizacionDto);
+				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error", "Status Incorrecto, Status disponibles: active [crear nueva cotizacion]"));
+				// String response = gson.toJson(cotizacionDto);
 				
 				return new ResponseEntity<String>(
 						gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			logger.error("Error inesperado", e);
-			String request = gson.toJson(cotizacionDto);
-			GDAMenssageDto gdaMessage = new GDAMenssageDto();
-				gdaMessage.setCodeHttp(HttpStatus.BAD_REQUEST.value());
-				gdaMessage.setMenssage("error");
-				gdaMessage.setDescripcion("error:" + e.getMessage()!=null?e.getMessage():e.getCause().getMessage());
-				gdaMessage.setAcuse(generalUtil.getAcuseUUID());
-				cotizacionDto.setGDA_menssage(gdaMessage);
-			String response = gson.toJson(cotizacionDto);
-			
+			// String request = gson.toJson(cotizacionDto);
+			cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error", "error:" + e.getMessage()!=null?e.getMessage():e.getCause().getMessage()));
+			// String response = gson.toJson(cotizacionDto);
 			return new ResponseEntity<String>(
 					gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 		}

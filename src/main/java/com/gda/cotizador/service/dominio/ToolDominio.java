@@ -1,8 +1,8 @@
 package com.gda.cotizador.service.dominio;
 
 import com.gda.cotizador.dto.AccesoClienteDto;
-import com.gda.cotizador.dto.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
+import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 
 public interface ToolDominio {
 

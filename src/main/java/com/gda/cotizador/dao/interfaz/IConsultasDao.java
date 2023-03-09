@@ -3,10 +3,10 @@ import java.util.List;
 
 
 import com.gda.cotizador.dto.requestExamen.ExamenDto;
-import com.gda.cotizador.dto.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.PerfilDto;
-import com.gda.cotizador.dto.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroDto;
