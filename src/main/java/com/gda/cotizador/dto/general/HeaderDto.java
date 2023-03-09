@@ -16,8 +16,7 @@ public class HeaderDto {
     @NotBlank
 	private String lineanegocio;
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.sss")
-	@NotNull
-    @NotBlank
+	
 	private String dregistro;
 	@NotNull
 	private Integer marca;

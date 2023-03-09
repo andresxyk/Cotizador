@@ -141,9 +141,9 @@ public class CotizadorServiceImpl implements Cotizador {
 				}
 				return request;
 			}
-			TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
-			request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
-			request.setId(tosc.getKordensucursalcotizacion());
+			//TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+			//request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+			//request.setId(tosc.getKordensucursalcotizacion());
 			request.setStatus("completed");
 			request.setBase64(base64.base64);
 			request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
