@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.service.impl.dominio.SetsDtosImpl;
 import com.gda.cotizador.utils.GeneralUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SetsDtos implements SetsDtosImpl{
     
 	@Autowired
