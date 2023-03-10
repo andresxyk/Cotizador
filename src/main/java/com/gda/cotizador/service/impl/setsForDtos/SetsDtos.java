@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.service.impl.dominio.SetsDtosImpl;
 import com.gda.cotizador.utils.GeneralUtil;
@@ -61,5 +62,39 @@ public class SetsDtos implements SetsDtosImpl {
         toesc.setUvolumenexamen(Uvolumenexamen);
 
         return toesc;
+    }
+
+    @Override
+    public TOrdenSucursalCotizacionDto setForTOrdenSucursalCotizacionDto(Integer Kordensucursal,Integer Cmarca,String Ssucursal,Integer Csucursalm,Integer Csucursaldestino,Integer Kpaciente,
+                    Integer Cmedico,String Smedico,BigDecimal Msubtotalm,BigDecimal Mdescuentopromocion,BigDecimal Mdescuentoempresa,BigDecimal Mdescuentomedico,
+                    BigDecimal Mfacturaempresa,BigDecimal Mpagopaciente,BigDecimal Miva,BigDecimal Piva,BigDecimal Mtotal,Integer Userid,Integer Cestadoregistro,
+                    String Sobservacion,Integer Cconvenio,Integer Useridchange,Integer Kordensucursalcotizacion){
+        TOrdenSucursalCotizacionDto ordenCotizacionDto = new TOrdenSucursalCotizacionDto();
+		ordenCotizacionDto.setKordensucursal(Kordensucursal);
+		ordenCotizacionDto.setCmarca(Cmarca);
+		ordenCotizacionDto.setSsucursal(Ssucursal);
+		ordenCotizacionDto.setCsucursal(Csucursalm);
+		ordenCotizacionDto.setCsucursaldestino(Csucursaldestino);
+        ordenCotizacionDto.setKpaciente(Kpaciente);
+		ordenCotizacionDto.setCmedico(Cmedico);
+		ordenCotizacionDto.setSmedico(Smedico);
+		ordenCotizacionDto.setMsubtotal(Msubtotalm);
+		ordenCotizacionDto.setMdescuentopromocion(Mdescuentopromocion);
+		ordenCotizacionDto.setMdescuentoempresa(Mdescuentoempresa);
+		ordenCotizacionDto.setMdescuentomedico(Mdescuentomedico);
+		ordenCotizacionDto.setMfacturaempresa(Mfacturaempresa);
+		ordenCotizacionDto.setMpagopaciente(Mpagopaciente);
+		ordenCotizacionDto.setMiva(Miva);
+		ordenCotizacionDto.setPiva(Piva);
+		ordenCotizacionDto.setMtotal(Mtotal);
+		ordenCotizacionDto.setUserid(Userid);
+		ordenCotizacionDto.setCestadoregistro(Cestadoregistro);
+		ordenCotizacionDto.setDregistro(new Date());
+		ordenCotizacionDto.setSobservacion(Sobservacion);		
+		ordenCotizacionDto.setCconvenio(Cconvenio);
+		ordenCotizacionDto.setUseridchange(Useridchange);
+		ordenCotizacionDto.setKordensucursalcotizacion(Kordensucursalcotizacion);
+
+        return ordenCotizacionDto;
     }
 }

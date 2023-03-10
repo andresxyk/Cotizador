@@ -85,42 +85,25 @@ public class ToolServiceImpl implements ToolDominio{
 	}
 	@Override
 	public TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto) throws Exception {
-		TOrdenSucursalCotizacionDto ordenCotizacionDto = new TOrdenSucursalCotizacionDto();
-		ordenCotizacionDto.setKordensucursal(0);
-		ordenCotizacionDto.setCmarca(cotizacionDto.getRequisition().getMarca());
-		// ordenCotizacionDto.setSsucursal(consultaDao.getSSucursal(accesoClienteDto.getCsucursal()));
-		// ordenCotizacionDto.setCsucursal(accesoClienteDto.getCsucursal());
-		// ordenCotizacionDto.setCsucursaldestino(accesoClienteDto.getCsucursal());
 		
-		/*String patient = cotizacionDto.getSubject().getReference().substring(
+		String patient = cotizacionDto.getSubject().getReference().substring(
 				cotizacionDto.getSubject().getReference().indexOf("/") + 1,
 				cotizacionDto.getSubject().getReference().length());
-		ordenCotizacionDto.setKpaciente(Integer.parseInt(patient));
 		String practitioner = cotizacionDto.getRequester().getReference().substring(
 				cotizacionDto.getRequester().getReference().indexOf("/") + 1,
-				cotizacionDto.getRequester().getReference().length());*/
-				// ordenCotizacionDto.setCmedico(Integer.parseInt(practitioner));
-				ordenCotizacionDto.setSmedico(cotizacionDto.getRequester().getDisplay());
-				ordenCotizacionDto.setMsubtotal(cotizacionDto.getRequisition().getSubtotal());
-				ordenCotizacionDto.setMdescuentopromocion(cotizacionDto.getRequisition().getDescuentopromocion());
-				ordenCotizacionDto.setMdescuentoempresa(BigDecimal.ZERO);
-				ordenCotizacionDto.setMdescuentomedico(BigDecimal.ZERO);
-				ordenCotizacionDto.setMfacturaempresa(BigDecimal.ZERO);
-				ordenCotizacionDto.setMpagopaciente(cotizacionDto.getRequisition().getPagopaciente());
-				ordenCotizacionDto.setMiva(BigDecimal.ZERO);
-				ordenCotizacionDto.setPiva(BigDecimal.ZERO);
-				ordenCotizacionDto.setMtotal(BigDecimal.ZERO);
-				ordenCotizacionDto.setUserid(1);
-				ordenCotizacionDto.setCestadoregistro(173);
-				ordenCotizacionDto.setDregistro(new Date());
-				ordenCotizacionDto.setSobservacion("");
-				Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
-				ordenCotizacionDto.setCconvenio(cconvenio);
-				ordenCotizacionDto.setUseridchange(1);
+				cotizacionDto.getRequester().getReference().length());
+		Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
 
-		Integer idCotizacion = consultasDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
-		ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
-		return ordenCotizacionDto;
+		// TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(0,cotizacionDto.getRequisition().getMarca(),consultaDao.getSSucursal(accesoClienteDto.getCsucursal()),
+		// 		accesoClienteDto.getCsucursal(),Integer.parseInt(patient),Integer.parseInt(practitioner),cotizacionDto.getRequester().getDisplay(),cotizacionDto.getRequisition().getSubtotal(),cotizacionDto.getRequisition().getDescuentopromocion(),
+		// 		BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,cotizacionDto.getRequisition().getPagopaciente(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,1,173,"",cconvenio,1);
+		
+
+		// Integer idCotizacion = consultasDao.insetTOrdenSucursalCotizacion(ordenCotizacionDto);
+
+		
+		// ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
+		return null;
 	}
 	@Override
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
