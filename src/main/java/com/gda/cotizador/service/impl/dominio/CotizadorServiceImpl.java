@@ -104,11 +104,12 @@ public class CotizadorServiceImpl implements Cotizador {
 	@Override
 	public RequestCotizacionDto procesarRequestCotizacion(RequestCotizacionDto request) throws Exception {
 		validateCotizacion.validateCotizacion(request);
-		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
-			request = toolServiceImpl.addConvenioDetalle(request);
-		} else {
+		if (!(env.getProperty("access.token.api").equals(request.getHeader().getToken()))) {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
+			request.setStatus("completed");
+			request.setBase64(base64.base64);
+			request = toolServiceImpl.addConvenioDetalle(request);	
 		return request;
 	}
 
