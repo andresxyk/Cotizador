@@ -3,6 +3,7 @@ import java.util.List;
 
 
 import com.gda.cotizador.dto.requestExamen.ExamenDto;
+import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
@@ -12,6 +13,7 @@ import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
+import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 public interface IConsultasDao {
 
@@ -38,4 +40,6 @@ public interface IConsultasDao {
 	Integer insertTOrdenExamenSucursalCotizacion(TOrdenExamenSucursalCotizacionDto dto)throws Exception;
 	
 	List<PerfilDto> getListExamenesPerfil(Integer cperfil, Integer cconvenio);
+
+	List<AccesoClienteDto> getListAccesoCliente(UssersDTO user) throws Exception;
 }

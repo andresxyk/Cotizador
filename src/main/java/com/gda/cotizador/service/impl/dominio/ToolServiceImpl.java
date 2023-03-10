@@ -110,6 +110,7 @@ public class ToolServiceImpl implements ToolDominio{
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
 		for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
 			try {
+
 				if (cotizacionDto.getRequisition().getMarca() == 16) {
 					List<ExamenDto> examenDto = consultasDao.getListCExamenDto2(coding.getCode(),
 							cotizacionDto.getRequisition().getConvenio());
@@ -123,8 +124,8 @@ public class ToolServiceImpl implements ToolDominio{
 					}
 				} else {
 					consultasDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),Integer.parseInt(coding.getCode()),
-					coding.getDisplay(),coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
-					coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
+								coding.getDisplay(),coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
+								coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
 				}
 			} catch (DataIntegrityViolationException e) {
 				if (cotizacionDto.getRequisition().getMarca() != 16) {
@@ -142,8 +143,8 @@ public class ToolServiceImpl implements ToolDominio{
 								.subtract(listExamenesPerfil.get(0).getMpagopacienteytotal());
 						for (PerfilDto perfilDto : listExamenesPerfil) {
 							consultasDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),perfilDto.getCexamen(),
-							perfilDto.getSexamen(),bdSubtotalTotal,bdDescuentoPromocion,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),
-							BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),1,13,perfilDto.getCconvenio(),"",perfilDto.getCperfil(),perfilDto.getUvolumenexamen()));
+									perfilDto.getSexamen(),bdSubtotalTotal,bdDescuentoPromocion,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),
+									BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),1,13,perfilDto.getCconvenio(),"",perfilDto.getCperfil(),perfilDto.getUvolumenexamen()));
 						}
 					} else {
 						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()

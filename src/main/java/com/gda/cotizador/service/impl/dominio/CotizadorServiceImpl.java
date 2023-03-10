@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
+import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.cotizasion.CodingDto;
 
@@ -26,6 +27,7 @@ import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
+import com.gda.cotizador.seguridad.Seguridad;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.service.validate.cotizacion.ValidateCotizacion;
 import com.gda.cotizador.utils.GeneralUtil;
@@ -49,6 +51,8 @@ public class CotizadorServiceImpl implements Cotizador {
 	private SetsDtosImpl setsDtosImpl;
 	@Autowired
 	private Base64Const base64;
+	@Autowired
+	private Seguridad seguridad;
 
 	@Override
 	public RequestConvenioDto procesarRequestConvenio(RequestConvenioDto request) throws Exception {
@@ -112,44 +116,51 @@ public class CotizadorServiceImpl implements Cotizador {
 	public CotizacionDto procesarNewCotizacion(CotizacionDto request) throws Exception {
 		validateCotizacion.validateCotizacion(request);
 		try {
-			if (!env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
-				throw new Exception("El token es incorrecto, favor de validar el acceso.");
-			}
-			if (request.getRequisition().getMarca() == 16) {
-				Boolean procesarOrden = false;
-				for (CodingDto coding : request.getCode().getCoding()) {
-					List<ExamenDto> listCExamen = consultasDao.getListCExamenDto2(coding.getCode(),
-							request.getRequisition().getConvenio());
-					if (listCExamen != null && listCExamen.size() > 0) {
-						procesarOrden = true;
-						logger.info("El estudio SI se encuentra en convenio: [" + coding.getCode() + "]");
-					} else {
-						logger.info("El estudio NO se encuentra en convenio: [" + coding.getCode() + "]");
+			// if
+			// (!env.getProperty("access.token.api").equals(request.getHeader().getToken()))
+			// {
+			// throw new Exception("El token es incorrecto, favor de validar el acceso.");
+			// }
+			List<AccesoClienteDto> listAcceso = seguridad.accesoCliente(request.getHeader().getToken());
+			if (listAcceso.size() > 0) {
+				if (request.getRequisition().getMarca() == 16) {
+					Boolean procesarOrden = false;
+					for (CodingDto coding : request.getCode().getCoding()) {
+						List<ExamenDto> listCExamen = consultasDao.getListCExamenDto2(coding.getCode(),
+								request.getRequisition().getConvenio());
+						if (listCExamen != null && listCExamen.size() > 0) {
+							procesarOrden = true;
+							logger.info("El estudio SI se encuentra en convenio: [" + coding.getCode() + "]");
+						} else {
+							logger.info("El estudio NO se encuentra en convenio: [" + coding.getCode() + "]");
+						}
 					}
+					if (procesarOrden) {
+						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+						request.setId(tosc.getKordensucursalcotizacion());
+						request.setStatus("completed");
+						request.setBase64(base64.base64);
+						request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.OK.value(), "success",
+								"La transacción fue exitosa." + request.getGDA_menssage()));
+					} else {
+						request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
+								"Los estudios de la cotizacion no estan en convenio"));
+					}
+					return request;
 				}
-				if (procesarOrden) {
-					TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
-					request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request,tosc);
-					request.setId(tosc.getKordensucursalcotizacion());
-					request.setStatus("completed");
-					request.setBase64(base64.base64);
-					request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.OK.value(), "success",
-							"La transacción fue exitosa." + request.getGDA_menssage()));
-				} else {
-					request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
-							"Los estudios de la cotizacion no estan en convenio"));
-				}
+				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+				request.setId(tosc.getKordensucursalcotizacion());
+				request.setStatus("completed");
+				request.setBase64(base64.base64);
+				request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
+						"La transacción fue exitosa."));
+				// logger.info(gson.toJson(request));
 				return request;
+			} else {
+				throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());
 			}
-			//TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
-			//request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
-			//request.setId(tosc.getKordensucursalcotizacion());
-			request.setStatus("completed");
-			request.setBase64(base64.base64);
-			request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
-					"La transacción fue exitosa."));
-			//logger.info(gson.toJson(request));
-			return request;
 		} catch (Exception e) {
 			throw e;
 		}

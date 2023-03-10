@@ -37,6 +37,12 @@ public class ValidateCotizacionServiceImpl implements ValidateCotizacion{
 		}
 	}
 
+	/**
+	 * Funcion para la validacion del objeto dto CotizacionDto
+	 * 
+	 * @param serviceRequest objeto del tipo CotizacionDto
+	 * @throws Exception
+	 */
 	@Override
 	public void validateCotizacion(CotizacionDto serviceRequest) throws Exception{
 		Set<ConstraintViolation<Object>> constraintViolations = Validacion.validatObject(serviceRequest);

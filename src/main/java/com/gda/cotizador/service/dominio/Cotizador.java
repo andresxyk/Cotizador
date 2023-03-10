@@ -16,6 +16,12 @@ public interface Cotizador {
 
 	RequestCotizacionDto procesarRequestCotizacion(RequestCotizacionDto request) throws Exception;
 	
+	/**
+	 * Funcion para procesar una nueva cotizasion y guardarla en la bd
+	 * @param request objeto del tipo CotizacionDto
+	 * @return CotizacionDto
+	 * @throws Exception
+	 */
 	CotizacionDto procesarNewCotizacion(CotizacionDto request) throws Exception;
 
 }
