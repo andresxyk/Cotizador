@@ -95,15 +95,33 @@ public class ToolServiceImpl implements ToolDominio{
 		Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
 
 																   // setForTOrdenSucursalCotizacionDto
-		TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(0,cotizacionDto.getRequisition().getMarca(),consultasDao.getSSucursal(accesoClienteDto.getCsucursal()),
-								accesoClienteDto.getCsucursal(),Integer.parseInt(patient),Integer.parseInt(practitioner),cotizacionDto.getRequester().getDisplay(),cotizacionDto.getRequisition().getSubtotal(),
-								cotizacionDto.getRequisition().getDescuentopromocion(),
-									BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,cotizacionDto.getRequisition().getPagopaciente(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,1,173,"",cconvenio,1,0);
-				//TOrdenSucursalCotizacionDto
+		TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(
+			0,
+			cotizacionDto.getRequisition().getMarca(),
+			consultasDao.getSSucursal(accesoClienteDto.getCsucursal()),
+			accesoClienteDto.getCsucursal(),
+			accesoClienteDto.getCsucursal(),
+			Integer.parseInt(patient),
+			Integer.parseInt(practitioner),
+			cotizacionDto.getRequester().getDisplay(),
+			cotizacionDto.getRequisition().getSubtotal(),
+			cotizacionDto.getRequisition().getDescuentopromocion(),
+			BigDecimal.ZERO,
+			BigDecimal.ZERO,
+			BigDecimal.ZERO,
+			cotizacionDto.getRequisition().getPagopaciente(),
+			BigDecimal.ZERO,
+			BigDecimal.ZERO,
+			BigDecimal.ZERO,
+			1,
+			173,
+			"",
+			cconvenio,
+			1,
+			0
+		);
 
 		Integer idCotizacion = consultasDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
-
-		
 		ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
 		return ordenCotizacionDto;
 	}
