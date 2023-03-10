@@ -84,7 +84,7 @@ public class ToolServiceImpl implements ToolDominio{
 		return request;
 	}
 	@Override
-	public TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto) throws Exception {
+	public TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto,AccesoClienteDto accesoClienteDto) throws Exception {
 		
 		String patient = cotizacionDto.getSubject().getReference().substring(
 				cotizacionDto.getSubject().getReference().indexOf("/") + 1,
@@ -94,16 +94,18 @@ public class ToolServiceImpl implements ToolDominio{
 				cotizacionDto.getRequester().getReference().length());
 		Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
 
-		// TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(0,cotizacionDto.getRequisition().getMarca(),consultaDao.getSSucursal(accesoClienteDto.getCsucursal()),
-		// 		accesoClienteDto.getCsucursal(),Integer.parseInt(patient),Integer.parseInt(practitioner),cotizacionDto.getRequester().getDisplay(),cotizacionDto.getRequisition().getSubtotal(),cotizacionDto.getRequisition().getDescuentopromocion(),
-		// 		BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,cotizacionDto.getRequisition().getPagopaciente(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,1,173,"",cconvenio,1);
-		
+																   // setForTOrdenSucursalCotizacionDto
+		TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(0,cotizacionDto.getRequisition().getMarca(),consultasDao.getSSucursal(accesoClienteDto.getCsucursal()),
+								accesoClienteDto.getCsucursal(),Integer.parseInt(patient),Integer.parseInt(practitioner),cotizacionDto.getRequester().getDisplay(),cotizacionDto.getRequisition().getSubtotal(),
+								cotizacionDto.getRequisition().getDescuentopromocion(),
+									BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,cotizacionDto.getRequisition().getPagopaciente(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,1,173,"",cconvenio,1,0);
+				//TOrdenSucursalCotizacionDto
 
-		// Integer idCotizacion = consultasDao.insetTOrdenSucursalCotizacion(ordenCotizacionDto);
+		Integer idCotizacion = consultasDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
 
 		
-		// ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
-		return null;
+		ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
+		return ordenCotizacionDto;
 	}
 	@Override
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,

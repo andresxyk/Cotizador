@@ -8,7 +8,7 @@ import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 public interface ToolDominio {
 
 	RequestCotizacionDto addConvenioDetalle(RequestCotizacionDto request);
-	TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto) throws Exception;
+	TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto,AccesoClienteDto accesoClienteDto) throws Exception;
 	CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception;
 }

@@ -137,7 +137,7 @@ public class CotizadorServiceImpl implements Cotizador {
 						}
 					}
 					if (procesarOrden) {
-						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
@@ -150,7 +150,7 @@ public class CotizadorServiceImpl implements Cotizador {
 					}
 					return request;
 				}
-				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request);
+				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
@@ -159,9 +159,9 @@ public class CotizadorServiceImpl implements Cotizador {
 						"La transacción fue exitosa."));
 				// logger.info(gson.toJson(request));
 				return request;
-			} else {
-				throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());
 			}
+			throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());
+
 		} catch (Exception e) {
 			throw e;
 		}
