@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
+import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.PerfilDto;
@@ -36,8 +37,11 @@ public class ToolServiceImpl implements ToolDominio{
 
 	final static Logger logger = LogManager.getLogger(ToolServiceImpl.class);
 	
+	
 	@Autowired
 	private IConsultasDao consultasDao;
+	@Autowired
+	private IConsultaCotizacionDao consultasCotizacionDao;
 	@Autowired
 	private GeneralUtil generalUtil;
 	@Autowired
@@ -98,7 +102,7 @@ public class ToolServiceImpl implements ToolDominio{
 		TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(
 			0,
 			cotizacionDto.getRequisition().getMarca(),
-			consultasDao.getSSucursal(accesoClienteDto.getCsucursal()),
+			consultasCotizacionDao.getSSucursal(accesoClienteDto.getCsucursal()),
 			accesoClienteDto.getCsucursal(),
 			accesoClienteDto.getCsucursal(),
 			Integer.parseInt(patient),
@@ -121,7 +125,7 @@ public class ToolServiceImpl implements ToolDominio{
 			0
 		);
 
-		Integer idCotizacion = consultasDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
+		Integer idCotizacion = consultasCotizacionDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
 		ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
 		return ordenCotizacionDto;
 	}
@@ -132,10 +136,10 @@ public class ToolServiceImpl implements ToolDominio{
 			try {
 
 				if (cotizacionDto.getRequisition().getMarca() == 16) {
-					List<ExamenDto> examenDto = consultasDao.getListCExamenDto2(coding.getCode(),
+					List<ExamenDto> examenDto = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 							cotizacionDto.getRequisition().getConvenio());
 					if (examenDto != null && examenDto.size() > 0) {
-						consultasDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),examenDto.get(0).getCexamen(),examenDto.get(0).getSexamen(),
+						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),examenDto.get(0).getCexamen(),examenDto.get(0).getSexamen(),
 									coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
 									coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
 					} else {
@@ -143,13 +147,13 @@ public class ToolServiceImpl implements ToolDominio{
 						cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(200,"success",cotizacionDto.getGDA_menssage() + "\nEl estudio " + coding.getCode()+ " no se encuentra en convenio."));
 					}
 				} else {
-					consultasDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),Integer.parseInt(coding.getCode()),
+					consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),Integer.parseInt(coding.getCode()),
 								coding.getDisplay(),coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
 								coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
 				}
 			} catch (DataIntegrityViolationException e) {
 				if (cotizacionDto.getRequisition().getMarca() != 16) {
-					List<PerfilDto> listExamenesPerfil = consultasDao
+					List<PerfilDto> listExamenesPerfil = consultasCotizacionDao
 							.getListExamenesPerfil(Integer.parseInt(coding.getCode()), coding.getConvenio());
 					if (listExamenesPerfil.size() > 0) {
 						BigDecimal bdSubtotal = BigDecimal.ZERO;
@@ -162,7 +166,7 @@ public class ToolServiceImpl implements ToolDominio{
 						BigDecimal bdDescuentoPromocion = bdSubtotalTotal
 								.subtract(listExamenesPerfil.get(0).getMpagopacienteytotal());
 						for (PerfilDto perfilDto : listExamenesPerfil) {
-							consultasDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),perfilDto.getCexamen(),
+							consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),perfilDto.getCexamen(),
 									perfilDto.getSexamen(),bdSubtotalTotal,bdDescuentoPromocion,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),
 									BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),1,13,perfilDto.getCconvenio(),"",perfilDto.getCperfil(),perfilDto.getUvolumenexamen()));
 						}

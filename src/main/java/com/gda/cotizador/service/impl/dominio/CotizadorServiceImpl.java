@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
+import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.cotizasion.CodingDto;
@@ -41,6 +42,8 @@ public class CotizadorServiceImpl implements Cotizador {
 	private GeneralUtil generalUtil;
 	@Autowired
 	private IConsultasDao consultasDao;
+	@Autowired
+	private IConsultaCotizacionDao consultasCotizacionDao;
 	@Autowired
 	private ToolServiceImpl toolServiceImpl;
 	@Autowired
@@ -123,11 +126,12 @@ public class CotizadorServiceImpl implements Cotizador {
 			// throw new Exception("El token es incorrecto, favor de validar el acceso.");
 			// }
 			List<AccesoClienteDto> listAcceso = seguridad.accesoCliente(request.getHeader().getToken());
+			logger.info(listAcceso);
 			if (listAcceso.size() > 0) {
 				if (request.getRequisition().getMarca() == 16) {
 					Boolean procesarOrden = false;
 					for (CodingDto coding : request.getCode().getCoding()) {
-						List<ExamenDto> listCExamen = consultasDao.getListCExamenDto2(coding.getCode(),
+						List<ExamenDto> listCExamen = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 								request.getRequisition().getConvenio());
 						if (listCExamen != null && listCExamen.size() > 0) {
 							procesarOrden = true;

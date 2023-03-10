@@ -10,9 +10,11 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gda.cotizador.dao.interfaz.IConsultasDao;
+import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
+
+import ch.qos.logback.classic.Logger;
 
 
 @Service
@@ -21,7 +23,7 @@ public class Seguridad {
     private static String ENCRYPT_KEY = Base64.getEncoder().encodeToString("GDA_2023_API".getBytes());
 
     @Autowired
-	private IConsultasDao consultasDao;
+	private IConsultaCotizacionDao consultasDao;	
 
     public List<AccesoClienteDto> accesoCliente(String token) throws Exception{
         List<AccesoClienteDto> Acceso = null;
