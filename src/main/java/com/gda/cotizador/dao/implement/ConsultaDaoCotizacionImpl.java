@@ -2,6 +2,8 @@ package com.gda.cotizador.dao.implement;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,8 +21,11 @@ import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
-@Repository("consultasDaoCotizacionImpl")
+@Repository("ConsultaDaoCotizacionImpl")
 public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsultaCotizacionDao{
+
+	@Autowired
+	DataSource dataSource;
 	
 	@Autowired
     @Qualifier("jdbcSlave")
