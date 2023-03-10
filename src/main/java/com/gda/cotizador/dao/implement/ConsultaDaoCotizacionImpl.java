@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +24,9 @@ import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 @Repository("ConsultaDaoCotizacionImpl")
-public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsultaCotizacionDao{
+public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
+	final static Logger logger = LogManager.getLogger(ConsultaDaoCotizacionImpl.class);
+
 
 	@Autowired
 	DataSource dataSource;
@@ -44,7 +48,7 @@ public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsul
 		
 		String query = "select ssucursal from c_sucursal where csucursal = ?;" ;
 	
-		ssucursal = this.getJdbcTemplate().queryForObject(query, new Object[] {csucursal}, String.class);
+		ssucursal = jdbcTemplate.queryForObject(query, new Object[] {csucursal}, String.class);
 
 		logger.info("getSSucursal ejecutado: " + ssucursal);
 		return ssucursal;
@@ -56,7 +60,7 @@ public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsul
 		
 		String query = "select cmarca from e_convenio where cconvenio = ?" ;
 	
-		marca = this.getJdbcTemplate().queryForObject(query, new Object[] {cconvenio}, Integer.class);
+		marca = jdbcTemplate.queryForObject(query, new Object[] {cconvenio}, Integer.class);
 
 		logger.info("getCmarcaOfConvenio ejecutado: " + marca);
 		return marca;
@@ -82,7 +86,7 @@ public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsul
 				+ "			?, ?, ?, ?) RETURNING kordensucursalcotizacion; " ;
 		
 		try {
-			insert = this.getJdbcTemplate().queryForObject(query, new Object[]{
+			insert = jdbcTemplate.queryForObject(query, new Object[]{
 					dto.getKordensucursal(), dto.getCmarca(), dto.getSsucursal(),
 					dto.getCsucursal(), dto.getKpaciente(), dto.getCmedico(), dto.getSmedico(),
 					dto.getMsubtotal(), dto.getMdescuentopromocion(), dto.getMdescuentoempresa(), dto.getMdescuentomedico(),
@@ -115,7 +119,7 @@ public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsul
 				+ "			?, ?, ?) RETURNING kordenexamensucursalcotizacion; " ;
 		
 		try {
-			insert = this.getJdbcTemplate().queryForObject(query, new Object[]{
+			insert = jdbcTemplate.queryForObject(query, new Object[]{
 					dto.getKordensucursalcotizacion(), dto.getCexamen(), dto.getSexamen(),
 					dto.getMsubtotal(), dto.getMdescuentopromocion(), dto.getMdescuentoempresa(), dto.getMdescuentomedico(),
 					dto.getMfacturaempresa(), dto.getMpagopaciente(), dto.getMiva(), dto.getMtotal(),
@@ -150,7 +154,7 @@ public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsul
 				+ "	on clc.clistacorporativa = elcd.clistacorporativa and ce.cexamen = elcd.cexamen\r\n"
 				+ "WHERE cp.cperfil = ? \r\n"
 				+ "and cc.cconvenio= ? " ;
-		list = this.getJdbcTemplate().query(query, new Object[]{cperfil, cconvenio},new PerfilMapper());
+		list = jdbcTemplate.query(query, new Object[]{cperfil, cconvenio},new PerfilMapper());
 		logger.info("getListExamenesPerfil ejecutado:"+list.size());
 		return list;
 	}
@@ -161,7 +165,7 @@ public class ConsultaDaoCotizacionImpl extends JdbcDaoSupport implements IConsul
 		logger.info("ejecutando getListAccesoCliente");
 		try {
 			String query = "select * from clientes.c_acceso_cliente_ws where sidusuariows = ? AND spasswordws = ? " ;
-			list = this.getJdbcTemplate().query(query, new Object[] {
+			list = jdbcTemplate.query(query, new Object[] {
 				user.getUser(),
 				user.getPassword()
 			}, new AccesoClienteMapper());
