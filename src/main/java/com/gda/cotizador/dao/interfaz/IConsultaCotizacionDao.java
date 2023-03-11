@@ -6,13 +6,13 @@ import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
-import com.gda.cotizador.dto.requestExamen.ExamenDto;
+import com.gda.cotizador.dto.cotizasion.CExamenDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 public interface IConsultaCotizacionDao {
 
-List<ExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio);
-	
+	List<CExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio);
+
 	Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception;
 	
 	String getSSucursal(Integer csucursal);

@@ -27,7 +27,7 @@ import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
-import com.gda.cotizador.dto.requestExamen.ExamenDto;
+import com.gda.cotizador.dto.cotizasion.CExamenDto;
 import com.gda.cotizador.service.dominio.ToolDominio;
 import com.gda.cotizador.utils.GeneralUtil;
 
@@ -134,9 +134,8 @@ public class ToolServiceImpl implements ToolDominio{
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
 		for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
 			try {
-
 				if (cotizacionDto.getRequisition().getMarca() == 16) {
-					List<ExamenDto> examenDto = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
+					List<CExamenDto> examenDto = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 							cotizacionDto.getRequisition().getConvenio());
 					if (examenDto != null && examenDto.size() > 0) {
 						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),examenDto.get(0).getCexamen(),examenDto.get(0).getSexamen(),

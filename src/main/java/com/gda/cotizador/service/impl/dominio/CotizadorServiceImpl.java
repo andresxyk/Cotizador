@@ -26,6 +26,7 @@ import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
 import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
+import com.gda.cotizador.dto.cotizasion.CExamenDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 import com.gda.cotizador.seguridad.Seguridad;
@@ -131,7 +132,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				if (request.getRequisition().getMarca() == 16) {
 					Boolean procesarOrden = false;
 					for (CodingDto coding : request.getCode().getCoding()) {
-						List<ExamenDto> listCExamen = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
+						List<CExamenDto> listCExamen = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 								request.getRequisition().getConvenio());
 						if (listCExamen != null && listCExamen.size() > 0) {
 							procesarOrden = true;

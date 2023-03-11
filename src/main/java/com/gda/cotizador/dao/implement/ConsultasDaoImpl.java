@@ -38,7 +38,6 @@ import com.gda.cotizador.utils.EdbExecutor;
 @Repository("consultasDaoImpl")
 public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	
-	
 	@Autowired 
 	DataSource dataSource;
 	

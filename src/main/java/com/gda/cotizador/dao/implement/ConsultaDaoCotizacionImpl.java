@@ -15,12 +15,13 @@ import org.springframework.stereotype.Repository;
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dao.mapper.AccesoClienteMapper;
+import com.gda.cotizador.dao.mapper.CExamenMapper;
 import com.gda.cotizador.dao.mapper.PerfilMapper;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
-import com.gda.cotizador.dto.requestExamen.ExamenDto;
+import com.gda.cotizador.dto.cotizasion.CExamenDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 @Repository("ConsultaDaoCotizacionImpl")
@@ -36,9 +37,19 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
     private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public List<ExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio){
-		List<ExamenDto> list ;
-		return null;
+	public List<CExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio){
+		List<CExamenDto> list ;
+		logger.info("ejecutando getListCExamenDto");
+		String query = 	"SELECT  ce.cexamen, ce.sexamen, ce.snemonico, ce.blistapublico, ce.sexamenweb, ce.bentregausb,ce.bregistrarconsumo, ce.cmarca, ce.cexamenazteca, ce.sexamenlabcore, ce.cexamenproceso "+
+		"FROM c_examen_convenio_sinonimo cexs INNER JOIN web2lablis.c_examen ce on cexs.cexamen = ce.cexamen "+      
+		"									  INNER JOIN e_convenio_detalle ecd on ecd.cexamen = ce.cexamen and ecd.cconvenio=cexs.cconvenio "+      
+		"WHERE cexs.sclavesinonimo = ? and cexs.cconvenio = ? "; 
+		list = jdbcTemplate.query(query, new Object[] {
+			sclavesinonimo,cconvenio
+			}, new CExamenMapper());
+
+		logger.info("getListCExamenDto ejecutado: " + list.size());
+	return list;
 	}
 	
 	@Override
