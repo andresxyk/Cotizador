@@ -28,5 +28,4 @@ public interface IConsultasDao {
 
 	List<EConvenioDetalleDto> getListEConvenioDetalle(Integer cconvenio, Integer cexamen);
 	
-	Connection getConnectionJDBC() throws Exception;
 }

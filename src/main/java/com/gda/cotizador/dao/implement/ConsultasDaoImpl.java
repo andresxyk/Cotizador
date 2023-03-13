@@ -1,8 +1,5 @@
 package com.gda.cotizador.dao.implement;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,24 +13,15 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
-import com.gda.cotizador.dao.mapper.AccesoClienteMapper;
 import com.gda.cotizador.dao.mapper.ConvenioMapper;
 import com.gda.cotizador.dao.mapper.ExamenConfigMapper;
-import com.gda.cotizador.dao.mapper.PerfilMapper;
 import com.gda.cotizador.dao.mapper.SucursalMapper;
 import com.gda.cotizador.dao.mapper.db.EConvenioDetalleMapper;
-import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
-import com.gda.cotizador.dto.PerfilDto;
-import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
-import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroDto;
-import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
-import com.gda.cotizador.dto.seguridad.UssersDTO;
-import com.gda.cotizador.utils.EdbExecutor;
 
 @Repository("consultasDaoImpl")
 public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
@@ -52,14 +40,6 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	@Autowired
     @Qualifier("jdbcMaster")
     private JdbcTemplate jdbcTemplate;
-	
-	@Override
-	public Connection getConnectionJDBC() throws Exception{
-		logger.debug("ejecutando getConnectionJDBC");
-		EdbExecutor edbExecutor;
-		edbExecutor = new EdbExecutor();
-		return edbExecutor.getConnetion(env.getProperty("spring.datasource.jdbc-url").replace("postgresql", "edb"), env.getProperty("spring.datasource.username"), env.getProperty("spring.datasource.password"));
-	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
