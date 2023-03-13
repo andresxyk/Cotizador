@@ -58,7 +58,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		logger.debug("ejecutando getConnectionJDBC");
 		EdbExecutor edbExecutor;
 		edbExecutor = new EdbExecutor();
-		return edbExecutor.getConnetion(env.getProperty("spring.datasource.url").replace("postgresql", "edb"), env.getProperty("spring.datasource.username"), env.getProperty("spring.datasource.password"));
+		return edbExecutor.getConnetion(env.getProperty("spring.datasource.jdbc-url").replace("postgresql", "edb"), env.getProperty("spring.datasource.username"), env.getProperty("spring.datasource.password"));
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -77,7 +77,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ "from cotizador.c_convenio cc\r\n"
 				+ "inner join cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n"
 				+ "where "+complemento ;
-		list = this.getJdbcTemplate().query(query, new Object[] {}, new ConvenioMapper());		
+		list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());		
 		return list;
 	}
 	
@@ -103,7 +103,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ "inner join cotizador.c_departamento cd on ce.cdepartamento = cd.cdepartamento\r\n"
 				+ "where ec.cconvenio = ? \r\n"
 				+ complemento;
-		list = this.getJdbcTemplate().query(query, new Object[] {filtro.getCconvenio()}, new ExamenConfigMapper());		
+		list = jdbcTemplate.query(query, new Object[] {filtro.getCconvenio()}, new ExamenConfigMapper());		
 		return list;
 	}
 	
@@ -124,7 +124,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ "inner join cotizador.c_departamento cd on ce.cdepartamento = cd.cdepartamento\r\n"
 				+ "where ce.cexamen = ?\r\n"
 				+ "and ec.cconvenio = ? " ;
-		list = this.getJdbcTemplate().query(query, new Object[] {cexamen,cconvenio}, new ExamenConfigMapper());		
+		list = jdbcTemplate.query(query, new Object[] {cexamen,cconvenio}, new ExamenConfigMapper());		
 		return list;
 	}
 	
@@ -146,7 +146,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ "from cotizador.c_sucursal\r\n"
 				+ "where cmarca = ?\r\n"
 				+ complemento;
-		list = this.getJdbcTemplate().query(query, new Object[] {cmarca}, new SucursalMapper());		
+		list = jdbcTemplate.query(query, new Object[] {cmarca}, new SucursalMapper());		
 		return list;
 	}
 	
@@ -158,7 +158,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		String query = "select * from cotizador.e_convenio_detalle \r\n"
 				+ "where cconvenio = ?\r\n"
 				+ "and cexamen = ?" ;
-		list = this.getJdbcTemplate().query(query, new Object[] {cconvenio,cexamen}, new EConvenioDetalleMapper());		
+		list = jdbcTemplate.query(query, new Object[] {cconvenio,cexamen}, new EConvenioDetalleMapper());		
 		return list;
 	}
 	
