@@ -60,7 +60,7 @@ public class SetsDtos implements SetsDtosImpl {
         toesc.setSmotivocancelacion(Smotivocancelacion);
         toesc.setCperfil(Cperfil);
         toesc.setUvolumenexamen(Uvolumenexamen);
-
+        toesc.setUserid(Userid);
         return toesc;
     }
 
