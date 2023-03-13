@@ -58,7 +58,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		logger.debug("ejecutando getConnectionJDBC");
 		EdbExecutor edbExecutor;
 		edbExecutor = new EdbExecutor();
-		return edbExecutor.getConnetion(env.getProperty("spring.datasource.jdbc-url").replace("postgresql", "edb"), env.getProperty("spring.datasource.username"), env.getProperty("spring.datasource.password"));
+		return edbExecutor.getConnetion(env.getProperty("spring.datasource.url").replace("postgresql", "edb"), env.getProperty("spring.datasource.username"), env.getProperty("spring.datasource.password"));
 	}
 	
 	@SuppressWarnings("deprecation")
