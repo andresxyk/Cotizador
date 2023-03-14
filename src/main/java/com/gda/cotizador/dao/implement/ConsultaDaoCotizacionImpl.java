@@ -9,11 +9,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
-import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dao.mapper.AccesoClienteMapper;
 import com.gda.cotizador.dao.mapper.CExamenMapper;
 import com.gda.cotizador.dao.mapper.PerfilMapper;

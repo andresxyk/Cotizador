@@ -33,6 +33,7 @@ import com.gda.cotizador.seguridad.Seguridad;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.service.validate.cotizacion.ValidateCotizacion;
 import com.gda.cotizador.utils.GeneralUtil;
+import com.gda.cotizador.utils.GenerateReportPDF;
 
 @Service
 public class CotizadorServiceImpl implements Cotizador {
@@ -57,6 +58,8 @@ public class CotizadorServiceImpl implements Cotizador {
 	private Base64Const base64;
 	@Autowired
 	private Seguridad seguridad;
+	@Autowired
+	private GenerateReportPDF generateReport;
 
 	@Override
 	public RequestConvenioDto procesarRequestConvenio(RequestConvenioDto request) throws Exception {
@@ -143,6 +146,8 @@ public class CotizadorServiceImpl implements Cotizador {
 					}
 					if (procesarOrden) {
 						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
+						logger.info("Marca: " + tosc.getCmarca());
+						generateReport.doIndicaciones(tosc);
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");

@@ -11,7 +11,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
-
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dao.mapper.ConvenioMapper;
 import com.gda.cotizador.dao.mapper.ExamenConfigMapper;
