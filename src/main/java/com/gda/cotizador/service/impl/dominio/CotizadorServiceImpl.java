@@ -161,6 +161,8 @@ public class CotizadorServiceImpl implements Cotizador {
 					return request;
 				}
 				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
+				logger.info("Marca: " + tosc.getCmarca());
+				generateReport.doIndicaciones(tosc);
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");

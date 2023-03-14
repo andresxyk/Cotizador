@@ -9,14 +9,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.util.JRLoader;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 
+@Service
 public class GeneraReporte implements Serializable{
   
   private Connection connection = null;

@@ -1,36 +1,57 @@
 package com.gda.cotizador.utils;
 
 import java.io.InputStream;
+
 import java.sql.Connection;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.stereotype.Service;
+
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 
 
-import ch.qos.logback.core.Context;
+@Service
 
-public class GenerateReportPDF {
+public class GenerateReportPDF extends JdbcDaoSupport{
 	
 	final static Logger iObjLog = LogManager.getLogger(GenerateReportPDF.class);
 	
 	 @Autowired
 	 private GeneraReporte GeneraReporte;
 
-
 	 @Autowired
 	 private Environment env;
 	 
-	  public Connection getConnectionJDBC() throws Exception{
+	 @Autowired
+	 DataSource dataSource;
+	 
+	 @PostConstruct
+	 private void initialize() {
+		 setDataSource(dataSource); 
+	 }
+	 
+	 @Autowired
+	 @Qualifier("jdbcSlave")
+	 private JdbcTemplate jdbcTemplate;
+	 
+	 public Connection getConnectionJDBC() throws Exception{
 		  iObjLog.debug("ejecutando getConnectionJDBC");
 		  EdbExecutor edbExecutor;
 		  edbExecutor = new EdbExecutor();
-		  return edbExecutor.getConnetion(env.getProperty("spring.datasource.jdbc-url").replace("postgresql", "edb"),
-				  env.getProperty("spring.datasource.username"), env.getProperty("spring.datasource.password"));
+		  return edbExecutor.getConnetion(env.getProperty("legacy.datasource.jdbc-url").replace("postgresql", "edb"),
+				  env.getProperty("legacy.datasource.username"), env.getProperty("legacy.datasource.password"));
 	  }
 
    public void doIndicaciones(TOrdenSucursalCotizacionDto aObjDatos) throws Exception {
@@ -40,7 +61,9 @@ public class GenerateReportPDF {
        try {
            	iObjLog.debug("Entrando la Admision doRecibofactura ");
 			//GenericDAO objConn = new GenericDAO();
-			objCon = getConnectionJDBC();                			        									
+           	iObjLog.info("Antes de entrar al getConnection");
+			objCon = getConnectionJDBC();         
+			iObjLog.info("Después de entrar al getConnection");
 			InputStream strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
 			InputStream strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");
 			if (aObjDatos.getCmarca() == 1) {
