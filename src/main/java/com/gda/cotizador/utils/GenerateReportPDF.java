@@ -7,24 +7,19 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+
 import org.springframework.stereotype.Service;
 
+import com.gda.cotizador.dao.interfaz.IConexionJasper;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 
 
 @Service
-
-public class GenerateReportPDF extends JdbcDaoSupport{
+public class GenerateReportPDF {
 	
 	final static Logger iObjLog = LogManager.getLogger(GenerateReportPDF.class);
 	
@@ -32,27 +27,7 @@ public class GenerateReportPDF extends JdbcDaoSupport{
 	 private GeneraReporte GeneraReporte;
 
 	 @Autowired
-	 private Environment env;
-	 
-	 @Autowired
-	 DataSource dataSource;
-	 
-	 @PostConstruct
-	 private void initialize() {
-		 setDataSource(dataSource); 
-	 }
-	 
-	 @Autowired
-	 @Qualifier("jdbcSlave")
-	 private JdbcTemplate jdbcTemplate;
-	 
-	 public Connection getConnectionJDBC() throws Exception{
-		  iObjLog.debug("ejecutando getConnectionJDBC");
-		  EdbExecutor edbExecutor;
-		  edbExecutor = new EdbExecutor();
-		  return edbExecutor.getConnetion(env.getProperty("legacy.datasource.jdbc-url").replace("postgresql", "edb"),
-				  env.getProperty("legacy.datasource.username"), env.getProperty("legacy.datasource.password"));
-	  }
+	 IConexionJasper conexionJasper;
 
    public void doIndicaciones(TOrdenSucursalCotizacionDto aObjDatos) throws Exception {
 	 
@@ -62,7 +37,7 @@ public class GenerateReportPDF extends JdbcDaoSupport{
            	iObjLog.debug("Entrando la Admision doRecibofactura ");
 			//GenericDAO objConn = new GenericDAO();
            	iObjLog.info("Antes de entrar al getConnection");
-			objCon = getConnectionJDBC();         
+			objCon = conexionJasper.getConnectionJDBC();         
 			iObjLog.info("Después de entrar al getConnection");
 			InputStream strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
 			InputStream strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");
