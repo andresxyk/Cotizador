@@ -75,9 +75,9 @@ public class GenerateReportPDF {
 		    params.put("imagenSlogan", strImagenSLogan);
            Map subreportes = new HashMap();           
 			if (aObjDatos.getCmarca() == 1) {            
-	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamen.jasper");
-	            subreportes.put("repindicacionpaciente","RepIndicacionPaciente.jasper");            
-			    GeneraReporte.generaReportePdf("RepIndicaciones.jasper", strNomArchivo, params, subreportes, objCon);            
+	            subreportes.put("Blank_A4.jasper","Blank_A4.jasper");
+	            subreportes.put("Blank_A4.jasper","Blank_A4.jasper");            
+			    GeneraReporte.generaReportePdf("Blank_A4.jasper", strNomArchivo, params, subreportes, objCon);            
 			} else if (aObjDatos.getCmarca() == 4) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenAzteca.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteAzteca.jasper");            
