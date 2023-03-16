@@ -68,16 +68,16 @@ public class GenerateReportPDF {
 			}
 			int intCotizacion = aObjDatos.getKordensucursalcotizacion();
 		    String strNomArchivo = "RepIndicacionPaciente" + Calendar.getInstance().getTimeInMillis() + ".pdf";
-           iObjLog.debug("Procesando la Admision doRecibofactura " +intCotizacion);
+           iObjLog.info("Procesando la Admision doRecibofactura " +intCotizacion);
 		    Map params = new HashMap();	
 		    params.put("kordensucursalcotizacion", new Double(intCotizacion));            
 		    params.put("imagen", strImagen);     
 		    params.put("imagenSlogan", strImagenSLogan);
            Map subreportes = new HashMap();           
 			if (aObjDatos.getCmarca() == 1) {            
-	            subreportes.put("Blank_A4.jasper","Blank_A4.jasper");
-	            subreportes.put("Blank_A4.jasper","Blank_A4.jasper");            
-			    GeneraReporte.generaReportePdf("Blank_A4.jasper", strNomArchivo, params, subreportes, objCon);            
+	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamen.jasper");
+	            subreportes.put("repindicacionpaciente","RepIndicacionPaciente.jasper");            
+			    GeneraReporte.generaReportePdf("RepIndicaciones.jasper", strNomArchivo, params, subreportes, objCon);            
 			} else if (aObjDatos.getCmarca() == 4) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenAzteca.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteAzteca.jasper");            

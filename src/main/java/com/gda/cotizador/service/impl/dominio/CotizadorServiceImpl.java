@@ -124,11 +124,7 @@ public class CotizadorServiceImpl implements Cotizador {
 	public CotizacionDto procesarNewCotizacion(CotizacionDto request) throws Exception {
 		validateCotizacion.validateCotizacion(request);
 		try {
-			// if
-			// (!env.getProperty("access.token.api").equals(request.getHeader().getToken()))
-			// {
-			// throw new Exception("El token es incorrecto, favor de validar el acceso.");
-			// }
+
 			List<AccesoClienteDto> listAcceso = seguridad.accesoCliente(request.getHeader().getToken());
 			logger.info(listAcceso);
 			if (listAcceso.size() > 0) {
@@ -147,8 +143,8 @@ public class CotizadorServiceImpl implements Cotizador {
 					if (procesarOrden) {
 						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 						logger.info("Marca: " + tosc.getCmarca());
-						generateReport.doIndicaciones(tosc);
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+						generateReport.doIndicaciones(tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
 						request.setBase64(base64.base64);
@@ -162,8 +158,8 @@ public class CotizadorServiceImpl implements Cotizador {
 				}
 				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 				logger.info("Marca: " + tosc.getCmarca());
-				generateReport.doIndicaciones(tosc);
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+				generateReport.doIndicaciones(tosc);
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
 				request.setBase64(base64.base64);
