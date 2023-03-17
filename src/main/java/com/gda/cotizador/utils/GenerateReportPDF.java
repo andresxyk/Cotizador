@@ -35,36 +35,27 @@ public class GenerateReportPDF {
     Connection objCon = null;
        try {
            	iObjLog.debug("Entrando la Admision doRecibofactura ");
-			//GenericDAO objConn = new GenericDAO();
-           	iObjLog.info("Antes de entrar al getConnection");
 			objCon = conexionJasper.getConnectionJDBC();         
-			iObjLog.info("Después de entrar al getConnection");
 			InputStream strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
 			InputStream strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");
 			if (aObjDatos.getCmarca() == 1) {
-				iObjLog.info("OLAB");
-			   // strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
-			   //strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");   
+			    strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
+			    strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");   
 			} else if (aObjDatos.getCmarca() == 4) {
-				iObjLog.info("AZTECA");
-			  // strImagen = getClass().getResourceAsStream("/images/marca/Azteca.jpg");            
-			  // strImagenSLogan = getClass().getResourceAsStream("/images/marca/Azteca_Slogan.png");   
+				strImagen = getClass().getResourceAsStream("/images/marca/Azteca.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Azteca_Slogan.png");   
 			} else if (aObjDatos.getCmarca() == 5) {
-				iObjLog.info("SWISSLAB");
-			   //strImagen = getClass().getResourceAsStream("/images/marca/Swisslab.jpg");            
-			  // strImagenSLogan = getClass().getResourceAsStream("/images/marca/Swisslab_Slogan.png");   
+				strImagen = getClass().getResourceAsStream("/images/marca/Swisslab.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Swisslab_Slogan.png");   
 			} else if (aObjDatos.getCmarca() == 7) {
-				iObjLog.info("JENNER");
-			 // strImagen = getClass().getResourceAsStream("/images/marca/jenner.jpg");            
-			  // strImagenSLogan = getClass().getResourceAsStream("/images/marca/Jenner_Slogan.png");   
+				strImagen = getClass().getResourceAsStream("/images/marca/jenner.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Jenner_Slogan.png");   
 			} else if (aObjDatos.getCmarca() == 15) {
-				iObjLog.info("LIACSA");
-			   // strImagen = getClass().getResourceAsStream("/images/marca/Liacsa.jpg");            
-			  // strImagenSLogan = getClass().getResourceAsStream("/images/marca/Liacsa_Slogan.png");   
+			    strImagen = getClass().getResourceAsStream("/images/marca/Liacsa.jpg");            
+			    strImagenSLogan = getClass().getResourceAsStream("/images/marca/Liacsa_Slogan.png");   
 			} else if (aObjDatos.getCmarca() == 19) {
-				iObjLog.info("ASESORES NORTE");
-			  // strImagen = getClass().getResourceAsStream("/images/marca/AsesoresNorte.jpg");            
-			   //strImagenSLogan = getClass().getResourceAsStream("/images/marca/AsesoresNorte_Slogan.png");   
+				strImagen = getClass().getResourceAsStream("/images/marca/AsesoresNorte.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/AsesoresNorte_Slogan.png");   
 			}
 			int intCotizacion = aObjDatos.getKordensucursalcotizacion();
 		    String strNomArchivo = "RepIndicacionPaciente" + Calendar.getInstance().getTimeInMillis() + ".pdf";
