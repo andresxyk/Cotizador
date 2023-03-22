@@ -1,7 +1,8 @@
 package com.gda.cotizador.utils;
 
 import java.io.InputStream;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -14,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import com.edb.util.Base64;
 import com.gda.cotizador.dao.interfaz.IConexionJasper;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
+
 
 
 @Service
@@ -29,10 +32,12 @@ public class GenerateReportPDF {
 	 @Autowired
 	 IConexionJasper conexionJasper;
 
-   public void doIndicaciones(TOrdenSucursalCotizacionDto aObjDatos) throws Exception {
+   public byte[] doIndicaciones(TOrdenSucursalCotizacionDto aObjDatos) throws Exception {
 	 
    	iObjLog.debug("doImprimir:ENTRANDO"); 
     Connection objCon = null;
+    String ruta = "" ;
+    
        try {
            	iObjLog.debug("Entrando la Admision doRecibofactura ");
 			objCon = conexionJasper.getConnectionJDBC();         
@@ -68,29 +73,32 @@ public class GenerateReportPDF {
 			if (aObjDatos.getCmarca() == 1) {            
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamen.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPaciente.jasper");            
-			    GeneraReporte.generaReportePdf("RepIndicaciones.jasper", strNomArchivo, params, subreportes, objCon);            
+			    ruta = GeneraReporte.generaReportePdf("RepIndicaciones.jasper", strNomArchivo, params, subreportes, objCon);
 			} else if (aObjDatos.getCmarca() == 4) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenAzteca.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteAzteca.jasper");            
-	            GeneraReporte.generaReportePdf("RepIndicacionesAzteca.jasper", strNomArchivo, params, subreportes, objCon);            
+	            ruta =GeneraReporte.generaReportePdf("RepIndicacionesAzteca.jasper", strNomArchivo, params, subreportes, objCon);
 			} else if (aObjDatos.getCmarca() == 5) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenSwissLab.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteSwissLab.jasper");            
-	            GeneraReporte.generaReportePdf("RepIndicacionesSwissLab.jasper", strNomArchivo, params, subreportes, objCon);            
+	            ruta =GeneraReporte.generaReportePdf("RepIndicacionesSwissLab.jasper", strNomArchivo, params, subreportes, objCon);            
 			} else if (aObjDatos.getCmarca() == 7) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenJenner.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteJenner.jasper");            
-	            GeneraReporte.generaReportePdf("RepIndicacionesJenner.jasper", strNomArchivo, params, subreportes, objCon);            
+	            ruta =GeneraReporte.generaReportePdf("RepIndicacionesJenner.jasper", strNomArchivo, params, subreportes, objCon);            
 			} else if (aObjDatos.getCmarca() == 15) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenLiacsa.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteLiacsa.jasper");            
-	            GeneraReporte.generaReportePdf("RepIndicacionesLiacsa.jasper", strNomArchivo, params, subreportes, objCon);            
+	            ruta =GeneraReporte.generaReportePdf("RepIndicacionesLiacsa.jasper", strNomArchivo, params, subreportes, objCon);            
 			} else if (aObjDatos.getCmarca() == 19) {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenAsesoresNorte.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteAsesoresNorte.jasper");            
-	            GeneraReporte.generaReportePdf("RepIndicacionesAsesoresNorte.jasper", strNomArchivo, params, subreportes, objCon);            
+	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesAsesoresNorte.jasper", strNomArchivo, params, subreportes, objCon);            
 			}
-           iObjLog.debug("Saliendo la Admision doRecibofactura " +intCotizacion);        	
+           iObjLog.debug("Saliendo la Admision doRecibofactura " +intCotizacion);
+           byte[] inFileBytes = Files.readAllBytes(Paths.get(ruta)); 
+           byte[] encoded = java.util.Base64.getEncoder().encode(inFileBytes);
+           return encoded;
 		}catch (Exception aError) {
 		    iObjLog.error("Error en ReporteAction.doRecibofactura ",aError);
 		    
@@ -98,6 +106,8 @@ public class GenerateReportPDF {
 		} finally {
 			if(objCon!=null)objCon.close();        	
 		}
+    
    }
 
 }
+
