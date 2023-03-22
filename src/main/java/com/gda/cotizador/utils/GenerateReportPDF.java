@@ -98,6 +98,7 @@ public class GenerateReportPDF {
            iObjLog.debug("Saliendo la Admision doRecibofactura " +intCotizacion);
            byte[] inFileBytes = Files.readAllBytes(Paths.get(ruta)); 
            byte[] encoded = java.util.Base64.getEncoder().encode(inFileBytes);
+           iObjLog.info(encoded);
            return encoded;
 		}catch (Exception aError) {
 		    iObjLog.error("Error en ReporteAction.doRecibofactura ",aError);

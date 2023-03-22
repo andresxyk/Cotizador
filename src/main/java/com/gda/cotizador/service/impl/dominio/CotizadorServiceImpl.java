@@ -146,7 +146,7 @@ public class CotizadorServiceImpl implements Cotizador {
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
-						request.setBase64(generateReport.doIndicaciones(tosc).toString());
+						request.setBase64(new String(generateReport.doIndicaciones(tosc)));
 						request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.OK.value(), "success",
 								"La transacción fue exitosa." + request.getGDA_menssage()));
 					} else {
@@ -161,7 +161,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				generateReport.doIndicaciones(tosc);
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
-				request.setBase64(generateReport.doIndicaciones(tosc).toString());
+				request.setBase64(new String(generateReport.doIndicaciones(tosc)));
 				request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
 						"La transacción fue exitosa."));
 				// logger.info(gson.toJson(request));
