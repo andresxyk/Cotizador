@@ -95,24 +95,14 @@ public class CotizadorController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			if(request.getFiltro().getSexamen()==null && request.getFiltro().getCconvenio()>-1) {
+			if((request.getFiltro().getSexamen()==null && request.getFiltro().getCconvenio()>-1) || 
+			   (request.getFiltro().getSexamen()!=null && request.getFiltro().getSexamen() == "" && request.getFiltro().getCconvenio()>-1) || 
+			   (request.getFiltro().getSexamen().length()>4 && request.getFiltro().getCconvenio()>-1)) {
 				request = cotizador.procesarRequestExamen(request);
 				request.getGDA_menssage().setMenssage("success");
 				request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
 				request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
 				return new ResponseEntity<RequestExamenDto>(request,HttpStatus.OK);		
-			}else if(request.getFiltro().getSexamen()!=null && request.getFiltro().getSexamen() == "" && request.getFiltro().getCconvenio()>-1) {
-				request = cotizador.procesarRequestExamen(request);
-				request.getGDA_menssage().setMenssage("success");
-				request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-				request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-				return new ResponseEntity<RequestExamenDto>(request,HttpStatus.OK);		
-			}else if(request.getFiltro().getSexamen().length()>4 && request.getFiltro().getCconvenio()>-1) {
-				request = cotizador.procesarRequestExamen(request);
-				request.getGDA_menssage().setMenssage("success");
-				request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-				request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-				return new ResponseEntity<RequestExamenDto>(request,HttpStatus.OK);				
 			}else {
 				request.getGDA_menssage().setMenssage("error");
 				request.getGDA_menssage().setDescripcion("El campo filtro.sexamen puede ir nulo o vacio o debe contener mas de 4 caracteres y el campo filtro.cconvenio debe ser mayor de -1");

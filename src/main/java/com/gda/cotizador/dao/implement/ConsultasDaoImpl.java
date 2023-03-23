@@ -77,10 +77,12 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ "eec.bdomingo, eec.utiemporespuestadiasprint, elcd.mpreciosiniva, ce.cdepartamento, cd.sdepartamento	\r\n"
 				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
 				+ "inner join cotizador.c_examen ce on elcd.cexamen = ce.cexamen\r\n"
+				+ "inner join cotizador.c_lista_corporativa clc on clc.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_convenio ec on ec.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen\r\n"
 				+ "inner join cotizador.c_departamento cd on ce.cdepartamento = cd.cdepartamento\r\n"
 				+ "where ec.cconvenio = ? \r\n"
+				+ "and clc.clistacorporativa in ("+env.getProperty("list.clistacorporativa.marca")+") \r\n"
 				+ complemento;
 		list = jdbcTemplate.query(query, new Object[] {filtro.getCconvenio()}, new ExamenConfigMapper());		
 		return list;
