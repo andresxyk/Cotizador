@@ -63,7 +63,9 @@ public class CotizadorController {
 		}
 	}
 	
-	@RequestMapping(value = "/search-sucursal", method = { RequestMethod.POST })
+	@RequestMapping(value = "/search-sucursal", method = { RequestMethod.POST },
+			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	        produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> searchSucursal(@RequestBody RequestSucursalDto request) {
 		log.info("searchSucursal");
 		GDAMenssageDto msg = new GDAMenssageDto();
@@ -84,7 +86,9 @@ public class CotizadorController {
 		}
 	}
 	
-	@RequestMapping(value = "/search-examen", method = { RequestMethod.POST })
+	@RequestMapping(value = "/search-examen", method = { RequestMethod.POST },
+			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	        produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> searchExamen(@RequestBody RequestExamenDto request) {
 		log.info("searchExamen");
 		GDAMenssageDto msg = new GDAMenssageDto();
@@ -124,7 +128,9 @@ public class CotizadorController {
 		}
 	}
 	
-	@RequestMapping(value = "/request-cotizador", method = { RequestMethod.POST })
+	@RequestMapping(value = "/request-cotizador", method = { RequestMethod.POST },
+			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	        produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> requestCotizador(@RequestBody RequestCotizacionDto request) {
 		log.info("searchExamen");
 		GDAMenssageDto msg = new GDAMenssageDto();
