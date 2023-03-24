@@ -7,6 +7,7 @@ import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.CExamenDto;
+import com.gda.cotizador.dto.cotizasion.CodingDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 public interface IConsultaCotizacionDao {
@@ -25,4 +26,6 @@ public interface IConsultaCotizacionDao {
 	List<PerfilDto> getListExamenesPerfil(Integer cperfil, Integer cconvenio);
 
 	List<AccesoClienteDto> getListAccesoCliente(UssersDTO user) throws Exception;
+	
+	boolean validarExamenConvenio(CodingDto codingdto);
 }

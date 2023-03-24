@@ -134,10 +134,20 @@ public class ToolServiceImpl implements ToolDominio{
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
 		for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
 			try {
+				logger.info("Antes de validar el examen");
+				
+				if(consultasCotizacionDao.validarExamenConvenio(coding) == false) {
+					logger.info("Entrando a la validación de examen por convenio");
+					logger.info("Examen:" +coding.getCode());
+					logger.info("Convenio:" + coding.getConvenio());
+					throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
+					+ " en el convenio " + coding.getConvenio());
+				}		
 				if (cotizacionDto.getRequisition().getMarca() == 16) {
 					List<CExamenDto> examenDto = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 							cotizacionDto.getRequisition().getConvenio());
-					if (examenDto != null && examenDto.size() > 0) {
+	
+					if (examenDto != null && examenDto.size() > 0) {		
 						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),examenDto.get(0).getCexamen(),examenDto.get(0).getSexamen(),
 									coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
 									coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
