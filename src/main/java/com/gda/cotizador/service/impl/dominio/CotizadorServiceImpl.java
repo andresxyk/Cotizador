@@ -143,6 +143,7 @@ public class CotizadorServiceImpl implements Cotizador {
 					if (procesarOrden) {
 						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 						logger.info("Marca: " + tosc.getCmarca());
+						
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
@@ -158,13 +159,13 @@ public class CotizadorServiceImpl implements Cotizador {
 				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 				logger.info("Marca: " + tosc.getCmarca());
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
-				generateReport.doIndicaciones(tosc);
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
+				logger.info("getKordensucursalcotizacion: "+ tosc.getKordensucursalcotizacion());
+				logger.info("getKordensucursal: "+ tosc.getKordensucursal());
 				request.setBase64(new String(generateReport.doIndicaciones(tosc)));
 				request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
 						"La transacción fue exitosa."));
-				// logger.info(gson.toJson(request));
 				return request;
 			}
 			throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());

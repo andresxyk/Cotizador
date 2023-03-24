@@ -7,22 +7,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.CotizacionDto;
-import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.service.impl.dominio.SetsDtosImpl;
-import com.gda.cotizador.utils.GeneralUtil;
 import com.google.gson.Gson;
 
 import io.swagger.annotations.Api;
@@ -44,8 +39,6 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 	@Autowired
 	private Cotizador cotizador;
 	
-	@Autowired
-	private Environment env;
 
 	@Autowired
 	private SetsDtosImpl setsDtosImpl;
@@ -61,24 +54,17 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 		try{
 			if(cotizacionDto.getStatus().equals("active")){
 				String response = gson.toJson(cotizador.procesarNewCotizacion(cotizacionDto));
-				
 				return new ResponseEntity<String>(
 						response,
 						HttpStatus.CREATED);				
 			}else{
-				// String request = gson.toJson(cotizacionDto);
-				//cotizacion = cotizacion.procesarRequestConvenio();
 				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error", "Status Incorrecto, Status disponibles: active [crear nueva cotizacion]"));
-				// String response = gson.toJson(cotizacionDto);
-				
 				return new ResponseEntity<String>(
 						gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			logger.error("Error inesperado", e);
-			// String request = gson.toJson(cotizacionDto);
 			cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error", "error:" + e.getMessage()!=null?e.getMessage():e.getCause().getMessage()));
-			// String response = gson.toJson(cotizacionDto);
 			return new ResponseEntity<String>(
 					gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 		}

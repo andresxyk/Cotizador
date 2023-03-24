@@ -41,8 +41,8 @@ public class GenerateReportPDF {
        try {
            	iObjLog.debug("Entrando la Admision doRecibofactura ");
 			objCon = conexionJasper.getConnectionJDBC();         
-			InputStream strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
-			InputStream strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");
+			InputStream strImagen = null;   
+			InputStream strImagenSLogan = null;
 			if (aObjDatos.getCmarca() == 1) {
 			    strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
 			    strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");   

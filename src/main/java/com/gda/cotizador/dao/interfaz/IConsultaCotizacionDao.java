@@ -25,4 +25,12 @@ public interface IConsultaCotizacionDao {
 	List<PerfilDto> getListExamenesPerfil(Integer cperfil, Integer cconvenio);
 
 	List<AccesoClienteDto> getListAccesoCliente(UssersDTO user) throws Exception;
+
+	/**
+	 * Funcion para consular en la bd que el convenio este en la marca
+	 * @param marca
+	 * @param conveion
+	 * @return Integer 1 = existe, 0 = no existe
+	 */
+	Integer validationConvIndiseBran(Integer marca, Integer conveion);
 }
