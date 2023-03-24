@@ -89,17 +89,23 @@ public class ToolServiceImpl implements ToolDominio{
 	}
 	@Override
 	public TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto,AccesoClienteDto accesoClienteDto) throws Exception {
-		
-		String patient = cotizacionDto.getSubject().getReference().substring(
+		try{
+			if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) == 0){
+				throw new Exception("No existe este convenio en la marca !!!");
+			}
+			// if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) >= 2){
+			// 	throw new Exception("Existe mas de un conevnio en con la marca");
+			// }
+			String patient = cotizacionDto.getSubject().getReference().substring(
 				cotizacionDto.getSubject().getReference().indexOf("/") + 1,
 				cotizacionDto.getSubject().getReference().length());
-		String practitioner = cotizacionDto.getRequester().getReference().substring(
+			String practitioner = cotizacionDto.getRequester().getReference().substring(
 				cotizacionDto.getRequester().getReference().indexOf("/") + 1,
 				cotizacionDto.getRequester().getReference().length());
-		Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
-
+			Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
+		
 																   // setForTOrdenSucursalCotizacionDto
-		TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(
+			TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(
 			0,
 			cotizacionDto.getRequisition().getMarca(),
 			consultasCotizacionDao.getSSucursal(accesoClienteDto.getCsucursal()),
@@ -128,6 +134,9 @@ public class ToolServiceImpl implements ToolDominio{
 		Integer idCotizacion = consultasCotizacionDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
 		ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
 		return ordenCotizacionDto;
+	}catch(Exception e){
+		throw e;
+	}
 	}
 	@Override
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
