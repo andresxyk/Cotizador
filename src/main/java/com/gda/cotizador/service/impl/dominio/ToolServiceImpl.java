@@ -96,6 +96,9 @@ public class ToolServiceImpl implements ToolDominio{
 			// if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) >= 2){
 			// 	throw new Exception("Existe mas de un conevnio en con la marca");
 			// }
+			if(validarExamen(cotizacionDto)) { 
+				
+			}
 			String patient = cotizacionDto.getSubject().getReference().substring(
 				cotizacionDto.getSubject().getReference().indexOf("/") + 1,
 				cotizacionDto.getSubject().getReference().length());
@@ -143,15 +146,7 @@ public class ToolServiceImpl implements ToolDominio{
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
 		for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
 			try {
-				logger.info("Antes de validar el examen");
 				
-				if(consultasCotizacionDao.validarExamenConvenio(coding) == false) {
-					logger.info("Entrando a la validación de examen por convenio");
-					logger.info("Examen:" +coding.getCode());
-					logger.info("Convenio:" + coding.getConvenio());
-					throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
-					+ " en el convenio " + coding.getConvenio());
-				}		
 				if (cotizacionDto.getRequisition().getMarca() == 16) {
 					List<CExamenDto> examenDto = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 							cotizacionDto.getRequisition().getConvenio());
@@ -196,5 +191,17 @@ public class ToolServiceImpl implements ToolDominio{
 			}
 		}
 		return cotizacionDto;
+	}
+	public boolean validarExamen(CotizacionDto cotizacionDto) throws Exception {
+	    for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
+	        if (consultasCotizacionDao.validarExamenConvenio(coding) == false) {
+	            logger.info("Entrando a la validación de examen por convenio");
+	            logger.info("Examen: " + coding.getCode());
+	            logger.info("Convenio: " + coding.getConvenio());
+	            throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
+	                + " en el convenio " + coding.getConvenio());
+	        }
+	    }
+	   return true;
 	}
 }

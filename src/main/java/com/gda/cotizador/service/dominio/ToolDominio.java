@@ -11,4 +11,5 @@ public interface ToolDominio {
 	TOrdenSucursalCotizacionDto saveTOrdenSucursalCotizacion(CotizacionDto cotizacionDto,AccesoClienteDto accesoClienteDto) throws Exception;
 	CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception;
+	boolean validarExamen(CotizacionDto cotizacionDto) throws Exception;
 }
