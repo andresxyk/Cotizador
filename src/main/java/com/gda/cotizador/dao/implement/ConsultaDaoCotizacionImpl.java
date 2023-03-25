@@ -21,6 +21,8 @@ import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.CExamenDto;
 import com.gda.cotizador.dto.cotizasion.CodingDto;
+import com.gda.cotizador.dto.cotizasion.Requisition;
+import com.gda.cotizador.dto.cotizasion.Subject;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 @Repository("ConsultaDaoCotizacionImpl")
@@ -48,6 +50,17 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		return validacion;
 		  			
 	}
+	public boolean validarPacienteMarca(Integer marca,String patient) {
+		logger.info("Validando el Examen con el Convenio");
+		boolean validacion = false;
+		String query = 
+				"select exists(select cmarca, kpaciente\r\n"
+				+ "from t_paciente where cmarca = ? and kpaciente = ?)\r\n";
+		validacion = jdbcTemplate.queryForObject(query, new Object[]{marca, patient},
+			  			Boolean.class);
+		return validacion;
+	}
+		
 	
 	@Override
 	public List<CExamenDto> getListCExamenDto2(String sclavesinonimo, Integer cconvenio){

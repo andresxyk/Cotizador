@@ -96,7 +96,11 @@ public class ToolServiceImpl implements ToolDominio{
 			// if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) >= 2){
 			// 	throw new Exception("Existe mas de un conevnio en con la marca");
 			// }
+
 			if(validarExamen(cotizacionDto)) { 
+				
+			}
+			if(validarPaciente(cotizacionDto)) {
 				
 			}
 			String patient = cotizacionDto.getSubject().getReference().substring(
@@ -203,5 +207,19 @@ public class ToolServiceImpl implements ToolDominio{
 	        }
 	    }
 	   return true;
+	}
+	public boolean validarPaciente(CotizacionDto cotizacionDto) throws Exception {
+		    for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
+		    	String patient = cotizacionDto.getSubject().getReference().substring(
+						cotizacionDto.getSubject().getReference().indexOf("/") + 1, cotizacionDto.getSubject().getReference().length());
+		        if (consultasCotizacionDao.validarPacienteMarca(cotizacionDto.getRequisition().getMarca(), patient) == false) {
+		            logger.info("Entrando a la validación de examen por paciente");
+		            logger.info("Marca: " + cotizacionDto.getRequisition().getMarca());
+		            logger.info("Paciente: " + patient);
+		            throw new Exception("El paciente " + patient
+		                + " no pertenece a la marca " + cotizacionDto.getRequisition().getMarca());
+		        }
+		    }
+		   return true;
 	}
 }

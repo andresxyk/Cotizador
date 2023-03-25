@@ -8,6 +8,8 @@ import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizasion.CExamenDto;
 import com.gda.cotizador.dto.cotizasion.CodingDto;
+import com.gda.cotizador.dto.cotizasion.Requisition;
+import com.gda.cotizador.dto.cotizasion.Subject;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 public interface IConsultaCotizacionDao {
@@ -35,4 +37,6 @@ public interface IConsultaCotizacionDao {
 	Integer validationConvIndiseBran(Integer marca, Integer conveion);
 	
 	boolean validarExamenConvenio(CodingDto codingdto);
-}
+	
+	boolean validarPacienteMarca(Integer marca,String patient);
+	}
