@@ -37,7 +37,8 @@ public class ToolServiceImpl implements ToolDominio{
 
 	final static Logger logger = LogManager.getLogger(ToolServiceImpl.class);
 	
-	
+	private static Double tasaIVA = 1.16; // Tasa de IVA (16%)
+
 	@Autowired
 	private IConsultasDao consultasDao;
 	@Autowired
@@ -93,15 +94,13 @@ public class ToolServiceImpl implements ToolDominio{
 			if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) == 0){
 				throw new Exception("No existe este convenio en la marca !!!");
 			}
-			if(validarExamen(cotizacionDto)) { 
-				
-			}
+			
 			if(validarPaciente(cotizacionDto)) {
 				
 			}
-			if(!validateCode(cotizacionDto)){
-				throw new Exception("Exámenes de otros convenios de contado !!!");
-			}
+			// if(!validateCode(cotizacionDto)){
+			// 	throw new Exception("Exámenes de otros convenios de contado !!!");
+			// }
 			String patient = cotizacionDto.getSubject().getReference().substring(
 				cotizacionDto.getSubject().getReference().indexOf("/") + 1,
 				cotizacionDto.getSubject().getReference().length());
@@ -109,6 +108,7 @@ public class ToolServiceImpl implements ToolDominio{
 				cotizacionDto.getRequester().getReference().indexOf("/") + 1,
 				cotizacionDto.getRequester().getReference().length());
 			Integer cconvenio = cotizacionDto.getCode().getCoding().get(0).getConvenio();
+			double mIVATotal = cotizacionDto.getRequisition().getTotal().doubleValue() - (cotizacionDto.getRequisition().getTotal().doubleValue() / tasaIVA);
 		
 																   // setForTOrdenSucursalCotizacionDto
 			TOrdenSucursalCotizacionDto ordenCotizacionDto = setsDtosImpl.setForTOrdenSucursalCotizacionDto(
@@ -126,9 +126,9 @@ public class ToolServiceImpl implements ToolDominio{
 			BigDecimal.ZERO,
 			BigDecimal.ZERO,
 			cotizacionDto.getRequisition().getPagopaciente(),
-			BigDecimal.ZERO,
-			BigDecimal.ZERO,
-			BigDecimal.ZERO,
+			new BigDecimal(mIVATotal),
+			new BigDecimal(tasaIVA),
+			cotizacionDto.getRequisition().getTotal(),
 			1,
 			173,
 			"",
@@ -148,25 +148,68 @@ public class ToolServiceImpl implements ToolDominio{
 	@Override
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
+				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(0," "," "));
 		for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
 			try {
-				
+				// BigDecimal mIVATotal = coding.getTotal().add(tasaIVA);
+				double mIVATotal =  coding.getTotal().doubleValue()-(coding.getTotal().doubleValue() / tasaIVA) ;
+
 				if (cotizacionDto.getRequisition().getMarca() == 16) {
 					List<CExamenDto> examenDto = consultasCotizacionDao.getListCExamenDto2(coding.getCode(),
 							cotizacionDto.getRequisition().getConvenio());
 	
 					if (examenDto != null && examenDto.size() > 0) {		
-						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),examenDto.get(0).getCexamen(),examenDto.get(0).getSexamen(),
-									coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
-									coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
+						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
+							ordenCotizacionDto.getKordensucursalcotizacion(),
+							examenDto.get(0).getCexamen(),
+							examenDto.get(0).getSexamen(),
+							coding.getSubtotal(),
+							coding.getDescuentopromocion(),
+							BigDecimal.ZERO,BigDecimal.ZERO,
+							BigDecimal.ZERO,
+							coding.getPagopaciente(),
+							new BigDecimal(mIVATotal),
+									coding.getTotal(),
+									1,
+									13,
+									coding.getConvenio(),
+									"",
+									-1,1));
 					} else {
 						logger.error("ERROR:El estudio no se encuentra en convenio");
 						cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(200,"success",cotizacionDto.getGDA_menssage() + "\nEl estudio " + coding.getCode()+ " no se encuentra en convenio."));
 					}
 				} else {
-					consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),Integer.parseInt(coding.getCode()),
-								coding.getDisplay(),coding.getSubtotal(),coding.getDescuentopromocion(),BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,coding.getPagopaciente(),BigDecimal.ZERO,
-								coding.getTotal(),1,13,coding.getConvenio(),"",-1,1));
+					logger.info("antes de validad el examne "+coding.getCode());
+					//if(){
+						// 			logger.error("Examen no corresponde a la marca: " + coding.getCode());
+						// 			throw new Exception("Examen no corresponde a la marca");
+						// 
+					//}
+					if(!consultasCotizacionDao.validarExamenConvenio(coding) && consultasCotizacionDao.validationConvIndiseExamn(cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0) { 
+						// "No se encontraron registros con el perfil " + coding.getCode() + " en el convenio " + coding.getConvenio()
+						logger.error("ERROR:El estudio no se encuentra en convenio");
+						cotizacionDto.setGDA_menssage(
+							setsDtosImpl.setForGdaMessage(200,"success",
+							cotizacionDto.getGDA_menssage().getDescripcion() + "\nNo se encontraron registros con el perfil " + coding.getCode()+ " en el convenio " + coding.getConvenio()));
+					}else{
+						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
+						ordenCotizacionDto.getKordensucursalcotizacion(),
+						Integer.parseInt(coding.getCode()),
+						coding.getDisplay(),
+						coding.getSubtotal(),
+						coding.getDescuentopromocion(),
+						BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,
+						coding.getPagopaciente(),
+						new BigDecimal(mIVATotal),
+						coding.getTotal(),
+						1,
+						13,
+						coding.getConvenio(),
+						"",
+						-1,
+						1));
+					}
 				}
 			} catch (DataIntegrityViolationException e) {
 				if (cotizacionDto.getRequisition().getMarca() != 16) {
@@ -183,9 +226,28 @@ public class ToolServiceImpl implements ToolDominio{
 						BigDecimal bdDescuentoPromocion = bdSubtotalTotal
 								.subtract(listExamenesPerfil.get(0).getMpagopacienteytotal());
 						for (PerfilDto perfilDto : listExamenesPerfil) {
-							consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(ordenCotizacionDto.getKordensucursalcotizacion(),perfilDto.getCexamen(),
-									perfilDto.getSexamen(),bdSubtotalTotal,bdDescuentoPromocion,BigDecimal.ZERO,BigDecimal.ZERO,BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),
-									BigDecimal.ZERO,perfilDto.getMpagopacienteytotal(),1,13,perfilDto.getCconvenio(),"",perfilDto.getCperfil(),perfilDto.getUvolumenexamen()));
+							//BigDecimal mIVATotal = perfilDto.getMpagopacienteytotal().add(tasaIVA);
+							double mIVATotal = cotizacionDto.getRequisition().getTotal().doubleValue() / tasaIVA;
+
+
+							consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
+								ordenCotizacionDto.getKordensucursalcotizacion(),
+								perfilDto.getCexamen(),
+									perfilDto.getSexamen(),
+									bdSubtotalTotal,
+									bdDescuentoPromocion,
+									BigDecimal.ZERO,
+									BigDecimal.ZERO,
+									BigDecimal.ZERO,
+									perfilDto.getMpagopacienteytotal(),
+									new BigDecimal(mIVATotal),
+									perfilDto.getMpagopacienteytotal(),
+									1,
+									13,
+									perfilDto.getCconvenio(),
+									"",
+									perfilDto.getCperfil(),
+									perfilDto.getUvolumenexamen()));
 						}
 					} else {
 						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
@@ -196,18 +258,19 @@ public class ToolServiceImpl implements ToolDominio{
 		}
 		return cotizacionDto;
 	}
-	public boolean validarExamen(CotizacionDto cotizacionDto) throws Exception {
-	    for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
-	        if (consultasCotizacionDao.validarExamenConvenio(coding) == false) {
-	            logger.info("Entrando a la validación de examen por convenio");
-	            logger.info("Examen: " + coding.getCode());
-	            logger.info("Convenio: " + coding.getConvenio());
-	            throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
-	                + " en el convenio " + coding.getConvenio());
-	        }
-	    }
-	   return true;
-	}
+	// public boolean validarExamen(CodingDto coding) throws Exception {
+	//     // for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
+	//         if ( == false) {
+	//             logger.info("Validación de examen por convenio");
+	//             // logger.info("Examen: " + coding.getCode());
+	//             // logger.info("Convenio: " + coding.getConvenio());
+	//             // throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
+	//             //     + " en el convenio " + coding.getConvenio());
+	// 			return false;
+	//         }
+	//     // }
+	//    return true;
+	// }
 
 	public boolean validarPaciente(CotizacionDto cotizacionDto) throws Exception {
 		    for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
@@ -223,19 +286,19 @@ public class ToolServiceImpl implements ToolDominio{
 		    }
 		   return true;
 	}
-	public Boolean validateCode(CotizacionDto _cotizacionDto) throws Exception{
-		try{
-		for (CodingDto coding : _cotizacionDto.getCode().getCoding()) {
-			if(consultasCotizacionDao.validationConvIndiseExamn(_cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0){
-				logger.error("Examen no corresponde a la marca: " + coding.getCode());
-				throw new Exception("Examen no corresponde a la marca");
-			}
-		}
-		return true;
-	}catch(Exception e){
-		logger.error("Error en la funcion validateCode");
-		throw e;
-	}
+	// public Boolean validateCode(CotizacionDto _cotizacionDto) throws Exception{
+	// 	try{
+	// 	for (CodingDto coding : _cotizacionDto.getCode().getCoding()) {
+	// 		if(consultasCotizacionDao.validationConvIndiseExamn(_cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0){
+	// 			logger.error("Examen no corresponde a la marca: " + coding.getCode());
+	// 			throw new Exception("Examen no corresponde a la marca");
+	// 		}
+	// 	}
+	// 	return true;
+	// }catch(Exception e){
+	// 	logger.error("Error en la funcion validateCode");
+	// 	throw e;
+	// }
 
-	}
+	// }
 }

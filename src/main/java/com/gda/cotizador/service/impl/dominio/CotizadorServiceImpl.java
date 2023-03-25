@@ -163,7 +163,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				logger.info("getKordensucursal: "+ tosc.getKordensucursal());
 				request.setBase64(new String(generateReport.doIndicaciones(tosc)));
 				request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
-						"La transacción fue exitosa."));
+						"La transacción fue exitosa. "+request.getGDA_menssage().getDescripcion()));
 				return request;
 			}
 			throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());

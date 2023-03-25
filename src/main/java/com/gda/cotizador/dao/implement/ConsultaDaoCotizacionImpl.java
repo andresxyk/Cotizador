@@ -43,9 +43,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		logger.info("Validando el Examen con el Convenio");
 		boolean validacion = false;
 		String query =
-					"select exists(select cconvenio, cexamen\r\n"
-					+ "from e_convenio_detalle\r\n"
-					+ "where cconvenio = ? and cexamen = ?)";
+					"select exists(select cconvenio, cexamen from e_convenio_detalle where cconvenio = ? and cexamen = ?)";
 		validacion = jdbcTemplate.queryForObject(query, new Object[]{codingdto.getConvenio(), codingdto.getCode()},
 	  			Boolean.class);
 		return validacion;
@@ -104,10 +102,13 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		return marca;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception{
 		logger.info("entra insertTOrdenSucursalCotizacion");
-		
+		logger.info("PIVA"+dto.getPiva());
+		logger.info("IVA"+dto.getMiva());
+
 		Integer insert = 0;
 		String query = "INSERT INTO public.t_orden_sucursal_cotizacion(\r\n"
 				+ "	kordensucursalcotizacion, kordensucursal, cmarca, ssucursal, \r\n"
@@ -128,7 +129,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 					dto.getKordensucursal(), dto.getCmarca(), dto.getSsucursal(),
 					dto.getCsucursal(), dto.getKpaciente(), dto.getCmedico(), dto.getSmedico(),
 					dto.getMsubtotal(), dto.getMdescuentopromocion(), dto.getMdescuentoempresa(), dto.getMdescuentomedico(),
-					dto.getMfacturaempresa(), dto.getMpagopaciente(), dto.getMiva(), dto.getPiva(),
+					dto.getMfacturaempresa(), dto.getMpagopaciente(), dto.getMiva(), 16,
 					dto.getMtotal(), dto.getUserid(), dto.getCestadoregistro(), dto.getDregistro(), 
 					dto.getSobservacion(), dto.getCconvenio(), dto.getUseridchange(), dto.getCsucursaldestino()
 			},Integer.class);
