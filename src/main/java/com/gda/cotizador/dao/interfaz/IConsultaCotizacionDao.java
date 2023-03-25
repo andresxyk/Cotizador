@@ -33,6 +33,14 @@ public interface IConsultaCotizacionDao {
 	 * @return Integer 1 = existe, 0 = no existe
 	 */
 	Integer validationConvIndiseBran(Integer marca, Integer conveion);
+
+	/**
+	 * Funcion para validar en la bd que el examen pertenesca al convenio
+	 * @param conveion
+	 * @param cexamen
+	 * @return Integer 1 = existe, 0 = no existe
+	 */
+	Integer validationConvIndiseExamn(Integer conveion, String cexamen);
 	
 	boolean validarExamenConvenio(CodingDto codingdto);
 }

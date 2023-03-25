@@ -36,6 +36,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
     private JdbcTemplate jdbcTemplate;
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean validarExamenConvenio(CodingDto codingdto){
 		logger.info("Validando el Examen con el Convenio");
 		boolean validacion = false;
@@ -207,6 +208,15 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		return jdbcTemplate.queryForObject(
 			"select Count(*) from c_convenio ccon inner join e_convenio econ on ccon.cconvenio = econ.cconvenio where econ.cmarca = ? and econ.cconvenio = ?"
 		, new Object[] {marca,conveion},
+		Integer.class);
+	}
+
+	@Override
+    @SuppressWarnings("deprecation")
+	public Integer validationConvIndiseExamn(Integer conveion, String cexamen){
+		return jdbcTemplate.queryForObject(
+			"select Count(*) from c_convenio ctc inner join e_convenio_detalle ectd on ctc.cconvenio = ectd.cconvenio where ectd.cexamen = ? and ctc.cconvenio = ?"
+		, new Object[] {cexamen,conveion},
 		Integer.class);
 	}
 }
