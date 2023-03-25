@@ -93,15 +93,14 @@ public class ToolServiceImpl implements ToolDominio{
 			if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) == 0){
 				throw new Exception("No existe este convenio en la marca !!!");
 			}
-			// if(consultasCotizacionDao.validationConvIndiseBran(cotizacionDto.getRequisition().getMarca(), cotizacionDto.getRequisition().getConvenio()) >= 2){
-			// 	throw new Exception("Existe mas de un conevnio en con la marca");
-			// }
-
 			if(validarExamen(cotizacionDto)) { 
 				
 			}
 			if(validarPaciente(cotizacionDto)) {
 				
+			}
+			if(!validateCode(cotizacionDto)){
+				throw new Exception("Exámenes de otros convenios de contado !!!");
 			}
 			String patient = cotizacionDto.getSubject().getReference().substring(
 				cotizacionDto.getSubject().getReference().indexOf("/") + 1,
@@ -137,14 +136,15 @@ public class ToolServiceImpl implements ToolDominio{
 			1,
 			0
 		);
-
+			
 		Integer idCotizacion = consultasCotizacionDao.insertTOrdenSucursalCotizacion(ordenCotizacionDto);
 		ordenCotizacionDto.setKordensucursalcotizacion(idCotizacion);
 		return ordenCotizacionDto;
-	}catch(Exception e){
+			}catch(Exception e){
 		throw e;
 	}
-	}
+}
+	
 	@Override
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
@@ -208,6 +208,7 @@ public class ToolServiceImpl implements ToolDominio{
 	    }
 	   return true;
 	}
+
 	public boolean validarPaciente(CotizacionDto cotizacionDto) throws Exception {
 		    for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
 		    	String patient = cotizacionDto.getSubject().getReference().substring(
@@ -221,5 +222,20 @@ public class ToolServiceImpl implements ToolDominio{
 		        }
 		    }
 		   return true;
+	}
+	public Boolean validateCode(CotizacionDto _cotizacionDto) throws Exception{
+		try{
+		for (CodingDto coding : _cotizacionDto.getCode().getCoding()) {
+			if(consultasCotizacionDao.validationConvIndiseExamn(_cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0){
+				logger.error("Examen no corresponde a la marca: " + coding.getCode());
+				throw new Exception("Examen no corresponde a la marca");
+			}
+		}
+		return true;
+	}catch(Exception e){
+		logger.error("Error en la funcion validateCode");
+		throw e;
+	}
+
 	}
 }

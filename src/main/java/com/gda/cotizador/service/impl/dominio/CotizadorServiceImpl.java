@@ -126,7 +126,6 @@ public class CotizadorServiceImpl implements Cotizador {
 		try {
 
 			List<AccesoClienteDto> listAcceso = seguridad.accesoCliente(request.getHeader().getToken());
-			logger.info(listAcceso);
 			if (listAcceso.size() > 0) {
 				if (request.getRequisition().getMarca() == 16) {
 					Boolean procesarOrden = false;
@@ -143,7 +142,6 @@ public class CotizadorServiceImpl implements Cotizador {
 					if (procesarOrden) {
 						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
 						logger.info("Marca: " + tosc.getCmarca());
-						
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
