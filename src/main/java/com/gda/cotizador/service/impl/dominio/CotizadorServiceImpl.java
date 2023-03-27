@@ -115,7 +115,7 @@ public class CotizadorServiceImpl implements Cotizador {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
 			request.setStatus("completed");
-			request.setBase64(base64.base64);
+			//request.setBase64(base64.base64);
 			request = toolServiceImpl.addConvenioDetalle(request);	
 		return request;
 	}
