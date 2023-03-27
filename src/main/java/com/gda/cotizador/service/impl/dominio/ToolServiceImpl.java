@@ -180,7 +180,7 @@ public class ToolServiceImpl implements ToolDominio{
 						cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(200,"success",cotizacionDto.getGDA_menssage() + "\nEl estudio " + coding.getCode()+ " no se encuentra en convenio."));
 					}
 				} else {
-					logger.info("antes de validad el examne "+coding.getCode());
+					// logger.info("antes de validad el examne "+coding.getCode());
 					//if(){
 						// 			logger.error("Examen no corresponde a la marca: " + coding.getCode());
 						// 			throw new Exception("Examen no corresponde a la marca");

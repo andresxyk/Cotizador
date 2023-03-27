@@ -44,8 +44,6 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	@Override
 	public List<ConvenioDto> getListConvenioDto(FiltroDto filtro){
 		List<ConvenioDto> list;		
-		logger.info("ejecutando getListConvenioDto");
-		logger.info(filtro.toString());
 		String complemento = "";
 		if(filtro.getCconvenio() != null && filtro.getCconvenio()>-1) {
 			complemento = "cc.cconvenio = "+filtro.getCconvenio()+"\r\n";
@@ -64,8 +62,6 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	@Override
 	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroDto filtro){
 		List<ExamenConfigDto> list;
-		logger.info("ejecutando getListSearchExamenDto");	
-		logger.info(filtro.toString());
 		String complemento = "";
 		if(filtro.getSexamen()!=null) {
 			if(filtro.getSexamen().length()>0) {
@@ -92,9 +88,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	@Override
 	public List<ExamenConfigDto> getListSearchExamenDto(Integer cexamen, Integer cconvenio){
 		List<ExamenConfigDto> list;
-		logger.info("ejecutando getListSearchExamenDto");	
-		logger.info(cexamen);
-		logger.info(cconvenio);
+
 		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
 				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
 				+ "eec.bdomingo, eec.utiemporespuestadiasprint , elcd.mpreciosiniva, ce.cdepartamento, cd.sdepartamento	\r\n"
@@ -113,8 +107,6 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	@Override
 	public List<SucursalDto> getListSearchSucursalDto(com.gda.cotizador.dto.requestSucursal.FiltroDto filtro, Integer cmarca){
 		List<SucursalDto> list;
-		logger.info("ejecutando getListSearchSucursalDto");	
-		logger.info(filtro.toString());
 		String complemento = "";
 		if(filtro.getCsucursal()!="") {
 			complemento += "and csucursal in ("+filtro.getCsucursal()+") \r\n";
@@ -135,13 +127,10 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 	@Override
 	public List<EConvenioDetalleDto> getListEConvenioDetalle(Integer cconvenio, Integer cexamen){
 		List<EConvenioDetalleDto> list;
-		logger.info("ejecutando getListEConvenioDetalle");
 		String query = "select * from cotizador.e_convenio_detalle \r\n"
 				+ "where cconvenio = ?\r\n"
 				+ "and cexamen = ?" ;
 		list = jdbcTemplate.query(query, new Object[] {cconvenio,cexamen}, new EConvenioDetalleMapper());		
 		return list;
 	}
-	
-	
 }

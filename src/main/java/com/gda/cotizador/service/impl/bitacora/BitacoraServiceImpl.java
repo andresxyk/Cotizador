@@ -32,9 +32,8 @@ public class BitacoraServiceImpl implements Bitacora{
 		try { 
 			RestTemplate rt = new RestTemplate();
 			String url = env.getProperty("url.service.bitacora.apis");			
-			//RequestEntity<String> requestEntity = RequestEntity.post(new URL(url).toURI()).contentType(MediaType.APPLICATION_JSON).body(gson.toJson(dto)); 
-			//rt.postForEntity(url, dto, String.class );
-			ResponseEntity<String> response = rt.postForEntity(url, dto, String.class );
+			RequestEntity<String> requestEntity = RequestEntity.post(new URL(url).toURI()).contentType(MediaType.APPLICATION_JSON).body(gson.toJson(dto)); 
+			ResponseEntity<String> response = rt.exchange(requestEntity, String.class);
 			logger.info(response.getBody());
 			return response.getBody();
 		} catch (RestClientResponseException e) {

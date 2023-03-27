@@ -46,9 +46,18 @@ public class GeneraReporte implements Serializable{
       return bytes;
   }
 
+/**
+ * Funcion para genera el reporte pdf
+ * @param jasperFileName
+ * @param pdfFileName
+ * @param params
+ * @param subreportes
+ * @param connection
+ * @return String sHttpPath De buelve la ruta donde se creo el pdf del .jasper
+ * @throws Exception
+ */
   public String generaReportePdf(String jasperFileName, String pdfFileName, Map params, Map subreportes, Connection connection) throws Exception {
-	    try {
-	      
+	    try {	      
 	        String sHttpPath = generarPdf(jasperFileName, pdfFileName, params, subreportes, connection);
 	        return sHttpPath;
 	    } catch (JRException jexp) {
@@ -58,8 +67,17 @@ public class GeneraReporte implements Serializable{
 	    } 
 	  }
 
+	  /**
+	   * Funcion para crear el reporte con jasper para pdf
+	   * @param jasperFileName
+	   * @param pdfFileName
+	   * @param params
+	   * @param subreportes
+	   * @param connection
+	   * @return String pdfFileNameFull nombre completo del pdf generaro 
+	   * @throws Exception
+	   */
   public String generarPdf(String jasperFileName, String pdfFileName, Map params, Map subreportes, Connection connection) throws Exception {
-	    
 	    try {
 	      this.jasperFileName = jasperFileName;
 	      this.pdfFileName = pdfFileName;
@@ -101,14 +119,9 @@ public class GeneraReporte implements Serializable{
 	          this.subreportes.put(key, sNuevoValor);
 	        } 
 	      } 
-
-	    
 	    }
 	    catch (Exception aError) {
 	      throw aError;
 	    } 
 	  }
-
-
-  	
 }

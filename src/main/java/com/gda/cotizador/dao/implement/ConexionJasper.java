@@ -39,8 +39,6 @@ public class ConexionJasper extends JdbcDaoSupport implements IConexionJasper{
 	 
      @Override
 	 public Connection getConnectionJDBC() throws Exception{
-        logger.debug("ejecutando getConnectionJDBC");
-        logger.info("dentro de la funcion getConnectionJDBC");
 		  EdbExecutor edbExecutor;
 		  edbExecutor = new EdbExecutor();
          return edbExecutor.getConnetion(env.getProperty("legacy.datasource.jdbc-url").replace("postgresql", "edb"),

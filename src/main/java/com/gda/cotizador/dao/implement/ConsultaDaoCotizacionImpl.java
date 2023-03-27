@@ -106,9 +106,6 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 	@Override
 	public Integer insertTOrdenSucursalCotizacion(TOrdenSucursalCotizacionDto dto)throws Exception{
 		logger.info("entra insertTOrdenSucursalCotizacion");
-		logger.info("PIVA"+dto.getPiva());
-		logger.info("IVA"+dto.getMiva());
-
 		Integer insert = 0;
 		String query = "INSERT INTO public.t_orden_sucursal_cotizacion(\r\n"
 				+ "	kordensucursalcotizacion, kordensucursal, cmarca, ssucursal, \r\n"
@@ -137,12 +134,11 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 			logger.error(e.getMessage());
 			throw e;
 		}
-		logger.info("insertTOrdenSucursalCotizacion ejecutado");
 		return insert;
 	}	
 	@Override
 	public Integer insertTOrdenExamenSucursalCotizacion(TOrdenExamenSucursalCotizacionDto dto)throws Exception{
-		logger.info("entra insertTOrdenExamenSucursalCotizacion");
+		logger.info("insertTOrdenExamenSucursalCotizacion");
 		
 		Integer insert = 0;
 		String query = "INSERT INTO public.t_orden_examen_sucursal_cotizacion(\r\n"
@@ -169,12 +165,11 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 			logger.error(e.getMessage());
 			throw e;
 		}
-		logger.info("insertTOrdenExamenSucursalCotizacion ejecutado");
 		return insert;
 	}	
 	@Override
 	public List<PerfilDto> getListExamenesPerfil(Integer cperfil, Integer cconvenio){
-		logger.info("ejecutando getListExamenesPerfil");
+		logger.info(" getListExamenesPerfil");
 		List<PerfilDto> list;
 		String query = "SELECT cp.cperfil, cp.sperfil,  ecp.cconvenio,\r\n"
 				+ "ce.cexamen, ce.sexamen ,\r\n"
@@ -194,7 +189,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 				+ "WHERE cp.cperfil = ? \r\n"
 				+ "and cc.cconvenio= ? " ;
 		list = jdbcTemplate.query(query, new Object[]{cperfil, cconvenio},new PerfilMapper());
-		logger.info("getListExamenesPerfil ejecutado:"+list.size());
+		// logger.info("getListExamenesPerfil ejecutado:"+list.size());
 		return list;
 	}
 	
@@ -208,7 +203,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 				user.getUser(),
 				user.getPassword()
 			}, new AccesoClienteMapper());
-			logger.info("getListAccesoCliente ejecutado: " + list.size());
+			// logger.info("getListAccesoCliente ejecutado: " + list.size());
 			return list;			
 		} catch (Exception e) {
 			throw e;

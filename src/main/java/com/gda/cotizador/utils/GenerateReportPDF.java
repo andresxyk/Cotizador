@@ -32,6 +32,12 @@ public class GenerateReportPDF {
 	 @Autowired
 	 IConexionJasper conexionJasper;
 
+	 /**
+	  * Funcion puente para genera los pdfs en base la marca
+	  * @param TOrdenSucursalCotizacionDto 
+	  * @return byte[] Pdf en base 64
+	  * @throws Exception
+	  */
    public byte[] doIndicaciones(TOrdenSucursalCotizacionDto aObjDatos) throws Exception {
 	 
    	iObjLog.debug("doImprimir:ENTRANDO"); 
@@ -64,7 +70,6 @@ public class GenerateReportPDF {
 			}
 			int intCotizacion = aObjDatos.getKordensucursalcotizacion();
 		    String strNomArchivo = "RepIndicacionPaciente" + Calendar.getInstance().getTimeInMillis() + ".pdf";
-           iObjLog.info("Procesando la Admision doRecibofactura " +intCotizacion);
 		    Map params = new HashMap();	
 		    params.put("kordensucursalcotizacion", new Double(intCotizacion));            
 		    params.put("imagen", strImagen);     
@@ -98,11 +103,9 @@ public class GenerateReportPDF {
            iObjLog.debug("Saliendo la Admision doRecibofactura " +intCotizacion);
            byte[] inFileBytes = Files.readAllBytes(Paths.get(ruta)); 
            byte[] encoded = java.util.Base64.getEncoder().encode(inFileBytes);
-           iObjLog.info(encoded);
            return encoded;
 		}catch (Exception aError) {
 		    iObjLog.error("Error en ReporteAction.doRecibofactura ",aError);
-		    
 		    throw aError;
 		} finally {
 			if(objCon!=null)objCon.close();        	
