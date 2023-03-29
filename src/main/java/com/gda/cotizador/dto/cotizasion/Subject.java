@@ -3,6 +3,9 @@ package com.gda.cotizador.dto.cotizasion;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,10 +13,12 @@ import lombok.Setter;
 @Data
 @Setter
 @Getter
-public class Subject
-{
+@RequestMapping("/infogda-fullV3")
+
+public class Subject {
 	@NotNull
 	@NotBlank
-    private String reference;
+	@Schema(description = "ID paciente")
+	private String reference;
 
 }

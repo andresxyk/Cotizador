@@ -5,10 +5,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.gda.cotizador.dto.cotizasion.Requisition;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,52 +18,65 @@ import lombok.Setter;
 @Data
 @Setter
 @Getter
+@RequestMapping("/infogda-fullV3")
 public class CotizacionDto {
 
-    @NotNull
-    @Valid
-    private HeaderDto header;
+	@NotNull
+	@Valid
+	@Schema(description = "Revisar estructura Header")
+	private HeaderDto header;
 
-    private String base64;
+	@Schema(description = "Regresa base64 en response")
+	private String base64;
 
 	@NotNull
-    private String resourceType;
+	@Schema(description = "Fijo")
+	private String resourceType;
 
-    private Integer id;
+	@Schema(description = "Response ID cotitzación")
+	private Integer id;
 
-    @NotNull
-    @Valid
-    private Requisition requisition;
+	@NotNull
+	@Valid
+	@Schema(description = "Revisar estructura Requisition")
+	private Requisition requisition;
 
-    @NotNull
+	@NotNull
 	@NotBlank
 	@Pattern(regexp = "(active)+", message = "El campo solo acepta los siguientes valores: active")
-    private String status;
+	@Schema(description = "Fijo")
+	private String status;
 
-    @NotNull
+	@NotNull
 	@NotBlank
-    private String intent;
+	@Schema(description = "Fijo")
+	private String intent;
 
-    @NotNull
-    @Valid
-    private CodeDto code;
+	@NotNull
+	@Valid
+	@Schema(description = "Revisar estructura Coding")
+	private CodeDto code;
 
-    private String orderdetail;
+	@Schema(description = "Detalles cotización")
+	private String orderdetail;
 
-    @NotNull
+	@NotNull
 	@NotBlank
+	@Schema(description = "Cantidad examen")
 	@Pattern(regexp = "[0-9]+", message = "Debe contener solo números.")
-    private String quantityQuantity;
+	private String quantityQuantity;
 
-    @NotNull
-    @Valid
-    private Subject subject;
+	@NotNull
+	@Valid
+	@Schema(description = "Revisar estructura Subject")
+	private Subject subject;
 
-    @NotNull
-    @Valid
-    private Requester requester;
+	@NotNull
+	@Valid
+	@Schema(description = "Revisar estructura Requester")
+	private Requester requester;
 
-    @Valid
-    private GDAMenssageDto GDA_menssage;
+	@Valid
+	@Schema(description = "Revisar estructura GDAMessage")
+	private GDAMenssageDto GDA_menssage;
 }
-

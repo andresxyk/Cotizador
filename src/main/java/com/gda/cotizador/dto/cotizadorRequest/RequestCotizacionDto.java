@@ -8,106 +8,125 @@ import javax.validation.constraints.Pattern;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class RequestCotizacionDto {
 	@NotNull
-    private String resourceType;
+	@Schema(description = "Fijo")
+	private String resourceType;
+	@Schema(description = "Response ID cotización")
+	private Integer id;
 
-    private Integer id;
-    
-    @NotNull
-    private HeaderDto header;
-    
-    private String base64;
+	@NotNull
+	private HeaderDto header;
 
-    @NotNull
-    @Valid
-    private Requisition requisition;
+	private String base64;
 
-    @NotNull
+	@NotNull
+	@Valid
+	private Requisition requisition;
+
+	@NotNull
 	@NotBlank
 	@Pattern(regexp = "(active)+", message = "El campo solo acepta los siguientes valores: active")
-    private String status;
+	 @Schema(description =  "Fijo = active")
+	private String status;
 
-    @NotNull
+	@NotNull
 	@NotBlank
-    private String intent;
-    
+	@Schema(description =  "Fijo = order")
+	private String intent;
 
-    @NotNull
-    @Valid
-    private Code code;
+	@NotNull
+	@Valid
+	private Code code;
 
-    @NotNull
+	@NotNull
 	@NotBlank
 	@Pattern(regexp = "[0-9]+", message = "Debe contener solo números.")
-    private String quantityQuantity;
+	@Schema(description =  "Cantidad examen")
+	private String quantityQuantity;
 
-    private GDAMenssageDto GDA_menssage;
-    
-  
-            
-    
+	private GDAMenssageDto GDA_menssage;
+
 	public HeaderDto getHeader() {
 		return header;
 	}
+
 	public void setHeader(HeaderDto header) {
 		this.header = header;
 	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public void setResourceType(String resourceType){
-        this.resourceType = resourceType;
-    }
-    public String getResourceType(){
-        return this.resourceType;
-    }
-    public void setRequisition(Requisition requisition){
-        this.requisition = requisition;
-    }
-    public Requisition getRequisition(){
-        return this.requisition;
-    }
-    public void setStatus(String status){
-        this.status = status;
-    }
-    public String getStatus(){
-        return this.status;
-    }
-    public void setIntent(String intent){
-        this.intent = intent;
-    }
-    public String getIntent(){
-        return this.intent;
-    }
-    public void setCode(Code code){
-        this.code = code;
-    }
-    public Code getCode(){
-        return this.code;
-    }
-    public void setQuantityQuantity(String quantityQuantity){
-        this.quantityQuantity = quantityQuantity;
-    }
-    public String getQuantityQuantity(){
-        return this.quantityQuantity;
-    }
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public String getResourceType() {
+		return this.resourceType;
+	}
+
+	public void setRequisition(Requisition requisition) {
+		this.requisition = requisition;
+	}
+
+	public Requisition getRequisition() {
+		return this.requisition;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStatus() {
+		return this.status;
+	}
+
+	public void setIntent(String intent) {
+		this.intent = intent;
+	}
+
+	public String getIntent() {
+		return this.intent;
+	}
+
+	public void setCode(Code code) {
+		this.code = code;
+	}
+
+	public Code getCode() {
+		return this.code;
+	}
+
+	public void setQuantityQuantity(String quantityQuantity) {
+		this.quantityQuantity = quantityQuantity;
+	}
+
+	public String getQuantityQuantity() {
+		return this.quantityQuantity;
+	}
+
 	public GDAMenssageDto getGDA_menssage() {
 		return GDA_menssage;
 	}
+
 	public void setGDA_menssage(GDAMenssageDto gDA_menssage) {
 		GDA_menssage = gDA_menssage;
 	}
+
 	public String getBase64() {
 		return this.base64;
 	}
+
 	public void setBase64(String base64) {
 		this.base64 = base64;
 	}
-	
-    
-}
 
+}

@@ -1,5 +1,8 @@
 package com.gda.cotizador.dto.requestExamen;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +12,13 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class FiltroDto {
+@RequestMapping("/infogda-fullV3")
 
+
+public class FiltroDto {
+	@Schema(description = "Filtro cconvenio")
 	private Integer cconvenio;
+	@Schema(description = "Filtro sexamen")
 	private String sexamen;
-	
+
 }
