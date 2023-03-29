@@ -1,9 +1,5 @@
 package com.gda.cotizador.controller;
 
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +19,13 @@ import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.service.impl.dominio.SetsDtosImpl;
 import com.google.gson.Gson;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+
+
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/infogda-fullV3")
-@Api(tags = "controllerCotizacion")
 public class CotizacionController {
 
 final static Logger logger = LogManager.getLogger(CotizacionController.class);
@@ -51,11 +44,8 @@ final static Logger logger = LogManager.getLogger(CotizacionController.class);
 	
 	
 	@RequestMapping(value = "/service-request-cotizacion", method = { RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "Procesar Service Request Cotizacion", notes = "Método que se encarga de procesar la información del service request cotizacion, "
-			+ "para generar la Cotizacion.")
-	@ApiResponses({ @ApiResponse(code = HttpServletResponse.SC_CREATED, message = "CREATED",response = CotizacionDto.class),
-		@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "BAD_REQUEST",response = CotizacionDto.class)})
-	public ResponseEntity<?> serviceRequest(@ApiParam(value = "Objeto ServiceRequest", required = true) @RequestBody CotizacionDto cotizacionDto) throws Exception {
+	@Operation(description = "Método para generar un ID y archivo PDF de la cotización.", tags = {"Cotización"})
+	public ResponseEntity<?> serviceRequest(@RequestBody CotizacionDto cotizacionDto) throws Exception {
 		logger.info("serviceRequest");
 		try{
 			if(cotizacionDto.getStatus().equals("active")){

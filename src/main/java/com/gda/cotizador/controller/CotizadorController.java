@@ -23,12 +23,11 @@ import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.utils.GeneralUtil;
 import com.google.gson.Gson;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/gda-cotizador")
-@Api(tags = "cotizadorController")
 public class CotizadorController {
 	final static Logger log = LogManager.getLogger(CotizadorController.class);
 
@@ -43,6 +42,7 @@ public class CotizadorController {
 	@RequestMapping(value = "/search-convenio", method = { RequestMethod.POST },
 			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 	        produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(description = "Método para buscar convenios en base al filtro proporcionado en la petición.", tags = {"Cotización"})
 	public ResponseEntity<?> searchConvenio(@RequestBody RequestConvenioDto request) {
 		log.info("searchConvenio");
 		GDAMenssageDto msg = new GDAMenssageDto();
@@ -66,6 +66,7 @@ public class CotizadorController {
 	@RequestMapping(value = "/search-sucursal", method = { RequestMethod.POST },
 			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 	        produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(description = "Método para buscar sucursal en base al filtro proporcionado en la petición.", tags = {"Cotización"})
 	public ResponseEntity<?> searchSucursal(@RequestBody RequestSucursalDto request) {
 		log.info("searchSucursal");
 		GDAMenssageDto msg = new GDAMenssageDto();
@@ -89,6 +90,7 @@ public class CotizadorController {
 	@RequestMapping(value = "/search-examen", method = { RequestMethod.POST },
 			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 	        produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(description = "Método para buscar examenes en base al filtro proporcionado en la petición.", tags = {"Cotización"})
 	public ResponseEntity<?> searchExamen(@RequestBody RequestExamenDto request) {
 		log.info("searchExamen");
 		GDAMenssageDto msg = new GDAMenssageDto();
@@ -121,6 +123,7 @@ public class CotizadorController {
 	@RequestMapping(value = "/request-cotizador", method = { RequestMethod.POST },
 			consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 	        produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(description = "Método para obtener los precios de los estudios.", tags = {"Cotización"})
 	public ResponseEntity<?> requestCotizador(@RequestBody RequestCotizacionDto request) {
 		log.info("searchExamen");
 		GDAMenssageDto msg = new GDAMenssageDto();
