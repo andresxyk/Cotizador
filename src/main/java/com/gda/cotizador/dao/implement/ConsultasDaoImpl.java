@@ -176,16 +176,20 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		List<PerfilDto> list;
 		String complemento = "";
 		if (filtro.getCperfil() != "") {
-			complemento += "and cperfil in (" + filtro.getCperfil() + ") \r\n";
+			complemento += "and cp.cperfil in (" + filtro.getCperfil() + ") \r\n";
 		}
 		if (filtro.getSperfil() != "") {
-			complemento += "and sperfil like '%" + filtro.getSperfil() + "%' \r\n";
+			complemento += "and cp.sperfil like '%" + filtro.getSperfil() + "%' \r\n";
 		}
-		String query = "select cperfil, sperfil\r\n" + "from cotizador.c_perfil\r\n" + "where cmarca = ?\r\n"
+		String query = "select cp.cperfil, cp.sperfil from cotizador.c_perfil cp\r\n"
+				+ "inner join cotizador.e_convenio_perfil ecp on cp.cperfil = ecp.cperfil\r\n"
+				+ "inner join cotizador.c_convenio cc on cc.cconvenio = ecp.cconvenio\r\n"
+				+ "where cp.cmarca = ?\r\n"
+				+ "and cp.blistapublico = true\r\n"
+				+ "and cc.ctipoconvenio = 24\r\n"
 				+ complemento;
 		list = jdbcTemplate.query(query, new Object[] { cmarca }, new BusquedaPerfilMapper());
 		return list;
-
 	}
 
 	@SuppressWarnings("deprecation")
