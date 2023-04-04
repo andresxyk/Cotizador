@@ -16,9 +16,14 @@ import lombok.ToString;
 
 
 public class FiltroDto {
+	
 	@Schema(description = "Filtro cconvenio")
 	private Integer cconvenio;
-	@Schema(description = "Filtro sexamen")
+	
+	@Schema(description = "Filtro de sexamen")
 	private String sexamen;
+	
+	@Schema(description = "Filtro de sexamenweb")
+	private String sexamenweb;
 
 }

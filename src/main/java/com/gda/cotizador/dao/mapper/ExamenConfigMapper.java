@@ -14,6 +14,7 @@ public class ExamenConfigMapper implements RowMapper<ExamenConfigDto>{
 		ExamenConfigDto dto = new ExamenConfigDto();
 		dto.setCexamen(rs.getInt("cexamen"));
 		dto.setSexamen(rs.getString("sexamen"));
+		dto.setSexamenweb(rs.getString("sexamenweb"));
 		dto.setMprecio(rs.getBigDecimal("mprecio"));
 		dto.setScondicionpreanalitica(rs.getString("scondicionpreanalitica"));
 		dto.setBlunes(rs.getBoolean("blunes"));

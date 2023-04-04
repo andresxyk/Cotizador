@@ -16,16 +16,25 @@ import lombok.Setter;
 public class ExamenDto {
 	@Schema(description = "Código del examen")
 	private Integer cexamen;
+	
 	@Schema(description = "Descripción del examen")
 	private String sexamen;
+	
+	@Schema(description = "Descripción del examen web")
+	private String sexamenweb;
+	
 	@Schema(description = "Precio del examen")
 	private BigDecimal precio;
+	
 	@Schema(description = "Indicaciones del paciente")
 	private String indicacionespaciente;
+	
 	@Schema(description = "Fecha entrega examen")
 	private String fechaentrega;
+	
 	@Schema(description = "No departamento")
 	private Integer cdepartamento;
+	
 	@Schema(description = "Departamento encargado")
 	private String sdepartamento;
 		

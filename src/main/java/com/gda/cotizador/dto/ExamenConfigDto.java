@@ -15,6 +15,7 @@ public class ExamenConfigDto {
 
 	private Integer cexamen;
 	private String sexamen;
+	private String sexamenweb;
 	private BigDecimal mprecio;
 	private String scondicionpreanalitica;
 	private Boolean blunes;
