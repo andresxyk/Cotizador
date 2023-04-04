@@ -1,4 +1,4 @@
-package com.gda.cotizador.dto.cotizasion;
+package com.gda.cotizador.dto.cotizacion;
 
 public class CExamenDto {
 

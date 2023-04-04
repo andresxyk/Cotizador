@@ -1,4 +1,4 @@
-package com.gda.cotizador.dto.cotizasion;
+package com.gda.cotizador.dto.cotizacion;
 
 import java.math.BigDecimal;
 
@@ -16,39 +16,38 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequestMapping("/infogda-fullV3")
-public class CodingDto
-{
-	@Schema(description =  "Fijo")
+
+public class Requisition {
+	@Schema(description = "Fijo")
 	private String system;
-	
-	@NotNull
-	@NotBlank
-	@Schema(description =  "ID de examen")
-    private String code;
 
 	@NotNull
 	@NotBlank
-	@Schema(description =  "Nombre del examen")
-    private String display;
-		
+	@Schema(description = "Identificador externo")
+	private String value;
+
 	@NotNull
-	@Schema(description =  "Subtotal del examen")
-	private BigDecimal subtotal;
-	
-	@NotNull
-	@Schema(description =  "Descuento promoción examen")
-	private BigDecimal descuentopromocion;
-	
-	@NotNull
-	@Schema(description =  "Pago paciente del examen")
-	private BigDecimal pagopaciente;
-	
-	@NotNull
-	@Schema(description =  "Total del examen")
-	private BigDecimal total;
-	
-	@NotNull
-	@Schema(description =  "Id convenio examen")
+	@Schema(description = "ID convenio")
 	private Integer convenio;
-    
+
+	@NotNull
+	@Schema(description = "ID marca")
+	private Integer marca;
+
+	@NotNull
+	@Schema(description = "Subtotal de cotización")
+	private BigDecimal subtotal;
+
+	@NotNull
+	@Schema(description = "Descuento promoción cotización")
+	private BigDecimal descuentopromocion;
+
+	@NotNull
+	@Schema(description = "Pago paciente cotización")
+	private BigDecimal pagopaciente;
+
+	@NotNull
+	@Schema(description = "Total de la cotización")
+	private BigDecimal total;
+
 }

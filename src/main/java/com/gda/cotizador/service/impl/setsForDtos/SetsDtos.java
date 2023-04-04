@@ -5,8 +5,8 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
-import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.service.impl.dominio.SetsDtosImpl;
 import com.gda.cotizador.utils.GeneralUtil;

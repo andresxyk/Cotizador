@@ -19,7 +19,7 @@ public class RequestPerfilDto {
 
 	private HeaderDto header;
 	@Schema(description = "Revisar estructura filtro")
-	private FiltroDto filtro;
+	private FiltroPerfilDto filtro;
 	@Schema(description = "Revisar estructura perfiles")
 	private List<PerfilDto> perfiles;
 	@Schema(description = "Revisar estructura GDAMenssage")

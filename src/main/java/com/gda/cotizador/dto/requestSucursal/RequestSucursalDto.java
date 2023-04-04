@@ -21,7 +21,7 @@ public class RequestSucursalDto {
 	@Schema(description = "Revisar estructura header")
 	private HeaderDto header;
 	@Schema(description = "Revisar estructura filtro")
-	private FiltroDto filtro;
+	private FiltroSucursalDto filtro;
 	@Schema(description = "Revisar estructura sucursales")
 	private List<SucursalDto>  sucursales;
 	@Schema(description = "Revisar estructura GDAMenssage")

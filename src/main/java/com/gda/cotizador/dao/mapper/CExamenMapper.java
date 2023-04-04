@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.gda.cotizador.dto.cotizasion.CExamenDto;;
+import com.gda.cotizador.dto.cotizacion.CExamenDto;;
 
 public class CExamenMapper implements RowMapper<CExamenDto>{
 

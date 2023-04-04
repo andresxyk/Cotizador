@@ -6,20 +6,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Data
-@Getter
 @Setter
+@Getter
+@ToString
 @RequestMapping("/infogda-fullV3")
+public class FiltroSucursalDto {
 
-public class SucursalDto {
 	@Schema(description = "Código de la sucursal")
-	private Integer csucursal;
-	
-	@Schema(description = "Nemonico")
-	private String nemonico;
+	private String csucursal;
 	
 	@Schema(description = "Nombre de la sucursal")
-	private String nombresucursal;
+	private String ssucursal;
 	
 }

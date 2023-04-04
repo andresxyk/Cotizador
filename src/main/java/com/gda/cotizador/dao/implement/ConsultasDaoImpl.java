@@ -22,7 +22,7 @@ import com.gda.cotizador.dao.mapper.db.EConvenioDetalleMapper;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
-import com.gda.cotizador.dto.requestConvenio.FiltroDto;
+import com.gda.cotizador.dto.requestConvenio.FiltroConvenioDto;
 import com.gda.cotizador.dto.requestMarca.MarcaDto;
 import com.gda.cotizador.dto.requestPerfil.PerfilDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
@@ -47,7 +47,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<ConvenioDto> getListConvenioDto(FiltroDto filtro) {
+	public List<ConvenioDto> getListConvenioDto(FiltroConvenioDto filtro) {
 		List<ConvenioDto> list;
 		String complemento = "";
 		if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
@@ -65,7 +65,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroDto filtro) {
+	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro) {
 		List<ExamenConfigDto> list;
 		String complemento = "";
 		if (filtro.getSexamen() != null) {
@@ -117,7 +117,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	public List<ExamenConfigDto> getListSearchExamenDto(Integer cexamen, Integer cconvenio) {
 		List<ExamenConfigDto> list;
 
-		String query = "select elcd.cexamen, ce.sexamen, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
+		String query = "select elcd.cexamen, ce.sexamen, ce.sexamenweb, elcd.mprecio, eec.scondicionpreanalitica,\r\n"
 				+ "eec.blunes, eec.bmartes, eec.bmiercoles, eec.bjueves, eec.bviernes, eec.bsabado,\r\n"
 				+ "eec.bdomingo, eec.utiemporespuestadiasprint , elcd.mpreciosiniva, ce.cdepartamento, cd.sdepartamento	\r\n"
 				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
@@ -132,7 +132,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<SucursalDto> getListSearchSucursalDto(com.gda.cotizador.dto.requestSucursal.FiltroDto filtro,
+	public List<SucursalDto> getListSearchSucursalDto(com.gda.cotizador.dto.requestSucursal.FiltroSucursalDto filtro,
 			Integer cmarca) {
 		List<SucursalDto> list;
 		String complemento = "";
@@ -151,7 +151,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<MarcaDto> getListSearchMarcaDto(com.gda.cotizador.dto.requestMarca.FiltroDto filtro) {
+	public List<MarcaDto> getListSearchMarcaDto(com.gda.cotizador.dto.requestMarca.FiltroMarcaDto filtro) {
 		List<MarcaDto> list;
 		String complemento = "";
 		if (filtro.getCmarca() != "") {
@@ -172,7 +172,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<com.gda.cotizador.dto.requestPerfil.PerfilDto> getListSearchPerfilDto(
-			com.gda.cotizador.dto.requestPerfil.FiltroDto filtro, Integer cmarca) {
+			com.gda.cotizador.dto.requestPerfil.FiltroPerfilDto filtro, Integer cmarca) {
 		List<PerfilDto> list;
 		String complemento = "";
 		if (filtro.getCperfil() != "") {

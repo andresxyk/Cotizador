@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.edb.util.Base64;
 import com.gda.cotizador.dao.interfaz.IConexionJasper;
-import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
 
 
 

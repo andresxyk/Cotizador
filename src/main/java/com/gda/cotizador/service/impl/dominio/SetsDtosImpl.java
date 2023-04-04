@@ -2,8 +2,8 @@ package com.gda.cotizador.service.impl.dominio;
 
 import java.math.BigDecimal;
 
-import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
-import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 
 public interface SetsDtosImpl {

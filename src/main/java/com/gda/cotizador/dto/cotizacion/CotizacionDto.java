@@ -1,4 +1,4 @@
-package com.gda.cotizador.dto.cotizasion;
+package com.gda.cotizador.dto.cotizacion;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;

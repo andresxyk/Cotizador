@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
-import com.gda.cotizador.dto.requestMarca.FiltroDto;
+import com.gda.cotizador.dto.requestMarca.FiltroMarcaDto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +23,7 @@ public class RequestMarcaDto {
 	@Schema(description = "Revisar estructura header")
 	private HeaderDto header;
 	@Schema(description = "Revisar estructura filtro")
-	private FiltroDto filtro;
+	private FiltroMarcaDto filtro;
 	@Schema(description = "Revisar estructura marcas")
 	private List<MarcaDto> marcas;
 	@Schema(description = "Revisar estructura GDAMenssage")

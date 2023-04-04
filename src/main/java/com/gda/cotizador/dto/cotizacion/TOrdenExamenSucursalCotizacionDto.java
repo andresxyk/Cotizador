@@ -1,4 +1,4 @@
-package com.gda.cotizador.dto.cotizasion;
+package com.gda.cotizador.dto.cotizacion;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -20,7 +20,7 @@ public class RequestExamenDto {
 	@Schema(description = "Revisar estructura header")
 	private HeaderDto header;
 	@Schema(description = "Revisar estructura filtro")
-	private FiltroDto filtro;
+	private FiltroExamenDto filtro;
 	@Schema(description = "Revisar estructura examenes")
 	private List<ExamenDto> examenes;
 	@Schema(description = "Revisar estructura GDAMenssage")

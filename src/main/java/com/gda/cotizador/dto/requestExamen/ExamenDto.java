@@ -20,7 +20,7 @@ public class ExamenDto {
 	@Schema(description = "Descripción del examen")
 	private String sexamen;
 	
-	@Schema(description = "Descripción del examen web")
+	@Schema(description = "Descripción del examen Web")
 	private String sexamenweb;
 	
 	@Schema(description = "Precio del examen")

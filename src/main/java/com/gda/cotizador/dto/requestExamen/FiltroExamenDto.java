@@ -15,15 +15,15 @@ import lombok.ToString;
 @RequestMapping("/infogda-fullV3")
 
 
-public class FiltroDto {
+public class FiltroExamenDto {
 	
-	@Schema(description = "Filtro cconvenio")
+	@Schema(description = "Código del convenio")
 	private Integer cconvenio;
 	
-	@Schema(description = "Filtro de sexamen")
+	@Schema(description = "Descripción del examen")
 	private String sexamen;
 	
-	@Schema(description = "Filtro de sexamenweb")
+	@Schema(description = "Descripción del examen Web")
 	private String sexamenweb;
 
 }

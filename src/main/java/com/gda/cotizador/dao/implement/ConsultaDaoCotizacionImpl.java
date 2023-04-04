@@ -17,12 +17,12 @@ import com.gda.cotizador.dao.mapper.CExamenMapper;
 import com.gda.cotizador.dao.mapper.PerfilMapper;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
-import com.gda.cotizador.dto.cotizasion.TOrdenExamenSucursalCotizacionDto;
-import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
-import com.gda.cotizador.dto.cotizasion.CExamenDto;
-import com.gda.cotizador.dto.cotizasion.CodingDto;
-import com.gda.cotizador.dto.cotizasion.Requisition;
-import com.gda.cotizador.dto.cotizasion.Subject;
+import com.gda.cotizador.dto.cotizacion.CExamenDto;
+import com.gda.cotizador.dto.cotizacion.CodingDto;
+import com.gda.cotizador.dto.cotizacion.Requisition;
+import com.gda.cotizador.dto.cotizacion.Subject;
+import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 @Repository("ConsultaDaoCotizacionImpl")

@@ -25,7 +25,7 @@ public class RequestConvenioDto {
 	private HeaderDto header;
 	@NotNull
 	@Schema(description = "Revisar estructura filtro")
-	private FiltroDto filtro;
+	private FiltroConvenioDto filtro;
 	@Schema(description = "Revisar estructura convenios")
 	private List<ConvenioDto> convenios;
 	@Schema(description = "Revisar estructura GDAMenssage")

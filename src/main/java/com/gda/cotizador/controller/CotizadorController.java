@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.bitacora.TBitacoraApiDto;
+import com.gda.cotizador.dto.cotizacion.CotizacionDto;
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
-import com.gda.cotizador.dto.cotizasion.CotizacionDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.service.bitacora.Bitacora;
 import com.gda.cotizador.service.dominio.Cotizador;
@@ -102,7 +102,7 @@ public class CotizadorController {
 
 	}
 							//Confirmar nombre
-	@RequestMapping(value = "/search-cotizacion", method = { RequestMethod.POST }, consumes = {
+	@RequestMapping(value = "/apply-cotizacion", method = { RequestMethod.POST }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(description = "Método para obtener los precios de los estudios.", tags = { "Cotización" })
 	public ResponseEntity<?> searchCotizacion(@RequestBody RequestCotizacionDto request) {
