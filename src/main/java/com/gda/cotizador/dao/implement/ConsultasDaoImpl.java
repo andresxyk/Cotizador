@@ -159,7 +159,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 		if(filtro.getSperfil()!="") {
 			complemento += "and sperfil like '%"+filtro.getSperfil()+"%' \r\n";
 		}
-		String query = "select cpefil, spefil\r\n"
+		String query = "select cperfil, sperfil\r\n"
 				+ "from cotizador.c_perfil\r\n"
 				+ "where cmarca = ?\r\n"
 				+ complemento;

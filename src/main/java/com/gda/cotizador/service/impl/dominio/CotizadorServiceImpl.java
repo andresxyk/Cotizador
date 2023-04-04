@@ -123,6 +123,7 @@ public class CotizadorServiceImpl implements Cotizador {
 	public RequestPerfilDto procesarRequestPerfil(RequestPerfilDto request) throws Exception {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
 			List<PerfilDto> list = consultasDao.getListSearchPerfilDto(request.getFiltro(), request.getHeader().getMarca());
+			request.setPerfiles(list);
 		} else {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
