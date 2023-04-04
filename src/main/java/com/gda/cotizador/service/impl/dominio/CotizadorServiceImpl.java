@@ -7,26 +7,27 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
-import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
+import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
-import com.gda.cotizador.dto.cotizasion.CodingDto;
-
-import com.gda.cotizador.dto.cotizadorRequest.Coding;
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
+import com.gda.cotizador.dto.cotizasion.CExamenDto;
+import com.gda.cotizador.dto.cotizasion.CodingDto;
 import com.gda.cotizador.dto.cotizasion.CotizacionDto;
 import com.gda.cotizador.dto.cotizasion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.general.Base64Const;
-import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
 import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
-import com.gda.cotizador.dto.cotizasion.CExamenDto;
+import com.gda.cotizador.dto.requestMarca.MarcaDto;
+import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
+import com.gda.cotizador.dto.requestPerfil.PerfilDto;
+import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 import com.gda.cotizador.seguridad.Seguridad;
@@ -109,14 +110,33 @@ public class CotizadorServiceImpl implements Cotizador {
 	}
 
 	@Override
+	public RequestMarcaDto procesarRequestMarca(RequestMarcaDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			List<MarcaDto> list = consultasDao.getListSearchMarcaDto(request.getFiltro());
+			request.setMarcas(list);
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}
+	@Override
+	public RequestPerfilDto procesarRequestPerfil(RequestPerfilDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			List<PerfilDto> list = consultasDao.getListSearchPerfilDto(request.getFiltro(), request.getHeader().getMarca());
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}
+	@Override
 	public RequestCotizacionDto procesarRequestCotizacion(RequestCotizacionDto request) throws Exception {
 		validateCotizacion.validateCotizacion(request);
 		if (!(env.getProperty("access.token.api").equals(request.getHeader().getToken()))) {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
-			request.setStatus("completed");
-			//request.setBase64(base64.base64);
-			request = toolServiceImpl.addConvenioDetalle(request);	
+		request.setStatus("completed");
+		// request.setBase64(base64.base64);
+		request = toolServiceImpl.addConvenioDetalle(request);
 		return request;
 	}
 
@@ -140,7 +160,8 @@ public class CotizadorServiceImpl implements Cotizador {
 						}
 					}
 					if (procesarOrden) {
-						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
+						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,
+								listAcceso.get(0));
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
@@ -153,13 +174,14 @@ public class CotizadorServiceImpl implements Cotizador {
 					}
 					return request;
 				}
-				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,listAcceso.get(0));
+				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,
+						listAcceso.get(0));
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
 				request.setBase64(new String(generateReport.doIndicaciones(tosc)));
 				request.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.CREATED.value(), "success",
-						"La transacción fue exitosa. "+request.getGDA_menssage().getDescripcion()));
+						"La transacción fue exitosa. " + request.getGDA_menssage().getDescripcion()));
 				return request;
 			}
 			throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());

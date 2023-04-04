@@ -11,15 +11,20 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
+
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
+import com.gda.cotizador.dao.mapper.BusquedaPerfilMapper;
 import com.gda.cotizador.dao.mapper.ConvenioMapper;
 import com.gda.cotizador.dao.mapper.ExamenConfigMapper;
+import com.gda.cotizador.dao.mapper.MarcaMapper;
 import com.gda.cotizador.dao.mapper.SucursalMapper;
 import com.gda.cotizador.dao.mapper.db.EConvenioDetalleMapper;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroDto;
+import com.gda.cotizador.dto.requestMarca.MarcaDto;
+import com.gda.cotizador.dto.requestPerfil.PerfilDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 
 @Repository("consultasDaoImpl")
@@ -121,6 +126,46 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao{
 				+ complemento;
 		list = jdbcTemplate.query(query, new Object[] {cmarca}, new SucursalMapper());		
 		return list;
+	}
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<MarcaDto> getListSearchMarcaDto(com.gda.cotizador.dto.requestMarca.FiltroDto filtro){
+		List<MarcaDto> list;
+		String complemento = "";
+		if(filtro.getCmarca() !="") {
+			complemento += "where cmarca in (" + filtro.getCmarca()+") \r\n";
+		}
+		if(filtro.getSmarca() != "") {
+			if(complemento!="") {
+				complemento += "and smarca like '%" + filtro.getSmarca()+"%' \r\n";
+			}else {				
+				complemento += "where smarca like '%" + filtro.getSmarca()+"%' \r\n";
+			}
+		}
+		String query = "select cmarca, smarca \r\n"
+				+ "from cotizador.c_marca\r\n"				
+				+ complemento;
+		list = jdbcTemplate.query(query, new Object[] {}, new MarcaMapper());
+		return list;
+	}
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<com.gda.cotizador.dto.requestPerfil.PerfilDto> getListSearchPerfilDto(com.gda.cotizador.dto.requestPerfil.FiltroDto filtro, Integer cmarca){
+		List<PerfilDto> list;
+		String complemento = "";
+		if(filtro.getCperfil()!="") {
+			complemento += "and cperfil in ("+filtro.getCperfil()+") \r\n";
+		}
+		if(filtro.getSperfil()!="") {
+			complemento += "and sperfil like '%"+filtro.getSperfil()+"%' \r\n";
+		}
+		String query = "select cpefil, spefil\r\n"
+				+ "from cotizador.c_perfil\r\n"
+				+ "where cmarca = ?\r\n"
+				+ complemento;
+		list = jdbcTemplate.query(query, new Object[] {cmarca}, new BusquedaPerfilMapper());		
+		return list;
+
 	}
 	
 	@SuppressWarnings("deprecation")
