@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+@RequestMapping("/infogda-fullV3")
 public class Coding
 {	
 	@Schema(description =  "Fijo")
@@ -14,16 +16,16 @@ public class Coding
 	
 	@NotNull
 	@NotBlank
-	@Schema(description =  "ID de examen")
+	@Schema(description =  "ID de Cexamen")
     private String code;
 
 	@NotNull
 	@NotBlank
-	@Schema(description =  "ID de examen")
+	@Schema(description =  "Nombre del examen")
     private String display;
 		
 	@NotNull
-	@Schema(description =  "Subtotal del examen")
+	@Schema(description =  "Nombre del examen")
 	private BigDecimal subtotal;
 	
 	@NotNull

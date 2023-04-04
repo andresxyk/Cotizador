@@ -5,33 +5,45 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+@RequestMapping("/infogda-fullV3")
 public class Requisition
 {
+	@Schema(description = "Fijo")
     private String system;
 
     @NotNull
     @NotBlank
+	@Schema(description = "Identificador externo")
     private String value;
     
     @NotNull 
+    @Schema(description = "ID convenio")
     private Integer convenio;
     
-    @NotNull
+    @NotNull @Schema(description = "Nombre convenio")
     private String nombreconvenio;
             
     @NotNull
+    @Schema(description = "Subtotal de cotización")
     private BigDecimal subtotal;
     
     @NotNull
+    @Schema(description = "Descuento promoción cotización")
     private BigDecimal descuentopromocion;
 
     @NotNull
+    @Schema(description = "Pago paciente cotización")
     private BigDecimal pagopaciente;
     
     @NotNull
+    @Schema(description = "Total cotización")
     private BigDecimal total;
     
     @NotNull
+    @Schema(description = "Fecha de entrega")
     private String fechaentrega;
     
     

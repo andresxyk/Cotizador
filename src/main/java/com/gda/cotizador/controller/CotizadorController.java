@@ -102,7 +102,7 @@ public class CotizadorController {
 
 	}
 							//Confirmar nombre
-	@RequestMapping(value = "/apply-cotizacion", method = { RequestMethod.POST }, consumes = {
+	@RequestMapping(value = "/simulate-cotizacion", method = { RequestMethod.POST }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(description = "Método para obtener los precios de los estudios.", tags = { "Cotización" })
 	public ResponseEntity<?> searchCotizacion(@RequestBody RequestCotizacionDto request) {

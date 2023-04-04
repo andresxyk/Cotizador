@@ -39,7 +39,7 @@ public class CotizacionDto {
 	@NotNull
 	@Valid
 	@Schema(description = "Revisar estructura Requisition")
-	private Requisition requisition;
+	private RequisitionCotizacion requisition;
 
 	@NotNull
 	@NotBlank
@@ -55,7 +55,7 @@ public class CotizacionDto {
 	@NotNull
 	@Valid
 	@Schema(description = "Revisar estructura Coding")
-	private CodeDto code;
+	private CodeCotizacionDto code;
 
 	@Schema(description = "Detalles cotización")
 	private String orderdetail;

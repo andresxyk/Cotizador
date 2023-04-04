@@ -18,8 +18,8 @@ import com.gda.cotizador.dao.mapper.PerfilMapper;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizacion.CExamenDto;
-import com.gda.cotizador.dto.cotizacion.CodingDto;
-import com.gda.cotizador.dto.cotizacion.Requisition;
+import com.gda.cotizador.dto.cotizacion.CodingCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.RequisitionCotizacion;
 import com.gda.cotizador.dto.cotizacion.Subject;
 import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
@@ -39,7 +39,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public boolean validarExamenConvenio(CodingDto codingdto){
+	public boolean validarExamenConvenio(CodingCotizacionDto codingdto){
 		logger.info("Validando el Examen con el Convenio");
 		boolean validacion = false;
 		String query =

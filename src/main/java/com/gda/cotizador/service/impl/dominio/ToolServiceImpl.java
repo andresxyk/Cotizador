@@ -19,7 +19,7 @@ import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizacion.CExamenDto;
-import com.gda.cotizador.dto.cotizacion.CodingDto;
+import com.gda.cotizador.dto.cotizacion.CodingCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.CotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
@@ -149,7 +149,7 @@ public class ToolServiceImpl implements ToolDominio{
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
 				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(0," "," "));
-		for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
+		for (CodingCotizacionDto coding : cotizacionDto.getCode().getCoding()) {
 			try {
 				// BigDecimal mIVATotal = coding.getTotal().add(tasaIVA);
 				double mIVATotal =  coding.getTotal().doubleValue()-(coding.getTotal().doubleValue() / tasaIVA) ;
@@ -273,7 +273,7 @@ public class ToolServiceImpl implements ToolDominio{
 	// }
 
 	public boolean validarPaciente(CotizacionDto cotizacionDto) throws Exception {
-		    for (CodingDto coding : cotizacionDto.getCode().getCoding()) {
+		    for (CodingCotizacionDto coding : cotizacionDto.getCode().getCoding()) {
 		    	String patient = cotizacionDto.getSubject().getReference().substring(
 						cotizacionDto.getSubject().getReference().indexOf("/") + 1, cotizacionDto.getSubject().getReference().length());
 		        if (consultasCotizacionDao.validarPacienteMarca(cotizacionDto.getRequisition().getMarca(), patient) == false) {

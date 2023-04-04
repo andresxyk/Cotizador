@@ -5,8 +5,8 @@ import java.util.List;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizacion.CExamenDto;
-import com.gda.cotizador.dto.cotizacion.CodingDto;
-import com.gda.cotizador.dto.cotizacion.Requisition;
+import com.gda.cotizador.dto.cotizacion.CodingCotizacionDto;
+import com.gda.cotizador.dto.cotizacion.RequisitionCotizacion;
 import com.gda.cotizador.dto.cotizacion.Subject;
 import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
@@ -44,7 +44,7 @@ public interface IConsultaCotizacionDao {
 	 */
 	Integer validationConvIndiseExamn(Integer conveion, String cexamen);
 	
-	boolean validarExamenConvenio(CodingDto codingdto);
+	boolean validarExamenConvenio(CodingCotizacionDto codingdto);
 	
 	boolean validarPacienteMarca(Integer marca,String patient);
 	}
