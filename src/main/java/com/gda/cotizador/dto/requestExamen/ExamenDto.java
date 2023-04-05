@@ -14,28 +14,28 @@ import lombok.Setter;
 @Setter
 @RequestMapping("/infogda-fullV3")
 public class ExamenDto {
-	@Schema(description = "Código del examen")
+	@Schema(description = "Response código del examen")
 	private Integer cexamen;
 	
-	@Schema(description = "Descripción del examen")
+	@Schema(description = "Response descripción del examen")
 	private String sexamen;
 	
-	@Schema(description = "Descripción del examen Web")
+	@Schema(description = "Response descripción del examen Web")
 	private String sexamenweb;
 	
-	@Schema(description = "Precio del examen")
+	@Schema(description = "Response precio del examen")
 	private BigDecimal precio;
 	
-	@Schema(description = "Indicaciones del paciente")
+	@Schema(description = "Respose indicaciones del paciente")
 	private String indicacionespaciente;
 	
-	@Schema(description = "Fecha entrega examen")
+	@Schema(description = "Response fecha entrega examen")
 	private String fechaentrega;
 	
-	@Schema(description = "No departamento")
+	@Schema(description = "Response No departamento")
 	private Integer cdepartamento;
 	
-	@Schema(description = "Departamento encargado")
+	@Schema(description = "Response epartamento encargado")
 	private String sdepartamento;
 		
 }

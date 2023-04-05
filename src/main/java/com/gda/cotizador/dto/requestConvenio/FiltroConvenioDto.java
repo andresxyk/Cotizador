@@ -18,11 +18,11 @@ import lombok.ToString;
 public class FiltroConvenioDto {
 
 	@NotNull
-	@Schema(description = "Código del convenio")
+	@Schema(description = "Código del convenio, -1 busca todos los convenios")
 	private Integer cconvenio;
 	
 	@NotNull
 	@Schema(description = "Nombre del convenio")
 	private String sconvenio;
-	
+
 }

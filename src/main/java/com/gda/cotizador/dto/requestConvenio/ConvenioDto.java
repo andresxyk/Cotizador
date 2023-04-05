@@ -12,13 +12,16 @@ import lombok.Setter;
 @Setter
 @RequestMapping("/infogda-fullV3")
 public class ConvenioDto {
-	@Schema(description = "Código del convenio")
+	@Schema(description = "Response código del convenio")
 	private Integer cconvenio;
-	@Schema(description = "Nombre del convenio")
+	
+	@Schema(description = "Response nombre del convenio")
 	private String sconvenio;
-	@Schema(description = "Tipo de convenio")
+	
+	@Schema(description = "Response tipo de convenio")
 	private Integer ctipoconvenio;
-	@Schema(description = "Descripcion tipo de convenio")
+	
+	@Schema(description = "Response descripcion tipo de convenio")
 	private String stipoconvenio;
 	
 }

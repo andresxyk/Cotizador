@@ -12,9 +12,9 @@ import lombok.ToString;
 @ToString
 public class MarcaDto {
 	
-	@Schema(description = "Código de la marca")
+	@Schema(description = "Response código de la marca")
 	private String cmarca;
 	
-	@Schema(description = "Nombre de la marca")
+	@Schema(description = "Response nombre de la marca")
 	private String smarca;
 }

@@ -13,13 +13,13 @@ import lombok.Setter;
 @RequestMapping("/infogda-fullV3")
 
 public class SucursalDto {
-	@Schema(description = "Código de la sucursal")
+	@Schema(description = "Response código de la sucursal")
 	private Integer csucursal;
 	
-	@Schema(description = "Nemonico")
+	@Schema(description = "Response nemonico")
 	private String nemonico;
 	
-	@Schema(description = "Nombre de la sucursal")
+	@Schema(description = "Response nombre de la sucursal")
 	private String nombresucursal;
 	
 }

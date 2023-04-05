@@ -104,7 +104,7 @@ public class CotizadorController {
 							//Confirmar nombre
 	@RequestMapping(value = "/simulate-cotizacion", method = { RequestMethod.POST }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@Operation(description = "Método para obtener los precios de los estudios.", tags = { "Cotización" })
+	@Operation(description = "Método para previsualizar los datos de una cotización.", tags = { "Cotización" })
 	public ResponseEntity<?> searchCotizacion(@RequestBody RequestCotizacionDto request) {
 		log.info("searchExamen");
 		GDAMenssageDto msg = new GDAMenssageDto();
