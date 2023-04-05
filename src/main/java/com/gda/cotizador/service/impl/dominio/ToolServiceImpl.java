@@ -189,7 +189,7 @@ public class ToolServiceImpl implements ToolDominio{
 						// 			throw new Exception("Examen no corresponde a la marca");
 						// 
 					//}
-					if(!consultasCotizacionDao.validarExamenConvenio(coding) || consultasCotizacionDao.validationConvIndiseExamn(cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0) {
+					if(!consultasCotizacionDao.validarExamenConvenio(coding) && consultasCotizacionDao.validationConvIndiseExamn(cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0) {
 
 						logger.error("ERROR:El estudio no se encuentra en convenio");
 						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()

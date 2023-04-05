@@ -111,11 +111,38 @@ public class CotizadorController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			request = cotizador.procesarRequestCotizacion(request);
-			request.getGDA_menssage().setMenssage("success");
-			request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-			request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-			return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.OK);
+			if(request.validarLineaNegocio(request)) {
+				if(request.validarFechaRegistro(request)) {
+					if(request.validarMarca(request)) {
+						request = cotizador.procesarRequestCotizacion(request);
+						request.getGDA_menssage().setMenssage("success");
+						request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+						return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.OK);
+					}else {
+						log.error("Error inesperado");
+						request.getGDA_menssage().setMenssage("error");
+						request.getGDA_menssage().setDescripcion("Marca incorrecta, validar");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+						return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
+					}
+					
+				}else {
+					log.error("Error inesperado");
+					request.getGDA_menssage().setMenssage("error");
+					request.getGDA_menssage().setDescripcion("Formato o fecha incorrecta, validar");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+					return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
+				}
+				
+			}else {
+				log.error("Error inesperado");
+				request.getGDA_menssage().setMenssage("error");
+				request.getGDA_menssage().setDescripcion("Linea de negocio incorrecta");
+				request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+				return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
+			}
+			
 		} catch (Exception e) {
 			log.error("Error inesperado", e);
 			request.getGDA_menssage().setMenssage("error");

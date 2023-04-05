@@ -1,5 +1,11 @@
 package com.gda.cotizador.dto.cotizadorRequest;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -7,6 +13,8 @@ import javax.validation.constraints.Pattern;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
+import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
+import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -128,5 +136,37 @@ public class RequestCotizacionDto {
 	public void setBase64(String base64) {
 		this.base64 = base64;
 	}
+	public Boolean validarMarca(RequestCotizacionDto request) throws Exception {
+		if (request.getHeader().getMarca() > 0 && request.getHeader().getMarca() < 999999) {
+			return true;
+		} else {
+			return false;
+		}
 
+	}
+	public Boolean validarLineaNegocio(RequestCotizacionDto request) {
+		if(request.getHeader().getLineanegocio().equals("De donde proviene")) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public Boolean validarFechaRegistro(RequestCotizacionDto request) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
+		LocalDate fechaActual = LocalDate.now(ZoneOffset.UTC);
+		LocalDateTime fechaInsertada = null;
+		try {
+			fechaInsertada = LocalDateTime.parse(request.getHeader().getDregistro(), formatter);
+		} catch (DateTimeParseException e) {
+			// La fecha insertada no tiene el formato deseado
+		}
+
+		if (fechaInsertada.atZone(ZoneOffset.UTC).toLocalDate().isEqual(fechaActual)) {
+			// La fecha insertada es igual a la fecha actual
+			return true;
+		} else {
+			// La fecha insertada es distinta a la fecha actual
+			return false;
+		}
+	}
 }
