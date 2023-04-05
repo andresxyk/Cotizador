@@ -59,7 +59,7 @@ public class ToolServiceImpl implements ToolDominio{
 					if(listECD.size()>0) {
 						coding.setPreciolistamadretotal(list.get(0).getMprecio());
 						coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
-						coding.setSubtotal(listECD.get(0).getMpreciofacturarsiniva());
+						coding.setSubtotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setTotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setDescuentopromocion(BigDecimal.ZERO);
 						coding.setPagopaciente(listECD.get(0).getMpreciofacturarconiva());
@@ -69,13 +69,13 @@ public class ToolServiceImpl implements ToolDominio{
 					}else {
 						coding.setPreciolistamadretotal(list.get(0).getMprecio());
 						coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
-						coding.setSubtotal(list.get(0).getMpreciosiniva());
+						coding.setSubtotal(list.get(0).getMprecio());
 						coding.setTotal(list.get(0).getMprecio());
 						coding.setDescuentopromocion(BigDecimal.ZERO);
 						coding.setPagopaciente(list.get(0).getMprecio());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
 						ttotal = ttotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
-						tsubtotal = tsubtotal.add(list.get(0).getMpreciosiniva().setScale(2, BigDecimal.ROUND_HALF_UP));					
+						tsubtotal = tsubtotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));					
 					}
 				}
 			lisCodings.add(coding);
@@ -178,7 +178,9 @@ public class ToolServiceImpl implements ToolDominio{
 									-1,1));
 					} else {
 						logger.error("ERROR:El estudio no se encuentra en convenio");
-						cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(200,"success",cotizacionDto.getGDA_menssage() + "\nEl estudio " + coding.getCode()+ " no se encuentra en convenio."));
+						throw new Exception("El estudio " + coding.getCode()
+						+ " no se encuentra en conveino ");
+						//cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(400,"error",cotizacionDto.getGDA_menssage() + "\nEl estudio " + coding.getCode()+ " no se encuentra en convenio."));
 					}
 				} else {
 					// logger.info("antes de validad el examne "+coding.getCode());
@@ -190,9 +192,8 @@ public class ToolServiceImpl implements ToolDominio{
 					if(!consultasCotizacionDao.validarExamenConvenio(coding) && consultasCotizacionDao.validationConvIndiseExamn(cotizacionDto.getRequisition().getConvenio(),coding.getCode()) == 0) { 
 						// "No se encontraron registros con el perfil " + coding.getCode() + " en el convenio " + coding.getConvenio()
 						logger.error("ERROR:El estudio no se encuentra en convenio");
-						cotizacionDto.setGDA_menssage(
-							setsDtosImpl.setForGdaMessage(200,"success",
-							cotizacionDto.getGDA_menssage().getDescripcion() + "\nNo se encontraron registros con el perfil " + coding.getCode()+ " en el convenio " + coding.getConvenio()));
+						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
+						+ " en el convenio " + coding.getConvenio());
 					}else{
 						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
 						ordenCotizacionDto.getKordensucursalcotizacion(),

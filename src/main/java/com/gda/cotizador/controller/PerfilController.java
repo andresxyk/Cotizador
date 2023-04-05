@@ -42,46 +42,60 @@ public class PerfilController {
 		GDAMenssageDto msg = new GDAMenssageDto();
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
-	
-	try {
-		if(request.validarFiltro(request)) {
-			if(request.validarMarca(request)) {
-				if(request.validarFiltroPerfil(request)) {
-					request = cotizador.procesarRequestPerfil(request);
-					request.getGDA_menssage().setMenssage("success");
-					request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-					return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.OK);
-				}else {
-					log.error("Error inesperado");
+
+		try {
+			if (request.validarlineaNegocio(request)) {
+				if (request.validarFechaRegistro(request)) {
+					if (request.validarFiltro(request)) {
+						if (request.validarMarca(request)) {
+							if (request.validarFiltroPerfil(request)) {
+								request = cotizador.procesarRequestPerfil(request);
+								request.getGDA_menssage().setMenssage("success");
+								request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+								request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+								return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.OK);
+							} else {
+								log.error("Error inesperado");
+								request.getGDA_menssage().setMenssage("error");
+								request.getGDA_menssage()
+										.setDescripcion("Los campos sperfil y cperfil son vacios, no se puede validar");
+								request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+								return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.BAD_REQUEST);
+							}
+
+						} else {
+							log.error("Error inesperado");
+							request.getGDA_menssage().setMenssage("error");
+							request.getGDA_menssage().setDescripcion("La marca no es la correcta");
+							request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+							return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.BAD_REQUEST);
+						}
+
+					} else {
+						request.getGDA_menssage().setMenssage("error");
+						request.getGDA_menssage().setDescripcion(
+								"Los campos filtro.cperfil, filtro.sperfil no pueden ir nulos o vacios o deben contener mas de 4 caracteres");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+						return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.NOT_ACCEPTABLE);
+					}
+				} else {
 					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage()
-							.setDescripcion("Los campos sperfil y cperfil son vacios, no se puede validar");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-					return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.BAD_REQUEST);
+					request.getGDA_menssage().setDescripcion("La fecha no es la actual");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+					return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.NOT_ACCEPTABLE);
 				}
-				
 			} else {
-				log.error("Error inesperado");
 				request.getGDA_menssage().setMenssage("error");
-				request.getGDA_menssage().setDescripcion("La marca no es la correcta");
-				request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-				return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.BAD_REQUEST);
+				request.getGDA_menssage().setDescripcion("Linea de negocio incorrecto");
+				request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+				return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.NOT_ACCEPTABLE);
 			}
-			
-		}else {
+		} catch (Exception e) {
+			log.error("Error inesperado", e);
 			request.getGDA_menssage().setMenssage("error");
-			request.getGDA_menssage().setDescripcion(
-					"Los campos filtro.cperfil, filtro.sperfil no pueden ir nulos o vacios o deben contener mas de 4 caracteres");
-			request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
-			return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.NOT_ACCEPTABLE);
-		}
-	}catch (Exception e) {
-		log.error("Error inesperado", e);
-		request.getGDA_menssage().setMenssage("error");
-		request.getGDA_menssage().setDescripcion(e.getMessage());
-		request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.BAD_REQUEST);
+			request.getGDA_menssage().setDescripcion(e.getMessage());
+			request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+			return new ResponseEntity<RequestPerfilDto>(request, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

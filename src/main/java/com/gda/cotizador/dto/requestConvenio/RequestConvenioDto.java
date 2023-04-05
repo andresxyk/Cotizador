@@ -1,5 +1,10 @@
 package com.gda.cotizador.dto.requestConvenio;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -8,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
-import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
-import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -44,7 +47,7 @@ public class RequestConvenioDto {
 	}
 	public Boolean validarFiltroConvenio(RequestConvenioDto request) {
 		if (request.getFiltro().getSconvenio().isEmpty()
-				&& request.getFiltro().getCmarca() == 0) {
+				&& request.getFiltro().getCconvenio() == -1) {
 			return false;
 		} else {
 			return true;
@@ -52,11 +55,37 @@ public class RequestConvenioDto {
 
 	}
 	public Boolean validarFiltro(RequestConvenioDto request) throws Exception {
-		if (request.getFiltro().getSconvenio().length() >= 1 || request.getFiltro().getCmarca() > 0) {
+		if (request.getFiltro().getSconvenio().length() >= 4 && request.getFiltro().getCmarca() != 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+	public Boolean validarFechaRegistro(RequestConvenioDto request) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
+		LocalDate fechaActual = LocalDate.now(ZoneOffset.UTC);
+		LocalDateTime fechaInsertada = null;
+
+		try {
+			fechaInsertada = LocalDateTime.parse(request.getHeader().getDregistro(), formatter);
+		} catch (DateTimeParseException e) {
+			// La fecha insertada no tiene el formato deseado
+		}
+
+		if (fechaInsertada.atZone(ZoneOffset.UTC).toLocalDate().isEqual(fechaActual)) {
+			// La fecha insertada es igual a la fecha actual
+			return true;
+		} else {
+			// La fecha insertada es distinta a la fecha actual
+			return false;
+		}
+	}
+
+	public boolean validarlineaNegocio(RequestConvenioDto request) {
+		if (request.getHeader().getLineanegocio().equals("COTIZACION")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

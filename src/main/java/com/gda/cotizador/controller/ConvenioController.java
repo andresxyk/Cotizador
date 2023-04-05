@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
+import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
 import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.utils.GeneralUtil;
@@ -43,35 +44,49 @@ public class ConvenioController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			if(request.validarFiltro(request)) {
-				if(request.validarMarca(request)) {
-					if(request.validarFiltroConvenio(request)) {
-						request = cotizador.procesarRequestConvenio(request);
-						request.getGDA_menssage().setMenssage("success");
-						request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-						request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-						return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.OK);
-					}else {
-						log.error("Error inesperado");
+			if (request.validarlineaNegocio(request)) {
+				if (request.validarFechaRegistro(request)) {
+					if (request.validarFiltro(request)) {
+						if (request.validarMarca(request)) {
+							if (request.validarFiltroConvenio(request)) {
+								request = cotizador.procesarRequestConvenio(request);
+								request.getGDA_menssage().setMenssage("success");
+								request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+								request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+								return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.OK);
+							} else {
+								log.error("Error inesperado");
+								request.getGDA_menssage().setMenssage("error");
+								request.getGDA_menssage().setDescripcion(
+										"Los campos sconvenio y cmarca son vacios, no se puede validar");
+								request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+								return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.BAD_REQUEST);
+							}
+
+						} else {
+							log.error("Error inesperado");
+							request.getGDA_menssage().setMenssage("error");
+							request.getGDA_menssage().setDescripcion("La marca no es la correcta, marca: 0");
+							request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+							return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.BAD_REQUEST);
+						}
+
+					} else {
 						request.getGDA_menssage().setMenssage("error");
-						request.getGDA_menssage()
-								.setDescripcion("Los campos sconvenio y cmarca son vacios, no se puede validar");
-						request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-						return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.BAD_REQUEST);
+						request.getGDA_menssage().setDescripcion(
+								"Los campos filtro.sconvenio, filtro.cmarca no pueden ir nulos o vacios o deben contener mas caracteres");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+						return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.NOT_ACCEPTABLE);
 					}
-					
 				} else {
-					log.error("Error inesperado");
 					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("La marca no es la correcta");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-					return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.BAD_REQUEST);
+					request.getGDA_menssage().setDescripcion("La fecha no es la actual");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+					return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.NOT_ACCEPTABLE);
 				}
-				
-			}else {
+			} else {
 				request.getGDA_menssage().setMenssage("error");
-				request.getGDA_menssage().setDescripcion(
-						"Los campos filtro.sconvenio, filtro.cmarca no pueden ir nulos o vacios o deben contener mas de 1 caracteres");
+				request.getGDA_menssage().setDescripcion("Linea de negocio incorrecto, linea de negocio: COTIZACION");
 				request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
 				return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.NOT_ACCEPTABLE);
 			}

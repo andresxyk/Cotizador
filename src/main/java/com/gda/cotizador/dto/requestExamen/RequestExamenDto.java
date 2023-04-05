@@ -1,5 +1,10 @@
 package com.gda.cotizador.dto.requestExamen;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -8,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
+import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -53,13 +59,40 @@ public class RequestExamenDto {
 	}
 
 	public Boolean validarFiltroExamen(RequestExamenDto request) {
-		if (request.getFiltro().getSexamen().isEmpty() 
-				&& request.getFiltro().getSexamenweb().isEmpty() 
+		if (request.getFiltro().getSexamen().isEmpty() && request.getFiltro().getSexamenweb().isEmpty()
 				&& request.getFiltro().getCconvenio() == 0) {
 			return false;
 		} else {
 			return true;
 		}
 
+	}
+
+	public Boolean validarFechaRegistro(RequestExamenDto request) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneOffset.UTC);
+		LocalDate fechaActual = LocalDate.now(ZoneOffset.UTC);
+		LocalDateTime fechaInsertada = null;
+
+		try {
+			fechaInsertada = LocalDateTime.parse(request.getHeader().getDregistro(), formatter);
+		} catch (DateTimeParseException e) {
+			// La fecha insertada no tiene el formato deseado
+		}
+
+		if (fechaInsertada.atZone(ZoneOffset.UTC).toLocalDate().isEqual(fechaActual)) {
+			// La fecha insertada es igual a la fecha actual
+			return true;
+		} else {
+			// La fecha insertada es distinta a la fecha actual
+			return false;
+		}
+	}
+
+	public boolean validarlineaNegocio(RequestExamenDto request) {
+		if (request.getHeader().getLineanegocio().equals("COTIZACION")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

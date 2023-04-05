@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
+import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.utils.GeneralUtil;
 
@@ -40,34 +41,48 @@ public class ExamenController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			if (request.validarFiltro(request)) {
-				if (request.validarMarca(request)) {
-					if (request.validarFiltroExamen(request)) {
-						request = cotizador.procesarRequestExamen(request);
-						request.getGDA_menssage().setMenssage("success");
-						request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-						request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+			if (request.validarlineaNegocio(request)) {
+				if (request.validarFechaRegistro(request)) {
+					if (request.validarFiltro(request)) {
+						if (request.validarMarca(request)) {
+							if (request.validarFiltroExamen(request)) {
+								request = cotizador.procesarRequestExamen(request);
+								request.getGDA_menssage().setMenssage("success");
+								request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+								request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+								return new ResponseEntity<RequestExamenDto>(request, HttpStatus.OK);
+							} else {
+								log.error("Error inesperado");
+								request.getGDA_menssage().setMenssage("error");
+								request.getGDA_menssage().setDescripcion(
+										"Los campos sexamen y sexamenweb son vacios, no se puede validar");
+								request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+								return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
+							}
+						} else {
+							log.error("Error inesperado");
+							request.getGDA_menssage().setMenssage("error");
+							request.getGDA_menssage().setDescripcion("La marca no es la correcta marcas correctas: 7,12,20,22,24,30");
+							request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+							return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
+						}
+
 					} else {
-						log.error("Error inesperado");
 						request.getGDA_menssage().setMenssage("error");
-						request.getGDA_menssage()
-								.setDescripcion("Los campos sexamen y sexamenweb son vacios, no se puede validar");
-						request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-						return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
+						request.getGDA_menssage().setDescripcion(
+								"El campo filtro.sexamen no puede ir nulo o vacio o debe contener mas de 4 caracteres y el campo filtro.cconvenio debe ser mayor de -1");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+						return new ResponseEntity<RequestExamenDto>(request, HttpStatus.NOT_ACCEPTABLE);
 					}
 				} else {
-					log.error("Error inesperado");
 					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("La marca no es la correcta");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-					return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
+					request.getGDA_menssage().setDescripcion("La fecha no es la actual");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+					return new ResponseEntity<RequestExamenDto>(request, HttpStatus.NOT_ACCEPTABLE);
 				}
-				return new ResponseEntity<RequestExamenDto>(request, HttpStatus.OK);
-
 			} else {
 				request.getGDA_menssage().setMenssage("error");
-				request.getGDA_menssage().setDescripcion(
-						"El campo filtro.sexamen puede ir nulo o vacio o debe contener mas de 4 caracteres y el campo filtro.cconvenio debe ser mayor de -1");
+				request.getGDA_menssage().setDescripcion("Linea de negocio incorrecto");
 				request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
 				return new ResponseEntity<RequestExamenDto>(request, HttpStatus.NOT_ACCEPTABLE);
 			}

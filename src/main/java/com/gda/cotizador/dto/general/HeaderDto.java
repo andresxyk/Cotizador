@@ -3,6 +3,8 @@ package com.gda.cotizador.dto.general;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
@@ -15,10 +17,10 @@ public class HeaderDto {
 
 	@NotNull
     @NotBlank
-    @Schema(description =  "Fijo = De donde proviene")
+    @Schema(description =  "Fijo = COTIZACION")
 	private String lineanegocio;
 	
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.sss")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:sss")
 	@Schema(description =  "Fecha petición, formato: yyyy-MM-dd'T'HH:mm:ss:sss")
 	private String dregistro;
 	@NotNull

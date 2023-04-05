@@ -50,7 +50,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	public List<ConvenioDto> getListConvenioDto(FiltroConvenioDto filtro) {
 		List<ConvenioDto> list = null;
 		String complemento = "ec.cmarca = " + filtro.getCmarca() + " and ";
-		if (filtro.getCconvenio() > 0 || filtro.getSconvenio().isEmpty()) {
+		//if (filtro.getCconvenio() > 0 || filtro.getSconvenio().isEmpty()) {
 			if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
 				complemento += "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
 			} else {
@@ -63,7 +63,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 					+ "inner join cotizador.e_convenio ec on ec.cconvenio = cc.cconvenio \r\n"  
 					+ "WHERE " + complemento;
 			list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());
-		}
+		//}
 		return list;
 
 	}
