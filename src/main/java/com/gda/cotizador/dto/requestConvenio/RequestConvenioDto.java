@@ -29,7 +29,7 @@ public class RequestConvenioDto {
 	@Schema(description = "Revisar estructura header")
 	private HeaderDto header;
 	@NotNull
-	@Schema(description = "Para buscar por nombre: setear -1 en cconvenio")
+	@Schema(description = "Revisar estructura filtro")
 	private FiltroConvenioDto filtro;
 	
 	@Schema(description = "Revisar estructura convenios")

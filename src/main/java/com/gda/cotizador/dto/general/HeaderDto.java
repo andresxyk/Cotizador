@@ -17,14 +17,14 @@ public class HeaderDto {
 
 	@NotNull
     @NotBlank
-    @Schema(description =  "Fijo = COTIZACION")
+    @Schema(description =  "Fijo = 'De donde proviene' para simulate y generate || Fijo = 'COTIZACION' para search")
 	private String lineanegocio;
 	
 	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:sss")
 	@Schema(description =  "Fecha petición, formato: yyyy-MM-dd'T'HH:mm:ss:sss")
 	private String dregistro;
 	@NotNull
-	 @Schema(description =  "Marca proveniente")
+	 @Schema(description =  "Marca proveniente, Fijo: 0 para search-marca, search-convenio")
 	private Integer marca;
 	@NotNull
     @NotBlank

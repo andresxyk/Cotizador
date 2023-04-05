@@ -43,7 +43,7 @@ public class Requisition
     private BigDecimal total;
     
     @NotNull
-    @Schema(description = "Fijo fecha de entrega, formato = yyyy-MM-dd'T'HH:mm:ss:sss")
+    @Schema(description = "Fecha de entrega, formato: dd-mm-yyy, ejemplo: 09-01-2023")
     private String fechaentrega;
     
     

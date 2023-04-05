@@ -47,7 +47,7 @@ public class CotizadorController {
 
 	@RequestMapping(value = "/request-cotizador", method = { RequestMethod.POST }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@Operation(description = "Método para obtener los precios de los estudios.", tags = { "Cotización" })
+	@Operation(description = "El método simulate-cotizacion remplaza a este, posteriormente se va a eliminar", tags = { "Cotización" })
 	@Deprecated
 	public ResponseEntity<?> requestCotizador(@RequestBody RequestCotizacionDto request) {
 		log.info("searchExamen");
@@ -71,7 +71,7 @@ public class CotizadorController {
 
 	@RequestMapping(value = "/service-request-cotizacion", method = {
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	@Operation(description = "Método para generar un ID y archivo PDF de la cotización.", tags = { "Cotización" })
+	@Operation(description = "El método generate-cotizacion remplaza a este, posteriormente se va a eliminar", tags = { "Cotización" })
 	@Deprecated
 	public ResponseEntity<?> serviceRequest(@RequestBody CotizacionDto cotizacionDto) throws Exception {
 		log.info("serviceRequest");

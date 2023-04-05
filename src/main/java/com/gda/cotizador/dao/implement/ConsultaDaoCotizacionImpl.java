@@ -210,12 +210,12 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		}
 	}
 
-	/*Validaciones para las cotizasiones */
+	/*Validaciones para las cotizaciones */
 	@Override
     @SuppressWarnings("deprecation")
 	public Integer validationConvIndiseBran(Integer marca, Integer conveion){
 		return jdbcTemplate.queryForObject(
-			"select Count(*) from c_convenio ccon inner join e_convenio econ on ccon.cconvenio = econ.cconvenio where econ.cmarca = ? and econ.cconvenio = ?"
+			"select count(*) from c_convenio ccon inner join e_convenio econ on ccon.cconvenio = econ.cconvenio where econ.cmarca = ? and econ.cconvenio = ?"
 		, new Object[] {marca,conveion},
 		Integer.class);
 	}
