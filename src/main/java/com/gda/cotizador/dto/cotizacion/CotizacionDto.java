@@ -44,12 +44,12 @@ public class CotizacionDto {
 	@NotNull
 	@NotBlank
 	@Pattern(regexp = "(active)+", message = "El campo solo acepta los siguientes valores: active")
-	@Schema(description = "Fijo")
+	@Schema(description = "Fijo: active")
 	private String status;
 
 	@NotNull
 	@NotBlank
-	@Schema(description = "Fijo")
+	@Schema(description = "Fijo: order")
 	private String intent;
 
 	@NotNull
@@ -62,7 +62,7 @@ public class CotizacionDto {
 
 	@NotNull
 	@NotBlank
-	@Schema(description = "Cantidad examen")
+	@Schema(description = "Cantidad examen, ejemplo: 1")
 	@Pattern(regexp = "[0-9]+", message = "Debe contener solo números.")
 	private String quantityQuantity;
 

@@ -18,37 +18,37 @@ import lombok.Setter;
 @RequestMapping("/infogda-fullV3")
 public class CodingCotizacionDto
 {
-	@Schema(description =  "Fijo")
+	@Schema(description =  "Fijo = System")
 	private String system;
 	
 	@NotNull
 	@NotBlank
-	@Schema(description =  "ID de examen")
+	@Schema(description =  "ID de examen, ejemplo: 175031")
     private String code;
 
 	@NotNull
 	@NotBlank
-	@Schema(description =  "Nombre del examen")
+	@Schema(description =  "Nombre del examen, ejemplo: ULTRASONIDO DOPPLER TRANSVAGINAL")
     private String display;
 		
 	@NotNull
-	@Schema(description =  "Subtotal del examen")
+	@Schema(description =  "Subtotal del examen, especificar dos decimales, ejemplo: 4231.00")
 	private BigDecimal subtotal;
 	
 	@NotNull
-	@Schema(description =  "Descuento promoción examen")
+	@Schema(description =  "Descuento promoción examen, especificar dos decimales, ejemplo: 0.00")
 	private BigDecimal descuentopromocion;
 	
 	@NotNull
-	@Schema(description =  "Pago paciente del examen")
+	@Schema(description =  "Pago paciente del examen, especificar dos decimales, ejemplo: 4231.00")
 	private BigDecimal pagopaciente;
 	
 	@NotNull
-	@Schema(description =  "Total del examen")
+	@Schema(description =  "Total del examen, especificar dos decimales, ejemplo: 4231.00")
 	private BigDecimal total;
 	
 	@NotNull
-	@Schema(description =  "Id convenio examen")
+	@Schema(description =  "Id convenio examen, ejemplo: 0")
 	private Integer convenio;
     
 }
