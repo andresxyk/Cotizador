@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class RequestCotizacionDto {
 	@NotNull
-	@Schema(description = "Fijo")
+	@Schema(description = "Fijo = ServiceRequestCotizacion")
 	private String resourceType;
 	@Schema(description = "Response ID cotización")
 	private Integer id;
@@ -44,7 +44,7 @@ public class RequestCotizacionDto {
 	@NotNull
 	@NotBlank
 	@Pattern(regexp = "[0-9]+", message = "Debe contener solo números.")
-	@Schema(description =  "Cantidad examen")
+	@Schema(description =  "Cantidad examen, ejemplo: 2")
 	private String quantityQuantity;
 
 	private GDAMenssageDto GDA_menssage;

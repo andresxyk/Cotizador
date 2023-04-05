@@ -30,7 +30,7 @@ public class CotizacionDto {
 	private String base64;
 
 	@NotNull
-	@Schema(description = "Fijo")
+	@Schema(description = "Fijo = ServiceRequestCotizacion")
 	private String resourceType;
 
 	@Schema(description = "Response ID cotitzación")

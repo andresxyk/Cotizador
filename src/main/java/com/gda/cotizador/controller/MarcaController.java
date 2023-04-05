@@ -43,11 +43,38 @@ public class MarcaController {
 		request.setGDA_menssage(msg);
 	
 	try {
-		request = cotizador.procesarRequestMarca(request);
-		request.getGDA_menssage().setMenssage("success");
-		request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-		request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-		return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.OK);
+		if(request.validarFiltro(request)) {
+			if(request.validarMarca(request)) {
+				if(request.validarFiltroMarca(request)) {
+					request = cotizador.procesarRequestMarca(request);
+					request.getGDA_menssage().setMenssage("success");
+					request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+					return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.OK);
+				}else {
+					log.error("Error inesperado");
+					request.getGDA_menssage().setMenssage("error");
+					request.getGDA_menssage()
+							.setDescripcion("Los campos smarca y cmarca son vacios, no se puede validar");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+					return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.BAD_REQUEST);
+				}
+				
+			} else {
+				log.error("Error inesperado");
+				request.getGDA_menssage().setMenssage("error");
+				request.getGDA_menssage().setDescripcion("La marca no es la correcta, Marca: 0");
+				request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+				return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.BAD_REQUEST);
+			}
+			
+		}else {
+			request.getGDA_menssage().setMenssage("error");
+			request.getGDA_menssage().setDescripcion(
+					"Los campos filtro.cmarca, filtro.smarca no pueden ir nulos o vacios o deben contener mas de 1 caracteres");
+			request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+			return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.NOT_ACCEPTABLE);
+		}
 	}catch (Exception e) {
 		log.error("Error inesperado", e);
 		request.getGDA_menssage().setMenssage("error");

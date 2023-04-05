@@ -77,6 +77,7 @@ public class CotizadorServiceImpl implements Cotizador {
 	@Override
 	public RequestExamenDto procesarRequestExamen(RequestExamenDto request) throws Exception {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			
 			List<ExamenDto> examenes = new ArrayList<>();
 			List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(request.getFiltro());
 			for (ExamenConfigDto examenConfigDto : list) {

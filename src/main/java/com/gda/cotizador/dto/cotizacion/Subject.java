@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Subject {
 	@NotNull
 	@NotBlank
-	@Schema(description = "ID paciente")
+	@Schema(description = "ID paciente, ejemplo: Patient/4620606")
 	private String reference;
 
 }

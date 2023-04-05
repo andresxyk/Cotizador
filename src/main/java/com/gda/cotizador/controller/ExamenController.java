@@ -40,15 +40,30 @@ public class ExamenController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			if ((request.getFiltro().getSexamen() == null && request.getFiltro().getCconvenio() > -1)
-					|| (request.getFiltro().getSexamen() != null && request.getFiltro().getSexamen() == ""
-							&& request.getFiltro().getCconvenio() > -1)
-					|| (request.getFiltro().getSexamen().length() > 4 && request.getFiltro().getCconvenio() > -1)) {
-				request = cotizador.procesarRequestExamen(request);
-				request.getGDA_menssage().setMenssage("success");
-				request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-				request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+			if (request.validarFiltro(request)) {
+				if (request.validarMarca(request)) {
+					if (request.validarFiltroExamen(request)) {
+						request = cotizador.procesarRequestExamen(request);
+						request.getGDA_menssage().setMenssage("success");
+						request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+					} else {
+						log.error("Error inesperado");
+						request.getGDA_menssage().setMenssage("error");
+						request.getGDA_menssage()
+								.setDescripcion("Los campos sexamen y sexamenweb son vacios, no se puede validar");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+						return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
+					}
+				} else {
+					log.error("Error inesperado");
+					request.getGDA_menssage().setMenssage("error");
+					request.getGDA_menssage().setDescripcion("La marca no es la correcta");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+					return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
+				}
 				return new ResponseEntity<RequestExamenDto>(request, HttpStatus.OK);
+
 			} else {
 				request.getGDA_menssage().setMenssage("error");
 				request.getGDA_menssage().setDescripcion(

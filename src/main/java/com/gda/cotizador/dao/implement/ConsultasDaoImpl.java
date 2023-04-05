@@ -48,19 +48,24 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<ConvenioDto> getListConvenioDto(FiltroConvenioDto filtro) {
-		List<ConvenioDto> list;
-		String complemento = "";
-		if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
-			complemento = "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
-		} else {
-			complemento = "cc.sconvenio like '%" + filtro.getSconvenio() + "%'\r\n";
+		List<ConvenioDto> list = null;
+		String complemento = "cec.marca = " + filtro.getCmarca() + " and ";
+		if (filtro.getCconvenio() > 0 || filtro.getSconvenio().isEmpty()) {
+			if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
+				complemento = "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
+			} else {
+				complemento = "cc.sconvenio like '%" + filtro.getSconvenio() + "%'\r\n";
+			}
+			
+			String query = "SELECT cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio, cec.marca\r\n"
+					+ "FROM cotizador.c_convenio cc\r\n"
+					+ "INNER JOIN cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n"
+					+ "INNER JOIN cotizador.e_convenio cec ON cec.cconvenio = cc.cconvenio \r\n"  
+					+ "WHERE " + complemento;
+			list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());
 		}
-		String query = "select cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio\r\n"
-				+ "from cotizador.c_convenio cc\r\n"
-				+ "inner join cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n" + "where "
-				+ complemento;
-		list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());
 		return list;
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -68,47 +73,35 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro) {
 		List<ExamenConfigDto> list;
 		String complemento = "";
-		if (filtro.getSexamen() != null) {
-			if (filtro.getSexamen().length() > 0) {
-				complemento = "and ce.sexamen like '%" + filtro.getSexamen() + "%' ";
+		
+			if (filtro.getSexamen() != null) {
+				if (filtro.getSexamen().length() > 0) {
+					complemento = "and ce.sexamen like '%" + filtro.getSexamen() + "%' ";
+				}
 			}
-		}
-		if(filtro.getSexamenweb() != null) {
-			if(filtro.getSexamenweb().length() > 0) {
-				complemento = "and ce.sexamenweb like '%" + filtro.getSexamenweb() + "%' ";
+			if (filtro.getSexamenweb() != null) {
+				if (filtro.getSexamenweb().length() > 0) {
+					complemento = "and ce.sexamenweb like '%" + filtro.getSexamenweb() + "%' ";
+				}
 			}
-		}
-		String query = "select \r\n"
-				+ "elcd.cexamen,\r\n"
-				+ "ce.sexamen,\r\n"
-				+" ce.sexamenweb,\r\n"
-				+ "elcd.mprecio,\r\n"
-				+ "eec.scondicionpreanalitica,\r\n"
-				+ "eec.blunes,\r\n"
-				+ "eec.bmartes,\r\n"
-				+ "eec.bmiercoles,\r\n"
-				+ "eec.bjueves,\r\n"
-				+ "eec.bviernes,\r\n"
-				+ "eec.bsabado,\r\n"
-				+ "eec.bdomingo,\r\n"
-				+ "eec.utiemporespuestadiasprint,\r\n"
-				+ "elcd.mpreciosiniva,\r\n"
-				+ "ce.cdepartamento,\r\n"
-				+ "cd.sdepartamento\r\n"
-				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n"
-				+ "inner join cotizador.c_examen ce\r\n"
-				+ "on elcd.cexamen = ce.cexamen\r\n"
-				+ "inner join cotizador.c_lista_corporativa clc\r\n"
-				+ "on clc.clistacorporativa = elcd.clistacorporativa\r\n"
-				+ "inner join cotizador.e_convenio ec\r\n"
+		
+		String query = "select \r\n" + "elcd.cexamen,\r\n" + "ce.sexamen,\r\n" + " ce.sexamenweb,\r\n"
+				+ "elcd.mprecio,\r\n" + "eec.scondicionpreanalitica,\r\n" + "eec.blunes,\r\n" + "eec.bmartes,\r\n"
+				+ "eec.bmiercoles,\r\n" + "eec.bjueves,\r\n" + "eec.bviernes,\r\n" + "eec.bsabado,\r\n"
+				+ "eec.bdomingo,\r\n" + "eec.utiemporespuestadiasprint,\r\n" + "elcd.mpreciosiniva,\r\n"
+				+ "ce.cdepartamento,\r\n" + "cd.sdepartamento\r\n"
+				+ "from cotizador.e_lista_corporativa_detalle elcd\r\n" + "inner join cotizador.c_examen ce\r\n"
+				+ "on elcd.cexamen = ce.cexamen\r\n" + "inner join cotizador.c_lista_corporativa clc\r\n"
+				+ "on clc.clistacorporativa = elcd.clistacorporativa\r\n" + "inner join cotizador.e_convenio ec\r\n"
 				+ "on ec.clistacorporativa = elcd.clistacorporativa\r\n"
-				+ "inner join cotizador.e_examen_configuracion eec\r\n"
-				+ "on ce.cexamen = eec.cexamen\r\n"
-				+ "inner join cotizador.c_departamento cd\r\n"
-				+ "on ce.cdepartamento = cd.cdepartamento\r\n"
-				+ "where ec.cconvenio = ? \r\n" 
-				+ "and clc.clistacorporativa in (\r\n"+ env.getProperty("list.clistacorporativa.marca") + ")\r\n" + complemento;
+				+ "inner join cotizador.e_examen_configuracion eec\r\n" + "on ce.cexamen = eec.cexamen\r\n"
+				+ "inner join cotizador.c_departamento cd\r\n" + "on ce.cdepartamento = cd.cdepartamento\r\n"
+				+ "where ec.cconvenio = ? \r\n" + "and clc.clistacorporativa in (\r\n"
+				+ env.getProperty("list.clistacorporativa.marca") + ")\r\n" + complemento;
 		list = jdbcTemplate.query(query, new Object[] { filtro.getCconvenio() }, new ExamenConfigMapper());
+		
+		logger.info(query);
+		
 		return list;
 	}
 
@@ -183,11 +176,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		}
 		String query = "select cp.cperfil, cp.sperfil from cotizador.c_perfil cp\r\n"
 				+ "inner join cotizador.e_convenio_perfil ecp on cp.cperfil = ecp.cperfil\r\n"
-				+ "inner join cotizador.c_convenio cc on cc.cconvenio = ecp.cconvenio\r\n"
-				+ "where cp.cmarca = ?\r\n"
-				+ "and cp.blistapublico = true\r\n"
-				+ "and cc.ctipoconvenio = 24\r\n"
-				+ complemento;
+				+ "inner join cotizador.c_convenio cc on cc.cconvenio = ecp.cconvenio\r\n" + "where cp.cmarca = ?\r\n"
+				+ "and cp.blistapublico = true\r\n" + "and cc.ctipoconvenio = 24\r\n" + complemento;
 		list = jdbcTemplate.query(query, new Object[] { cmarca }, new BusquedaPerfilMapper());
 		return list;
 	}

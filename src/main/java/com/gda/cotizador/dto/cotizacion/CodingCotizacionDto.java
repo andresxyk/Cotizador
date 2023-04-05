@@ -23,7 +23,7 @@ public class CodingCotizacionDto
 	
 	@NotNull
 	@NotBlank
-	@Schema(description =  "ID de examen, ejemplo: 175031")
+	@Schema(description =  "ID de examen, ejemplo: 714282")
     private String code;
 
 	@NotNull
@@ -48,7 +48,7 @@ public class CodingCotizacionDto
 	private BigDecimal total;
 	
 	@NotNull
-	@Schema(description =  "Id convenio examen, ejemplo: 0")
+	@Schema(description =  "Id convenio examen, ejemplo: 6304")
 	private Integer convenio;
     
 }

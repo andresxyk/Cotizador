@@ -11,50 +11,50 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @RequestMapping("/infogda-fullV3")
 public class Coding
 {
-	@Schema(description =  "Fijo")
+	@Schema(description =  "Fijo = urn:oid:2.16.840.1.113883.3.215.5.59")
 	private String system;
 	
 	@NotNull
 	@NotBlank
-	@Schema(description =  "ID de Cexamen")
+	@Schema(description =  "ID de Cexamen, ejemplo: 15001")
     private String code;
 
 	@NotNull
 	@NotBlank
-	@Schema(description =  "Nombre del examen")
+	@Schema(description =  "Nombre del examen, ejemplo: BIOMETRIA HEMATICA")
     private String display;
 		
 	@NotNull
-	@Schema(description =  "Subtotal del examen")
+	@Schema(description =  "Subtotal del examen, especificar dos decimales, ejemplo: 529.00")
 	private BigDecimal subtotal;
 	
 	@NotNull
-	@Schema(description =  "Descuento promoción examen")
+	@Schema(description =  "Descuento promoción examen, especificar dos decimales, ejemplo: 0.00")
 	private BigDecimal descuentopromocion;
 	
 	@NotNull
-	@Schema(description =  "Pago paciente del examen")
+	@Schema(description =  "Pago paciente del examen, especificar dos decimales, ejemplo: 529.00")
 	private BigDecimal pagopaciente;
 	
 	@NotNull
-	@Schema(description =  "Total del examen")
+	@Schema(description =  "Total del examen, especificar dos decimales, ejemplo: 529.00")
 	private BigDecimal total;
 	
 	@NotNull
-	@Schema(description =  "Id convenio examen")
+	@Schema(description =  "Id convenio examen, ejemplo: 0")
 	private Integer convenio;
 	
 	@NotNull
-	@Schema(description =  "Nombre del convenio")
+	@Schema(description =  "Nombre del convenio, ejemplo: AA SIN CONVENIO")
 	private String nombreconvenio;
 	
-	@Schema(description =  "Precio de lista madre")
+	@Schema(description =  "Precio de lista madre, especificar dos decimales, ejemplo: 529.00 ")
 	private BigDecimal preciolistamadretotal;
 	
-	@Schema(description =  "Indicaciones para el paciente")
+	@Schema(description =  "Indicaciones para el paciente, ejemplo: No requiere ningún tipo de preparación previa al estudio (No se requiere ayuno)")
 	private String indicacionespaciente;
 	
-	@Schema(description =  "Fecha de entrega")
+	@Schema(description =  "Fecha de entrega, formato: dd-mm-yyy, ejemplo: 09-01-2023")
 	private String fechaentrega;
 	
 

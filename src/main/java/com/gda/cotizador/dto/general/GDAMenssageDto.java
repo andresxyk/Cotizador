@@ -11,7 +11,7 @@ import lombok.Setter;
 public class GDAMenssageDto {
 	@Schema(description =  "Respuesta del servidor")
 	private Integer codeHttp;
-	@Schema(description =  "Tipo de mensaje (error|success)")
+	@Schema(description =  "Fijo tipo de mensaje: (error|success)")
 	private String menssage;
 	@Schema(description =  "Descripción de la operación")
 	private String descripcion;

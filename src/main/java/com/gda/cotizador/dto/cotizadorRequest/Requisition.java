@@ -11,39 +11,39 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @RequestMapping("/infogda-fullV3")
 public class Requisition
 {
-	@Schema(description = "Fijo")
+	@Schema(description = "Fijo = urn:oid:2.16.840.1.113883.3.215.5.59")
     private String system;
 
     @NotNull
     @NotBlank
-	@Schema(description = "Identificador externo")
+	@Schema(description = "Identificador externo, ejemplo: 42")
     private String value;
     
     @NotNull 
-    @Schema(description = "ID convenio")
+    @Schema(description = "ID convenio, ejemplo: 0")
     private Integer convenio;
     
-    @NotNull @Schema(description = "Nombre convenio")
+    @NotNull @Schema(description = "Nombre convenio, ejemplo: AA SIN CONVENIO")
     private String nombreconvenio;
             
     @NotNull
-    @Schema(description = "Subtotal de cotización")
+    @Schema(description = "Subtotal de cotización, especificar dos decimales, ejemplo: 529.00")
     private BigDecimal subtotal;
     
     @NotNull
-    @Schema(description = "Descuento promoción cotización")
+    @Schema(description = "Descuento promoción cotización, especificar dos decimales, ejemplo: 0.00")
     private BigDecimal descuentopromocion;
 
     @NotNull
-    @Schema(description = "Pago paciente cotización")
+    @Schema(description = "Pago paciente cotización, especificar dos decimales, ejemplo: 529.00")
     private BigDecimal pagopaciente;
     
     @NotNull
-    @Schema(description = "Total cotización")
+    @Schema(description = "Total cotización, especificar dos decimales, ejemplo: 529.00")
     private BigDecimal total;
     
     @NotNull
-    @Schema(description = "Fecha de entrega")
+    @Schema(description = "Fijo fecha de entrega, formato = yyyy-MM-dd'T'HH:mm:ss:sss")
     private String fechaentrega;
     
     

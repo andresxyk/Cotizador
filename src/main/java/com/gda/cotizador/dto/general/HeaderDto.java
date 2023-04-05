@@ -15,7 +15,7 @@ public class HeaderDto {
 
 	@NotNull
     @NotBlank
-    @Schema(description =  "De donde proviene")
+    @Schema(description =  "Fijo = De donde proviene")
 	private String lineanegocio;
 	
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.sss")

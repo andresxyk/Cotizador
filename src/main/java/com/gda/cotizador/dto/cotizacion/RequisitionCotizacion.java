@@ -18,7 +18,7 @@ import lombok.Setter;
 @RequestMapping("/infogda-fullV3")
 public class RequisitionCotizacion {
 	
-	@Schema(description = "Fijo urn:oid:2.16.840.1.113883.3.215.5.59")
+	@Schema(description = "Fijo = urn:oid:2.16.840.1.113883.3.215.5.59")
 	private String system;
 
 	@NotNull

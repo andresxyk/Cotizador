@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
+import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.utils.GeneralUtil;
@@ -42,11 +43,38 @@ public class SucursalController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			request = cotizador.procesarRequestSucursal(request);
-			request.getGDA_menssage().setMenssage("success");
-			request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
-			request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
-			return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.OK);
+			if(request.validarFiltro(request)) {
+				if(request.validarMarca(request)) {
+					if(request.validarFiltroSucursal(request)) {
+						request = cotizador.procesarRequestSucursal(request);
+						request.getGDA_menssage().setMenssage("success");
+						request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+						return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.OK);
+					}else {
+						log.error("Error inesperado");
+						request.getGDA_menssage().setMenssage("error");
+						request.getGDA_menssage()
+								.setDescripcion("Los campos ssucursal y csucursal son vacios, no se puede validar");
+						request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+						return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.BAD_REQUEST);
+					}
+					
+				} else {
+					log.error("Error inesperado");
+					request.getGDA_menssage().setMenssage("error");
+					request.getGDA_menssage().setDescripcion("La marca no es la correcta");
+					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+					return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.BAD_REQUEST);
+				}
+				
+			}else {
+				request.getGDA_menssage().setMenssage("error");
+				request.getGDA_menssage().setDescripcion(
+						"Los campos filtro.csucursal, filtro.ssucursal no pueden ir nulos o vacios o deben contener mas de 3 caracteres");
+				request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+				return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.NOT_ACCEPTABLE);
+			}
 		} catch (Exception e) {
 			log.error("Error inesperado", e);
 			request.getGDA_menssage().setMenssage("error");

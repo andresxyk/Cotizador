@@ -17,11 +17,11 @@ import lombok.Setter;
 public class Requester {
 	@NotNull
 	@NotBlank
-	@Schema(description = "ID médico")
+	@Schema(description = "ID médico, ejemplo: Practitioner/5228")
 	private String reference;
 
 	@NotNull
 	@NotBlank
-	@Schema(description = "Nombre completo del médico")
+	@Schema(description = "Nombre completo del médico, ejemplo: A QUIEN CORRESPONDA")
 	private String display;
 }

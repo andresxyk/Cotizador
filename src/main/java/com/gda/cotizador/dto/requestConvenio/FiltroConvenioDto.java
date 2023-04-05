@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @RequestMapping("/infogda-fullV3")
 public class FiltroConvenioDto {
-
+	
 	@NotNull
 	@Schema(description = "Código del convenio, -1 busca todos los convenios")
 	private Integer cconvenio;
@@ -24,5 +24,7 @@ public class FiltroConvenioDto {
 	@NotNull
 	@Schema(description = "Nombre del convenio")
 	private String sconvenio;
+	
+	private Integer cmarca;
 
 }
