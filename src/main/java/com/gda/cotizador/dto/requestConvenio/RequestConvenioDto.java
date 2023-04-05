@@ -36,9 +36,7 @@ public class RequestConvenioDto {
 	private GDAMenssageDto GDA_menssage;
 	
 	public Boolean validarMarca(RequestConvenioDto request) throws Exception {
-		if (request.getHeader().getMarca() == 7 || request.getHeader().getMarca() == 12
-				|| request.getHeader().getMarca() == 20 || request.getHeader().getMarca() == 22
-				|| request.getHeader().getMarca() == 24 || request.getHeader().getMarca() == 30) {
+		if (request.getHeader().getMarca() == 0) {
 			return true;
 		} else {
 			return false;

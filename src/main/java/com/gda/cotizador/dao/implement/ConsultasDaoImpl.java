@@ -49,18 +49,18 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	@Override
 	public List<ConvenioDto> getListConvenioDto(FiltroConvenioDto filtro) {
 		List<ConvenioDto> list = null;
-		String complemento = "cec.marca = " + filtro.getCmarca() + " and ";
+		String complemento = "ec.cmarca = " + filtro.getCmarca() + " and ";
 		if (filtro.getCconvenio() > 0 || filtro.getSconvenio().isEmpty()) {
 			if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
-				complemento = "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
+				complemento += "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
 			} else {
-				complemento = "cc.sconvenio like '%" + filtro.getSconvenio() + "%'\r\n";
+				complemento += "cc.sconvenio like '%" + filtro.getSconvenio() + "%'\r\n";
 			}
 			
-			String query = "SELECT cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio, cec.marca\r\n"
+			String query = "select cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio, ec.cmarca\r\n"
 					+ "FROM cotizador.c_convenio cc\r\n"
 					+ "INNER JOIN cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n"
-					+ "INNER JOIN cotizador.e_convenio cec ON cec.cconvenio = cc.cconvenio \r\n"  
+					+ "inner join cotizador.e_convenio ec on ec.cconvenio = cc.cconvenio \r\n"  
 					+ "WHERE " + complemento;
 			list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());
 		}
