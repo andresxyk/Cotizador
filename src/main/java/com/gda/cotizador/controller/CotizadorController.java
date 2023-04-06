@@ -47,7 +47,8 @@ public class CotizadorController {
 
 	@RequestMapping(value = "/request-cotizador", method = { RequestMethod.POST }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-	@Operation(description = "El método simulate-cotizacion remplaza a este, posteriormente se va a eliminar", tags = { "Cotización" })
+	@Operation(description = "El método simulate-cotizacion remplaza a este, posteriormente se va a eliminar", tags = {
+			"Cotización" })
 	@Deprecated
 	public ResponseEntity<?> requestCotizador(@RequestBody RequestCotizacionDto request) {
 		log.info("searchExamen");
@@ -71,7 +72,8 @@ public class CotizadorController {
 
 	@RequestMapping(value = "/service-request-cotizacion", method = {
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	@Operation(description = "El método generate-cotizacion remplaza a este, posteriormente se va a eliminar", tags = { "Cotización" })
+	@Operation(description = "El método generate-cotizacion remplaza a este, posteriormente se va a eliminar", tags = {
+			"Cotización" })
 	@Deprecated
 	public ResponseEntity<?> serviceRequest(@RequestBody CotizacionDto cotizacionDto) throws Exception {
 		log.info("serviceRequest");
@@ -101,7 +103,8 @@ public class CotizadorController {
 		}
 
 	}
-							//Confirmar nombre
+
+	// Confirmar nombre
 	@RequestMapping(value = "/simulate-cotizacion", method = { RequestMethod.POST }, consumes = {
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(description = "Método para previsualizar los datos de una cotización.", tags = { "Cotización" })
@@ -111,38 +114,38 @@ public class CotizadorController {
 		msg.setAcuse(generalUtil.getAcuseUUID());
 		request.setGDA_menssage(msg);
 		try {
-			if(request.validarLineaNegocio(request)) {
-				if(request.validarFechaRegistro(request)) {
-					if(request.validarMarca(request)) {
+			if (request.validarLineaNegocio(request)) {
+				if (request.validarFechaRegistro(request)) {
+					if (request.validarMarca(request)) {
 						request = cotizador.procesarRequestCotizacion(request);
 						request.getGDA_menssage().setMenssage("success");
 						request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
 						request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
 						return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.OK);
-					}else {
+					} else {
 						log.error("Error inesperado");
 						request.getGDA_menssage().setMenssage("error");
-						request.getGDA_menssage().setDescripcion("Marca incorrecta, validar");
+						request.getGDA_menssage().setDescripcion("La marca no es la correcta, validar");
 						request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 						return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
 					}
-					
-				}else {
+
+				} else {
 					log.error("Error inesperado");
 					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("Formato o fecha incorrecta, validar");
+					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
 					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 					return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
 				}
-				
-			}else {
+
+			} else {
 				log.error("Error inesperado");
 				request.getGDA_menssage().setMenssage("error");
-				request.getGDA_menssage().setDescripcion("Linea de negocio incorrecta");
+				request.getGDA_menssage().setDescripcion("La linea de negocio no es la correcta, linea de negocio: De donde proviene");
 				request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 				return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
 			}
-			
+
 		} catch (Exception e) {
 			log.error("Error inesperado", e);
 			request.getGDA_menssage().setMenssage("error");
@@ -158,19 +161,47 @@ public class CotizadorController {
 	public ResponseEntity<?> generateCotizacion(@RequestBody CotizacionDto cotizacionDto) throws Exception {
 		log.info("serviceRequest");
 		try {
-			if (cotizacionDto.getStatus().equals("active")) {
-				String response = gson.toJson(cotizador.procesarNewCotizacion(cotizacionDto));
-				_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
-						env.getProperty("name.cotizador.create.service.requestcotizacion")));
-				return new ResponseEntity<String>(response, HttpStatus.CREATED);
+			if (cotizacionDto.validarFechaRegistro(cotizacionDto)) {
+				if (cotizacionDto.validarMarca(cotizacionDto)) {
+					if (cotizacionDto.validarLineaNegocio(cotizacionDto)) {
+						if (cotizacionDto.getStatus().equals("active")) {
+							String response = gson.toJson(cotizador.procesarNewCotizacion(cotizacionDto));
+							_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
+									env.getProperty("name.cotizador.create.service.requestcotizacion")));
+							return new ResponseEntity<String>(response, HttpStatus.CREATED);
+						} else {
+							cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(),
+									"error", "Status Incorrecto, Status disponibles: active [crear nueva cotizacion]"));
+							String response = gson.toJson(cotizacionDto);
+							_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
+									env.getProperty("name.cotizador.create.service.requestcotizacion")));
+							return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
+						}
+					} else {
+						cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(),
+								"error", "La linea de negocio no es la correcta, linea de negocio: De donde proviene"));
+						String response = gson.toJson(cotizacionDto);
+						_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
+								env.getProperty("name.cotizador.create.service.requestcotizacion")));
+						return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
+					}
+				} else {
+					cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error",
+							"La marca no es la correcta, validar"));
+					String response = gson.toJson(cotizacionDto);
+					_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
+							env.getProperty("name.cotizador.create.service.requestcotizacion")));
+					return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
+				}
 			} else {
 				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error",
-						"Status Incorrecto, Status disponibles: active [crear nueva cotizacion]"));
+						"El formato de la fecha es incorrecto o no es la actual, validar"));
 				String response = gson.toJson(cotizacionDto);
 				_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
 						env.getProperty("name.cotizador.create.service.requestcotizacion")));
 				return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 			}
+
 		} catch (Exception e) {
 			log.error("Error inesperado", e);
 			String request = gson.toJson(cotizacionDto);

@@ -62,7 +62,7 @@ public class ExamenController {
 						} else {
 							log.error("Error inesperado");
 							request.getGDA_menssage().setMenssage("error");
-							request.getGDA_menssage().setDescripcion("La marca no es la correcta marcas correctas: 7,12,20,22,24,30");
+							request.getGDA_menssage().setDescripcion("La marca no es la correcta, marca: 7,12,20,22,24,30");
 							request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 							return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
 						}
@@ -76,13 +76,13 @@ public class ExamenController {
 					}
 				} else {
 					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("La fecha no es la actual");
+					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
 					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
 					return new ResponseEntity<RequestExamenDto>(request, HttpStatus.NOT_ACCEPTABLE);
 				}
 			} else {
 				request.getGDA_menssage().setMenssage("error");
-				request.getGDA_menssage().setDescripcion("Linea de negocio incorrecto");
+				request.getGDA_menssage().setDescripcion("La linea de negocio no es la correcta, linea de negocio: COTIZACION");
 				request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
 				return new ResponseEntity<RequestExamenDto>(request, HttpStatus.NOT_ACCEPTABLE);
 			}
