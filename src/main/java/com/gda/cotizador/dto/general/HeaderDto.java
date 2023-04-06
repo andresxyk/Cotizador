@@ -24,7 +24,7 @@ public class HeaderDto {
 	@Schema(description =  "Fecha petición, formato: yyyy-MM-dd'T'HH:mm:ss.SSS")
 	private String dregistro;
 	@NotNull
-	 @Schema(description =  "Marca proveniente, Fijo: 0 para search-marca, search-convenio")
+	@Schema(description =  "Marca proveniente, Fijo: 0 para search-marca, search-convenio")
 	private Integer marca;
 	@NotNull
     @NotBlank

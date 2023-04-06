@@ -77,7 +77,7 @@ public class CotizadorServiceImpl implements Cotizador {
 	@Override
 	public RequestExamenDto procesarRequestExamen(RequestExamenDto request) throws Exception {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
-			
+
 			List<ExamenDto> examenes = new ArrayList<>();
 			List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(request.getFiltro());
 			for (ExamenConfigDto examenConfigDto : list) {
@@ -121,16 +121,19 @@ public class CotizadorServiceImpl implements Cotizador {
 		}
 		return request;
 	}
+
 	@Override
 	public RequestPerfilDto procesarRequestPerfil(RequestPerfilDto request) throws Exception {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
-			List<PerfilDto> list = consultasDao.getListSearchPerfilDto(request.getFiltro(), request.getHeader().getMarca());
+			List<PerfilDto> list = consultasDao.getListSearchPerfilDto(request.getFiltro(),
+					request.getHeader().getMarca());
 			request.setPerfiles(list);
 		} else {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
 		return request;
 	}
+
 	@Override
 	public RequestCotizacionDto procesarRequestCotizacion(RequestCotizacionDto request) throws Exception {
 		validateCotizacion.validateCotizacion(request);
@@ -149,6 +152,9 @@ public class CotizadorServiceImpl implements Cotizador {
 		try {
 
 			List<AccesoClienteDto> listAcceso = seguridad.accesoCliente(request.getHeader().getToken());
+			if(listAcceso == null) {
+			throw new Exception("Tocken incorrecto o no valido" + request.getGDA_menssage().getDescripcion());
+			} else {
 			if (listAcceso.size() > 0) {
 				if (request.getRequisition().getMarca() == 16) {
 					Boolean procesarOrden = false;
@@ -188,10 +194,11 @@ public class CotizadorServiceImpl implements Cotizador {
 				return request;
 			}
 			throw new Exception("No se tiene acceso con el convenio " + request.getRequisition().getConvenio());
-
+			}
 		} catch (Exception e) {
 			throw e;
 		}
 
 	}
+	
 }
