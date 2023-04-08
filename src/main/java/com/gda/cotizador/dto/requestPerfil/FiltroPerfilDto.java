@@ -13,7 +13,7 @@ import lombok.Setter;
 @RequestMapping("/infogda-fullV3")
 public class FiltroPerfilDto {
 	
-	@Schema(description = "Código del perfil")
+	@Schema(description = "Código del perfil, -1: todos los perfiles")
 	private String cperfil;
 	
 	@Schema(description = "Nombre del perfil")

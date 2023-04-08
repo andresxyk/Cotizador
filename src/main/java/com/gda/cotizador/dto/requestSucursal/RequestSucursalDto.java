@@ -56,7 +56,9 @@ public class RequestSucursalDto {
 	}
 
 	public Boolean validarFiltro(RequestSucursalDto request) throws Exception {
-		if (request.getFiltro().getCsucursal().length() >= 3 || request.getFiltro().getSsucursal().length() > 4) {
+		if (request.getFiltro().getCsucursal().contains("-1") && request.getFiltro().getSsucursal().length() >= 4
+				|| request.getFiltro().getCsucursal() == "" && request.getFiltro().getSsucursal().length() >= 4
+				|| request.getFiltro().getCsucursal().length() > 2 || request.getFiltro().getSsucursal().length() >= 4) {
 			return true;
 		} else {
 			return false;

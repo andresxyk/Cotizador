@@ -59,7 +59,9 @@ public class RequestPerfilDto {
 	}
 
 	public Boolean validarFiltro(RequestPerfilDto request) throws Exception {
-		if (request.getFiltro().getCperfil().length() > 4 || request.getFiltro().getSperfil().length() > 4) {
+		if (request.getFiltro().getCperfil().contains("-1") && request.getFiltro().getSperfil().length() >= 4
+				|| request.getFiltro().getCperfil() == "" && request.getFiltro().getSperfil().length() >= 4
+				|| request.getFiltro().getCperfil().length() >2 || request.getFiltro().getSperfil().length() >= 4) {
 			return true;
 		} else {
 			return false;

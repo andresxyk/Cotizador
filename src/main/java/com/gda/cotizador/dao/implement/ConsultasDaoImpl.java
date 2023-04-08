@@ -50,41 +50,41 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 	public List<ConvenioDto> getListConvenioDto(FiltroConvenioDto filtro) {
 		List<ConvenioDto> list = null;
 		String complemento = "ec.cmarca = " + filtro.getCmarca() + " and ";
-		//if (filtro.getCconvenio() > 0 || filtro.getSconvenio().isEmpty()) {
-			if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
-				complemento += "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
-			} else {
-				complemento += "cc.sconvenio like '%" + filtro.getSconvenio() + "%'\r\n";
-			}
-			
-			String query = "select cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio, ec.cmarca\r\n"
-					+ "FROM cotizador.c_convenio cc\r\n"
-					+ "INNER JOIN cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n"
-					+ "inner join cotizador.e_convenio ec on ec.cconvenio = cc.cconvenio \r\n"  
-					+ "WHERE " + complemento;
-			list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());
-		//}
+		// if (filtro.getCconvenio() > 0 || filtro.getSconvenio().isEmpty()) {
+		if (filtro.getCconvenio() != null && filtro.getCconvenio() > -1) {
+			complemento += "cc.cconvenio = " + filtro.getCconvenio() + "\r\n";
+		} else {
+			complemento += "cc.sconvenio like '%" + filtro.getSconvenio() + "%'\r\n";
+		}
+
+		String query = "select cc.cconvenio, cc.sconvenio, cc.ctipoconvenio, ctc.cdescripciontipoconvenio, ec.cmarca\r\n"
+				+ "FROM cotizador.c_convenio cc\r\n"
+				+ "INNER JOIN cotizador.c_tipo_convenio ctc on cc.ctipoconvenio = ctc.ctipoconvenio\r\n"
+				+ "inner join cotizador.e_convenio ec on ec.cconvenio = cc.cconvenio \r\n" + "WHERE " + complemento;
+		list = jdbcTemplate.query(query, new Object[] {}, new ConvenioMapper());
+		// }
 		return list;
 
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro, Integer cmarca) {
+	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro,
+			Integer cmarca) {
 		List<ExamenConfigDto> list;
 		String complemento = "";
-		
-			if (filtro.getSexamen() != null) {
-				if (filtro.getSexamen().length() > 0) {
-					complemento = "and ce.sexamen like '%" + filtro.getSexamen() + "%' ";
-				}
+
+		if (filtro.getSexamen() != null) {
+			if (filtro.getSexamen().length() > 0) {
+				complemento = "and ce.sexamen like '%" + filtro.getSexamen() + "%' ";
 			}
-			if (filtro.getSexamenweb() != null) {
-				if (filtro.getSexamenweb().length() > 0) {
-					complemento = "and ce.sexamenweb like '%" + filtro.getSexamenweb() + "%' ";
-				}
+		}
+		if (filtro.getSexamenweb() != null) {
+			if (filtro.getSexamenweb().length() > 0) {
+				complemento = "and ce.sexamenweb like '%" + filtro.getSexamenweb() + "%' ";
 			}
-		
+		}
+
 		String query = "select \r\n" + "elcd.cexamen,\r\n" + "ce.sexamen,\r\n" + " ce.sexamenweb,\r\n"
 				+ "elcd.mprecio,\r\n" + "eec.scondicionpreanalitica,\r\n" + "eec.blunes,\r\n" + "eec.bmartes,\r\n"
 				+ "eec.bmiercoles,\r\n" + "eec.bjueves,\r\n" + "eec.bviernes,\r\n" + "eec.bsabado,\r\n"
@@ -96,14 +96,12 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 				+ "on ec.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_examen_configuracion eec\r\n" + "on ce.cexamen = eec.cexamen\r\n"
 				+ "inner join cotizador.c_departamento cd\r\n" + "on ce.cdepartamento = cd.cdepartamento\r\n"
-				+ "where ec.cconvenio = ? \r\n"
-				+ "and ec.cmarca = " + cmarca 
-				+ " and clc.clistacorporativa in (\r\n"
+				+ "where ec.cconvenio = ? \r\n" + "and ec.cmarca = " + cmarca + " and clc.clistacorporativa in (\r\n"
 				+ env.getProperty("list.clistacorporativa.marca") + ")\r\n" + complemento;
-		list = jdbcTemplate.query(query, new Object[] { filtro.getCconvenio()}, new ExamenConfigMapper());
-		
+		list = jdbcTemplate.query(query, new Object[] { filtro.getCconvenio() }, new ExamenConfigMapper());
+
 		logger.info(query);
-		
+
 		return list;
 	}
 
@@ -132,7 +130,11 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		List<SucursalDto> list;
 		String complemento = "";
 		if (filtro.getCsucursal() != "") {
-			complemento += "and csucursal in (" + filtro.getCsucursal() + ") \r\n";
+			if (filtro.getCsucursal().contains("-1")) {
+				complemento = "";
+			} else {
+				complemento += "and csucursal in (" + filtro.getCsucursal() + ") \r\n";
+			}
 		}
 		if (filtro.getSsucursal() != "") {
 			complemento += "and snombresucursal like '%" + filtro.getSsucursal() + "%' \r\n";
@@ -171,7 +173,11 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		List<PerfilDto> list;
 		String complemento = "";
 		if (filtro.getCperfil() != "") {
+			if(filtro.getCperfil().contains("-1")) {
+				complemento = "";
+			}else {
 			complemento += "and cp.cperfil in (" + filtro.getCperfil() + ") \r\n";
+			}
 		}
 		if (filtro.getSperfil() != "") {
 			complemento += "and cp.sperfil like '%" + filtro.getSperfil() + "%' \r\n";

@@ -56,7 +56,7 @@ public class RequestMarcaDto {
 
 	}
 	public Boolean validarFiltro(RequestMarcaDto request) throws Exception {
-		if (request.getFiltro().getCmarca().length() >= 1 || request.getFiltro().getSmarca().length() > 4) {
+		if (request.getFiltro().getCmarca().length() >= 1 || request.getFiltro().getSmarca().length() >= 4) {
 			return true;
 		} else {
 			return false;

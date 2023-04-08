@@ -15,7 +15,7 @@ import lombok.ToString;
 @RequestMapping("/infogda-fullV3")
 public class FiltroSucursalDto {
 
-	@Schema(description = "Código de la sucursal")
+	@Schema(description = "Código de la sucursal, -1 Todas las sucursales")
 	private String csucursal;
 	
 	@Schema(description = "Nombre de la sucursal")
