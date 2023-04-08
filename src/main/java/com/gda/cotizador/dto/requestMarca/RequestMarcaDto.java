@@ -71,6 +71,7 @@ public class RequestMarcaDto {
 			fechaInsertada = LocalDateTime.parse(request.getHeader().getDregistro(), formatter);
 		} catch (DateTimeParseException e) {
 			// La fecha insertada no tiene el formato deseado
+			return false;
 		}
 
 		if (fechaInsertada.atZone(ZoneOffset.UTC).toLocalDate().isEqual(fechaActual)) {

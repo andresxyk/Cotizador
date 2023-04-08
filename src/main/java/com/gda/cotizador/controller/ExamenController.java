@@ -62,7 +62,7 @@ public class ExamenController {
 						} else {
 							log.error("Error inesperado");
 							request.getGDA_menssage().setMenssage("error");
-							request.getGDA_menssage().setDescripcion("La marca no es la correcta, marca: 7,12,20,22,24,30");
+							request.getGDA_menssage().setDescripcion("La marca no es la correcta, validar marca");
 							request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 							return new ResponseEntity<RequestExamenDto>(request, HttpStatus.BAD_REQUEST);
 						}

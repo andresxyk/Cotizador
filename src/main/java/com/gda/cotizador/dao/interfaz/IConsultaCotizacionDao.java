@@ -20,7 +20,6 @@ public interface IConsultaCotizacionDao {
 	
 	String getSSucursal(Integer csucursal);
 	
-	
 	Integer getCmarcaOfConvenio(Integer cconvenio); 
 	
 	Integer insertTOrdenExamenSucursalCotizacion(TOrdenExamenSucursalCotizacionDto dto)throws Exception;

@@ -109,6 +109,7 @@ public class CotizacionDto {
 			fechaInsertada = LocalDateTime.parse(cotizacion.getHeader().getDregistro(), formatter);
 		} catch (DateTimeParseException e) {
 			// La fecha insertada no tiene el formato deseado
+			return false;
 		}
 
 		if (fechaInsertada.atZone(ZoneOffset.UTC).toLocalDate().isEqual(fechaActual)) {

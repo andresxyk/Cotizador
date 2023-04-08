@@ -233,8 +233,8 @@ public class ToolServiceImpl implements ToolDominio{
 
 
 							consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
-								ordenCotizacionDto.getKordensucursalcotizacion(),
-								perfilDto.getCexamen(),
+									ordenCotizacionDto.getKordensucursalcotizacion(),
+									perfilDto.getCexamen(),
 									perfilDto.getSexamen(),
 									bdSubtotalTotal,
 									bdDescuentoPromocion,

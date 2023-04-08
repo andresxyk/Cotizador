@@ -79,7 +79,7 @@ public class CotizadorServiceImpl implements Cotizador {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
 
 			List<ExamenDto> examenes = new ArrayList<>();
-			List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(request.getFiltro());
+			List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(request.getFiltro(),request.getHeader().getMarca());
 			for (ExamenConfigDto examenConfigDto : list) {
 				ExamenDto examenDto = new ExamenDto();
 				examenDto.setCexamen(examenConfigDto.getCexamen());

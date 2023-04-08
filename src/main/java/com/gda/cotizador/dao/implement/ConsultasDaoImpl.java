@@ -70,7 +70,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro) {
+	public List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro, Integer cmarca) {
 		List<ExamenConfigDto> list;
 		String complemento = "";
 		
@@ -96,9 +96,11 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 				+ "on ec.clistacorporativa = elcd.clistacorporativa\r\n"
 				+ "inner join cotizador.e_examen_configuracion eec\r\n" + "on ce.cexamen = eec.cexamen\r\n"
 				+ "inner join cotizador.c_departamento cd\r\n" + "on ce.cdepartamento = cd.cdepartamento\r\n"
-				+ "where ec.cconvenio = ? \r\n" + "and clc.clistacorporativa in (\r\n"
+				+ "where ec.cconvenio = ? \r\n"
+				+ "and ec.cmarca = " + cmarca 
+				+ " and clc.clistacorporativa in (\r\n"
 				+ env.getProperty("list.clistacorporativa.marca") + ")\r\n" + complemento;
-		list = jdbcTemplate.query(query, new Object[] { filtro.getCconvenio() }, new ExamenConfigMapper());
+		list = jdbcTemplate.query(query, new Object[] { filtro.getCconvenio()}, new ExamenConfigMapper());
 		
 		logger.info(query);
 		

@@ -13,8 +13,6 @@ public interface IConsultasDao {
 
 	List<ConvenioDto> getListConvenioDto(FiltroConvenioDto filtro);
 
-	List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro);
-
 	List<SucursalDto> getListSearchSucursalDto(com.gda.cotizador.dto.requestSucursal.FiltroSucursalDto filtro,
 			Integer cmarca);
 
@@ -25,6 +23,8 @@ public interface IConsultasDao {
 	List<MarcaDto> getListSearchMarcaDto(com.gda.cotizador.dto.requestMarca.FiltroMarcaDto filtro);
 
 	List<com.gda.cotizador.dto.requestPerfil.PerfilDto> getListSearchPerfilDto(com.gda.cotizador.dto.requestPerfil.FiltroPerfilDto filtro, Integer cmarca);
+	
+	List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro, Integer cmarca);
 
 	
 }
