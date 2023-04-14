@@ -149,78 +149,78 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 					   "												INNER JOIN cotizador.c_tipo_comercial ctc on ctc.ctipocomercial = ce.ctipocomercial   					\r\n" +
 					   "WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + " and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") + ")      		\r\n" +
 					   complemento +
-//					   "--EXAMEN EN PERFIL																																		\r\n" +  
-//					   "UNION ALL																																				\r\n" +  
-//					   "SELECT cp.cperfil,																																		\r\n" +  
-//					   "       cp.sperfil,   																																	\r\n" +  
-//					   "       cp.sperfil,																																		\r\n" +  
-//					   "       ecp.mpreciofacturarconiva,																														\r\n" +  
-//					   "       '' scondicionpreanalitica,																														\r\n" +  
-//					   "       true blunes,   																																	\r\n" +  
-//					   "       true bmartes,  																																	\r\n" +  
-//					   "       true bmiercoles,																																	\r\n" +  
-//					   "	   true bjueves,  																																	\r\n" +  
-//					   "	   true bviernes,																																	\r\n" +  
-//					   "	   true bsabado,  																																	\r\n" +  
-//					   "	   true bdomingo,																																	\r\n" +  
-//					   "	   max(utiemporespuestadiasprint) utiemporespuestadiasprint, ecp.mpreciofacturarsiniva,																\r\n" +  
-//					   "	   77 cdepartamento,																																\r\n" +  
-//					   "	   'PERFIL' sdepartamento,																															\r\n" +  
-//					   "	   5 ctipocomercial,																																\r\n" +  
-//					   "	   'PERFIL' sdescripcioncomercial,																													\r\n" +  
-//					   "	   clc.clistacorporativa																															\r\n" +  
-//					   "FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil 														\r\n" +  
-//					   "                           INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil 														\r\n" +  
-//					   "                           INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen																	\r\n" +  
-//					   "                           INNER JOIN cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen 													\r\n" +  
-//					   "                           INNER JOIN cotizador.e_convenio ec on ecp.cconvenio = ec.cconvenio															\r\n" +  
-//					   "                           INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = ec.clistacorporativa 								\r\n" +  
-//					   "WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + " and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") + ")       		\r\n" +  
-//					   "	                   and cp.blistapublico = true																										\r\n" +  
-//					   "	                   and ec.cestadoregistro = 22																										\r\n" +  
-//					   complemento +
-//					   "	  group by cp.cperfil,								                                                                                    			\r\n" + 
-//					   "               cp.sperfil,								                                                                                   				\r\n" + 
-//					   "               cp.sperfil,								                                                                                    			\r\n" + 
-//					   "               ecp.mpreciofacturarconiva,								                                                                                \r\n" + 
-//					   "               ecp.mpreciofacturarsiniva,								                                                                                \r\n" + 
-//					   "               clc.clistacorporativa								                                                                                    \r\n" +  
-//					   "--NOMBRE PERFIL																																			\r\n" +  
-//					   "UNION ALL																																				\r\n" +  
-//					   "SELECT  cp.cperfil,																																		\r\n" +  
-//					   "        cp.sperfil,   																																	\r\n" +  
-//					   "        cp.sperfil,																																		\r\n" +  
-//					   "        ecp.mpreciofacturarconiva,																														\r\n" +  
-//					   "        '' scondicionpreanalitica,																														\r\n" +  
-//					   "        true blunes,   																																	\r\n" +  
-//					   "        true bmartes,  																																	\r\n" +  
-//					   "        true bmiercoles,																																\r\n" +  
-//					   "        true bjueves,  																																	\r\n" +  
-//					   "        true bviernes,																																	\r\n" +  
-//					   "        true bsabado,  																																	\r\n" +  
-//					   "        true bdomingo,																																	\r\n" +  
-//					   "        max(utiemporespuestadiasprint) utiemporespuestadiasprint, ecp.mpreciofacturarsiniva,															\r\n" +  
-//					   "        77 cdepartamento,																																\r\n" +  
-//					   "        'PERFIL' sdepartamento,																															\r\n" +  
-//					   "        5 ctipocomercial,																																\r\n" +  
-//					   "        'PERFIL' sdescripcioncomercial,																													\r\n" +  
-//					   "        clc.clistacorporativa																															\r\n" +  
-//					   "FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil														\r\n" +  
-//					   "                           INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil															\r\n" +  
-//					   "                           INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen																	\r\n" +  
-//					   "                           INNER JOIN cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen 													\r\n" +  
-//					   "                           INNER JOIN cotizador.e_convenio ec on ecp.cconvenio = ec.cconvenio 															\r\n" +  
-//					   "                           INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = ec.clistacorporativa 								\r\n" +  
-//					   "WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + " and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") + ")      		\r\n" +  
-//					   "	                   and cp.blistapublico = true																										\r\n" +  
-//					   "	                   and ec.cestadoregistro = 22																										\r\n" +  
-//					   	complementoperfiles +
-//					   "	  group by cp.cperfil,																																\r\n" +  
-//					   "	           cp.sperfil,																																\r\n" +  
-//					   "	           cp.sperfil,																																\r\n" +  
-//					   "	           ecp.mpreciofacturarconiva,																												\r\n" +  
-//					   "	           ecp.mpreciofacturarsiniva,																												\r\n" +  
-//					   "	           clc.clistacorporativa																													\r\n" +  
+					   "--EXAMEN EN PERFIL																																		\r\n" +  
+					   "UNION ALL																																				\r\n" +  
+					   "SELECT cp.cperfil,																																		\r\n" +  
+					   "       cp.sperfil,   																																	\r\n" +  
+					   "       cp.sperfil,																																		\r\n" +  
+					   "       ecp.mpreciofacturarconiva,																														\r\n" +  
+					   "       '' scondicionpreanalitica,																														\r\n" +  
+					   "       true blunes,   																																	\r\n" +  
+					   "       true bmartes,  																																	\r\n" +  
+					   "       true bmiercoles,																																	\r\n" +  
+					   "	   true bjueves,  																																	\r\n" +  
+					   "	   true bviernes,																																	\r\n" +  
+					   "	   true bsabado,  																																	\r\n" +  
+					   "	   true bdomingo,																																	\r\n" +  
+					   "	   max(utiemporespuestadiasprint) utiemporespuestadiasprint, ecp.mpreciofacturarsiniva,																\r\n" +  
+					   "	   77 cdepartamento,																																\r\n" +  
+					   "	   'PERFIL' sdepartamento,																															\r\n" +  
+					   "	   5 ctipocomercial,																																\r\n" +  
+					   "	   'PERFIL' sdescripcioncomercial,																													\r\n" +  
+					   "	   clc.clistacorporativa																															\r\n" +  
+					   "FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil 														\r\n" +  
+					   "                           INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil 														\r\n" +  
+					   "                           INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen																	\r\n" +  
+					   "                           INNER JOIN cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen 													\r\n" +  
+					   "                           INNER JOIN cotizador.e_convenio ec on ecp.cconvenio = ec.cconvenio															\r\n" +  
+					   "                           INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = ec.clistacorporativa 								\r\n" +  
+					   "WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + " and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") + ")       		\r\n" +  
+					   "	                   and cp.blistapublico = true																										\r\n" +  
+					   "	                   and ec.cestadoregistro = 22																										\r\n" +  
+					   complemento +
+					   "	  group by cp.cperfil,								                                                                                    			\r\n" + 
+					   "               cp.sperfil,								                                                                                   				\r\n" + 
+					   "               cp.sperfil,								                                                                                    			\r\n" + 
+					   "               ecp.mpreciofacturarconiva,								                                                                                \r\n" + 
+					   "               ecp.mpreciofacturarsiniva,								                                                                                \r\n" + 
+					   "               clc.clistacorporativa								                                                                                    \r\n" +  
+					   "--NOMBRE PERFIL																																			\r\n" +  
+					   "UNION ALL																																				\r\n" +  
+					   "SELECT  cp.cperfil,																																		\r\n" +  
+					   "        cp.sperfil,   																																	\r\n" +  
+					   "        cp.sperfil,																																		\r\n" +  
+					   "        ecp.mpreciofacturarconiva,																														\r\n" +  
+					   "        '' scondicionpreanalitica,																														\r\n" +  
+					   "        true blunes,   																																	\r\n" +  
+					   "        true bmartes,  																																	\r\n" +  
+					   "        true bmiercoles,																																\r\n" +  
+					   "        true bjueves,  																																	\r\n" +  
+					   "        true bviernes,																																	\r\n" +  
+					   "        true bsabado,  																																	\r\n" +  
+					   "        true bdomingo,																																	\r\n" +  
+					   "        max(utiemporespuestadiasprint) utiemporespuestadiasprint, ecp.mpreciofacturarsiniva,															\r\n" +  
+					   "        77 cdepartamento,																																\r\n" +  
+					   "        'PERFIL' sdepartamento,																															\r\n" +  
+					   "        5 ctipocomercial,																																\r\n" +  
+					   "        'PERFIL' sdescripcioncomercial,																													\r\n" +  
+					   "        clc.clistacorporativa																															\r\n" +  
+					   "FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil														\r\n" +  
+					   "                           INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil															\r\n" +  
+					   "                           INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen																	\r\n" +  
+					   "                           INNER JOIN cotizador.e_examen_configuracion eec on ce.cexamen = eec.cexamen 													\r\n" +  
+					   "                           INNER JOIN cotizador.e_convenio ec on ecp.cconvenio = ec.cconvenio 															\r\n" +  
+					   "                           INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = ec.clistacorporativa 								\r\n" +  
+					   "WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + " and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") + ")      		\r\n" +  
+					   "	                   and cp.blistapublico = true																										\r\n" +  
+					   "	                   and ec.cestadoregistro = 22																										\r\n" +  
+					   	complementoperfiles +
+					   "	  group by cp.cperfil,																																\r\n" +  
+					   "	           cp.sperfil,																																\r\n" +  
+					   "	           cp.sperfil,																																\r\n" +  
+					   "	           ecp.mpreciofacturarconiva,																												\r\n" +  
+					   "	           ecp.mpreciofacturarsiniva,																												\r\n" +  
+					   "	           clc.clistacorporativa																													\r\n" +  
 					   "	  order by 1,2																																		\r\n";  				
 		logger.info(query);
 		list = jdbcTemplate.query(query, new Object[] { filtro.getCconvenio() }, new ExamenConfigMapper());
