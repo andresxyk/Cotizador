@@ -25,6 +25,9 @@ public class ExamenDto {
 	
 	@Schema(description = "Response precio del examen")
 	private BigDecimal precio;
+
+	@Schema(description = "Response precio lista madre")
+	private BigDecimal preciomadre;	
 	
 	@Schema(description = "Respose indicaciones del paciente")
 	private String indicacionespaciente;
@@ -35,7 +38,13 @@ public class ExamenDto {
 	@Schema(description = "Response No departamento")
 	private Integer cdepartamento;
 	
-	@Schema(description = "Response epartamento encargado")
+	@Schema(description = "Response departamento laboratorio")
 	private String sdepartamento;
-		
+
+	@Schema(description = "Response No tipo comercial")
+	private Integer ctipocomercial;
+	
+	@Schema(description = "Response descripcion tipo comercial")
+	private String stipocomercial;
+	
 }

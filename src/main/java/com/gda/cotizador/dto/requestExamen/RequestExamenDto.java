@@ -58,7 +58,7 @@ public class RequestExamenDto {
 
 	public Boolean validarFiltroExamen(RequestExamenDto request) {
 		if (request.getFiltro().getSexamen().isEmpty() && request.getFiltro().getSexamenweb().isEmpty()
-				&& request.getFiltro().getCconvenio() == 0) {
+				&& request.getFiltro().getCconvenio() == 0 && request.getFiltro().getCtipocomercial() == 0) {
 			return false;
 		} else {
 			return true;

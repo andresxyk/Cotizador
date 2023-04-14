@@ -18,12 +18,17 @@ import lombok.ToString;
 public class FiltroExamenDto {
 	
 	@Schema(description = "Código del convenio")
-	private Integer cconvenio;
+	private Integer cconvenio = 0;
 	
 	@Schema(description = "Descripción del examen")
-	private String sexamen;
+	private String sexamen = "";
 	
 	@Schema(description = "Descripción del examen Web")
-	private String sexamenweb;
+	private String sexamenweb = "";
 
+	@Schema(description = "Código tipo comercial")
+	private Integer ctipocomercial = 0;
+
+	@Schema(description = "Descripción tipo comercial")
+	private String stipocomercial = "";	
 }

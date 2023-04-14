@@ -86,10 +86,13 @@ public class CotizadorServiceImpl implements Cotizador {
 				examenDto.setSexamen(examenConfigDto.getSexamen());
 				examenDto.setSexamenweb(examenConfigDto.getSexamenweb());
 				examenDto.setPrecio(examenConfigDto.getMprecio());
+				examenDto.setPreciomadre(examenConfigDto.getMpreciomadre());
 				examenDto.setIndicacionespaciente(examenConfigDto.getScondicionpreanalitica());
 				examenDto.setFechaentrega(generalUtil.calcularFechaPromesa(examenConfigDto));
 				examenDto.setCdepartamento(examenConfigDto.getCdepartamento());
 				examenDto.setSdepartamento(examenConfigDto.getSdepartamento());
+				examenDto.setCtipocomercial(examenConfigDto.getCtipocomercial());
+				examenDto.setStipocomercial(examenConfigDto.getStipocomercial());
 				examenes.add(examenDto);
 			}
 			request.setExamenes(examenes);
@@ -98,7 +101,8 @@ public class CotizadorServiceImpl implements Cotizador {
 		}
 		return request;
 	}
-
+	
+	
 	@Override
 	public RequestSucursalDto procesarRequestSucursal(RequestSucursalDto request) throws Exception {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
