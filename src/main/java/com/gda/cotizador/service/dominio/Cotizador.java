@@ -1,5 +1,7 @@
 package com.gda.cotizador.service.dominio;
 
+import com.gda.cotizador.dto.comercial.RequestComercialDto;
+import com.gda.cotizador.dto.comercial.RequestTipoComercialDto;
 import com.gda.cotizador.dto.cotizacion.CotizacionDto;
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
@@ -30,5 +32,9 @@ public interface Cotizador {
 	 * @throws Exception
 	 */
 	CotizacionDto procesarNewCotizacion(CotizacionDto request) throws Exception;
+
+	RequestComercialDto procesarRequestComercial(RequestComercialDto request) throws Exception;
+
+	RequestTipoComercialDto procesarRequestTipoComercial(RequestTipoComercialDto request) throws Exception;
 
 }

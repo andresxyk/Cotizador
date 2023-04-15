@@ -3,6 +3,9 @@ import java.util.List;
 
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.PerfilDto;
+import com.gda.cotizador.dto.comercial.FiltroComercialDto;
+import com.gda.cotizador.dto.comercial.FiltroTipoComercialDto;
+import com.gda.cotizador.dto.comercial.TipoComercialDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroConvenioDto;
@@ -25,6 +28,10 @@ public interface IConsultasDao {
 	List<com.gda.cotizador.dto.requestPerfil.PerfilDto> getListSearchPerfilDto(com.gda.cotizador.dto.requestPerfil.FiltroPerfilDto filtro, Integer cmarca);
 	
 	List<ExamenConfigDto> getListSearchExamenDto(com.gda.cotizador.dto.requestExamen.FiltroExamenDto filtro, Integer cmarca);
+
+	List<ExamenConfigDto> getListSearchExamenDtoComercial(FiltroComercialDto filtro, Integer cmarca);
+
+	List<TipoComercialDto> getListSearchTipoComercialDto(FiltroTipoComercialDto filtro, Integer cmarca);
 
 	
 }

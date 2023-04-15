@@ -13,8 +13,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequestMapping("/infogda-fullV3")
-
-
 public class FiltroExamenDto {
 	
 	@Schema(description = "Código del convenio")

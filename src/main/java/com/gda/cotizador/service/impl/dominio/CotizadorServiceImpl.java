@@ -14,6 +14,10 @@ import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
+import com.gda.cotizador.dto.comercial.HeaderResponseDto;
+import com.gda.cotizador.dto.comercial.RequestComercialDto;
+import com.gda.cotizador.dto.comercial.RequestTipoComercialDto;
+import com.gda.cotizador.dto.comercial.TipoComercialDto;
 import com.gda.cotizador.dto.cotizacion.CExamenDto;
 import com.gda.cotizador.dto.cotizacion.CodingCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.CotizacionDto;
@@ -102,6 +106,47 @@ public class CotizadorServiceImpl implements Cotizador {
 		return request;
 	}
 	
+	@Override
+	public RequestComercialDto procesarRequestComercial(RequestComercialDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			List<ExamenDto> newexamenes = new ArrayList<>();
+			List<ExamenDto> examenes = new ArrayList<>();
+			List<ExamenConfigDto> list = consultasDao.getListSearchExamenDtoComercial(request.getFiltro(),request.getHeader().getMarca());
+			for (ExamenConfigDto examenConfigDto : list) {
+				ExamenDto examenDto = new ExamenDto();
+				examenDto.setCexamen(examenConfigDto.getCexamen());
+				examenDto.setSexamen(examenConfigDto.getSexamen());
+				examenDto.setSexamenweb(examenConfigDto.getSexamenweb());
+				examenDto.setPrecio(examenConfigDto.getMprecio());
+				examenDto.setPreciomadre(examenConfigDto.getMpreciomadre());
+				examenDto.setIndicacionespaciente(examenConfigDto.getScondicionpreanalitica());
+				examenDto.setFechaentrega(generalUtil.calcularFechaPromesa(examenConfigDto));
+				examenDto.setCdepartamento(examenConfigDto.getCdepartamento());
+				examenDto.setSdepartamento(examenConfigDto.getSdepartamento());
+				examenDto.setCtipocomercial(examenConfigDto.getCtipocomercial());
+				examenDto.setStipocomercial(examenConfigDto.getStipocomercial());
+				examenes.add(examenDto);
+			}
+			
+			Integer init = request.getFiltro().getPaginacion().getInit();
+			Integer totalRecord = init + request.getFiltro().getPaginacion().getRecord();
+			HeaderResponseDto headerResponseDto = null;
+			if(totalRecord <= examenes.size()) {
+				for (int i = init; i < totalRecord ; i++) {
+					newexamenes.add(examenes.get(i));
+				}
+				headerResponseDto = new HeaderResponseDto(examenes.size(), init, totalRecord);
+			}else {
+				headerResponseDto = new HeaderResponseDto(examenes.size(), -1, -1);
+			}			
+			request.setHeaderResponse(headerResponseDto);
+			request.setExamenes(newexamenes);
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}
+	
 	
 	@Override
 	public RequestSucursalDto procesarRequestSucursal(RequestSucursalDto request) throws Exception {
@@ -109,6 +154,18 @@ public class CotizadorServiceImpl implements Cotizador {
 			List<SucursalDto> list = consultasDao.getListSearchSucursalDto(request.getFiltro(),
 					request.getHeader().getMarca());
 			request.setSucursales(list);
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}
+	
+	@Override
+	public RequestTipoComercialDto procesarRequestTipoComercial(RequestTipoComercialDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			List<TipoComercialDto> list = consultasDao.getListSearchTipoComercialDto(request.getFiltro(),
+					request.getHeader().getMarca());
+			request.setTipocomercial(list);
 		} else {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
