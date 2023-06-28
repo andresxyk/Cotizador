@@ -15,7 +15,7 @@ public class ExamenConfigMapper implements RowMapper<ExamenConfigDto>{
 		dto.setCexamen(rs.getInt("cexamen"));
 		dto.setSexamen(rs.getString("sexamen"));
 		dto.setSexamenweb(rs.getString("sexamenweb"));
-		dto.setMprecio(rs.getBigDecimal("mprecio"));
+		dto.setMprecio(rs.getBigDecimal("mprecioconvenio"));
 		dto.setMpreciomadre(rs.getBigDecimal("mprecio"));
 		dto.setScondicionpreanalitica(rs.getString("scondicionpreanalitica"));
 		dto.setBlunes(rs.getBoolean("blunes"));
@@ -31,7 +31,12 @@ public class ExamenConfigMapper implements RowMapper<ExamenConfigDto>{
 		dto.setSdepartamento(rs.getString("sdepartamento"));
 		dto.setCtipocomercial(rs.getInt("ctipocomercial"));
 		dto.setStipocomercial(rs.getString("sdescripcioncomercial"));
+		dto.setSincluye(rs.getString("incluye"));
+		try {
+			dto.setBrequierecita(rs.getBoolean("brequierecita"));
+		} catch (Exception exp) {
+			dto.setBrequierecita(false);
+		}
 		return dto;
 	}
-
 }

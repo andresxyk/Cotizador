@@ -46,5 +46,7 @@ public class ExamenDto {
 	
 	@Schema(description = "Response descripcion tipo comercial")
 	private String stipocomercial;
-	
+
+	@Schema(description = "Response nombre de todos los examenes que incluye el perfil o checkup")
+	private String sincluye;		
 }

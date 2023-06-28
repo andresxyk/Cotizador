@@ -56,7 +56,9 @@ public class Coding
 	
 	@Schema(description =  "Fecha de entrega, formato: dd-mm-yyy, ejemplo: 09-01-2023")
 	private String fechaentrega;
-	
+
+	@Schema(description =  "Indica si el examen requiere cita SI o NO")
+	private String requiere_cita = "NO";	
 
 	public String getNombreconvenio() {
 		return nombreconvenio;
@@ -81,6 +83,12 @@ public class Coding
 	}
 	public void setFechaentrega(String fechaentrega) {
 		this.fechaentrega = fechaentrega;
+	}
+	public String getRequiere_cita() {
+		return requiere_cita;
+	}
+	public void setRequiere_cita(String requiere_cita) {
+		this.requiere_cita = requiere_cita;
 	}
 	public BigDecimal getSubtotal() {
 		return subtotal;

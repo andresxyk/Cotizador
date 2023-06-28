@@ -97,6 +97,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				examenDto.setSdepartamento(examenConfigDto.getSdepartamento());
 				examenDto.setCtipocomercial(examenConfigDto.getCtipocomercial());
 				examenDto.setStipocomercial(examenConfigDto.getStipocomercial());
+				examenDto.setSincluye(examenConfigDto.getSincluye());
 				examenes.add(examenDto);
 			}
 			request.setExamenes(examenes);
@@ -130,14 +131,17 @@ public class CotizadorServiceImpl implements Cotizador {
 			
 			Integer init = request.getFiltro().getPaginacion().getInit();
 			Integer totalRecord = init + request.getFiltro().getPaginacion().getRecord();
+			
+			if(totalRecord > examenes.size()) {
+				totalRecord = examenes.size();
+			}			
+			
 			HeaderResponseDto headerResponseDto = null;
 			if(totalRecord <= examenes.size()) {
 				for (int i = init; i < totalRecord ; i++) {
 					newexamenes.add(examenes.get(i));
 				}
 				headerResponseDto = new HeaderResponseDto(examenes.size(), init, totalRecord);
-			}else {
-				headerResponseDto = new HeaderResponseDto(examenes.size(), -1, -1);
 			}			
 			request.setHeaderResponse(headerResponseDto);
 			request.setExamenes(newexamenes);

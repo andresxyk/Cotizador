@@ -21,5 +21,11 @@ public class SucursalDto {
 	
 	@Schema(description = "Response nombre de la sucursal")
 	private String nombresucursal;
+
+	@Schema(description = "Coordenada latitud")
+	private float nlatitud;
+
+	@Schema(description = "Coordenada longitud")
+	private float nlongitud;
 	
 }
