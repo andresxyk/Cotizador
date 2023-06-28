@@ -115,7 +115,7 @@ public class CotizadorController {
 		request.setGDA_menssage(msg);
 		try {
 			if (request.validarLineaNegocio(request)) {
-				if (request.validarFechaRegistro(request)) {
+//				if (request.validarFechaRegistro(request)) {
 					if (request.validarMarca(request)) {
 						request = cotizador.procesarRequestCotizacion(request);
 						request.getGDA_menssage().setMenssage("success");
@@ -130,13 +130,13 @@ public class CotizadorController {
 						return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
 					}
 
-				} else {
-					log.error("Error inesperado");
-					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-					return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
-				}
+//				} else {
+//					log.error("Error inesperado");
+//					request.getGDA_menssage().setMenssage("error");
+//					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
+//					request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+//					return new ResponseEntity<RequestCotizacionDto>(request, HttpStatus.BAD_REQUEST);
+//				}
 
 			} else {
 				log.error("Error inesperado");
@@ -161,7 +161,7 @@ public class CotizadorController {
 	public ResponseEntity<?> generateCotizacion(@RequestBody CotizacionDto cotizacionDto) throws Exception {
 		log.info("serviceRequest");
 		try {
-			if (cotizacionDto.validarFechaRegistro(cotizacionDto)) {
+//			if (cotizacionDto.validarFechaRegistro(cotizacionDto)) {
 				if (cotizacionDto.validarMarca(cotizacionDto)) {
 					if (cotizacionDto.validarLineaNegocio(cotizacionDto)) {
 						if (cotizacionDto.getStatus().equals("active")) {
@@ -193,14 +193,14 @@ public class CotizadorController {
 							env.getProperty("name.cotizador.create.service.requestcotizacion")));
 					return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
 				}
-			} else {
-				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error",
-						"El formato de la fecha es incorrecto o no es la actual, validar"));
-				String response = gson.toJson(cotizacionDto);
-				_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
-						env.getProperty("name.cotizador.create.service.requestcotizacion")));
-				return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
-			}
+//			} else {
+//				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(HttpStatus.BAD_REQUEST.value(), "error",
+//						"El formato de la fecha es incorrecto o no es la actual, validar"));
+//				String response = gson.toJson(cotizacionDto);
+//				_bitacora.bitacoraApis(new TBitacoraApiDto(gson.toJson(cotizacionDto), response,
+//						env.getProperty("name.cotizador.create.service.requestcotizacion")));
+//				return new ResponseEntity<String>(gson.toJson(cotizacionDto), HttpStatus.BAD_REQUEST);
+//			}
 
 		} catch (Exception e) {
 			log.error("Error inesperado", e);

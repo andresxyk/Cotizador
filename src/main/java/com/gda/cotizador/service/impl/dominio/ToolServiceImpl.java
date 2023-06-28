@@ -56,22 +56,20 @@ public class ToolServiceImpl implements ToolDominio{
 				List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(Integer.parseInt(coding.getCode()), coding.getConvenio());
 				List<EConvenioDetalleDto> listECD = consultasDao.getListEConvenioDetalle(coding.getConvenio(), Integer.parseInt(coding.getCode()));
 				if(list.size()>0) {
+					coding.setPreciolistamadretotal(list.get(0).getMprecio());
+					coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
+					coding.setDescuentopromocion(BigDecimal.ZERO);
+					coding.setRequiere_cita((list.get(0).getBrequierecita())?"SI":"NO");
 					if(listECD.size()>0) {
-						coding.setPreciolistamadretotal(list.get(0).getMprecio());
-						coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
 						coding.setSubtotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setTotal(listECD.get(0).getMpreciofacturarconiva());
-						coding.setDescuentopromocion(BigDecimal.ZERO);
 						coding.setPagopaciente(listECD.get(0).getMpreciofacturarconiva());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
 						ttotal = ttotal.add(listECD.get(0).getMpreciofacturarconiva().setScale(2, BigDecimal.ROUND_HALF_UP));
 						tsubtotal = tsubtotal.add(listECD.get(0).getMpreciofacturarsiniva().setScale(2, BigDecimal.ROUND_HALF_UP));
 					}else {
-						coding.setPreciolistamadretotal(list.get(0).getMprecio());
-						coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
 						coding.setSubtotal(list.get(0).getMprecio());
 						coding.setTotal(list.get(0).getMprecio());
-						coding.setDescuentopromocion(BigDecimal.ZERO);
 						coding.setPagopaciente(list.get(0).getMprecio());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
 						ttotal = ttotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
