@@ -17,6 +17,9 @@ public class FiltroExamenDto {
 	
 	@Schema(description = "Código del convenio")
 	private Integer cconvenio = 0;
+
+	@Schema(description = "Codigo del examen")
+	private Integer cexamen = 0;
 	
 	@Schema(description = "Descripción del examen")
 	private String sexamen = "";

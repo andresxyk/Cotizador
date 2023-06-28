@@ -119,7 +119,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>service-cotizador-1.0.14042023</finalName>
+		<finalName>service-cotizador-4.0.23052023</finalName>
 	</build>
 
 </project>
