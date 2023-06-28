@@ -42,15 +42,10 @@
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.4</version>
+		</dependency>
         <dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
@@ -92,6 +87,21 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 			<version>2.6.1</version>
 		</dependency>
+		<dependency>
+		 <groupId>net.sf.jasperreports</groupId>
+    <artifactId>jasperreports</artifactId>
+    <version>6.20.0</version>
+		</dependency>
+		<dependency>
+    <groupId>org.jfree</groupId>
+    <artifactId>jfreechart</artifactId>
+    <version>1.5.4</version>
+</dependency>
+		<dependency>
+			<groupId>com.edb</groupId>
+			<artifactId>edb-jdbc</artifactId>
+			<version>14</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -109,6 +119,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>service-cotizador-1.0.14042023</finalName>
 	</build>
 
 </project>

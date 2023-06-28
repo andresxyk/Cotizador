@@ -6,17 +6,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import java.sql.Connection;
+
 
 import com.gda.cotizador.dto.ExamenConfigDto;
+
+import net.sf.jasperreports.engine.JRException;
 
 @Service
 public class GeneralUtil {
 
 	final static Logger logger = LogManager.getLogger(GeneralUtil.class);
+	@Autowired
+	private Environment env;
 	
 	public String getAcuseUUID() {
 		return UUID.randomUUID().toString();
@@ -63,5 +72,4 @@ public class GeneralUtil {
 		}
 		return formatDate("dd-MM-yyyy", calendar.getTime());
 	}
-	
 }

@@ -5,8 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.gda.cotizador.dto.cotizacion.CotizacionDto;
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
+import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
 
 public class RequestCotizacionDto {
 	@NotNull
@@ -96,6 +98,5 @@ public class RequestCotizacionDto {
 	public void setGDA_menssage(GDAMenssageDto gDA_menssage) {
 		GDA_menssage = gDA_menssage;
 	}
-    
 }
 

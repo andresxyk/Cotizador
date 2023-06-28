@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+@RequestMapping("/infogda-fullV3")
 public class Requisition
 {
     private String system;

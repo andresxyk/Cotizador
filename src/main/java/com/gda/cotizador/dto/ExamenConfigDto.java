@@ -15,7 +15,9 @@ public class ExamenConfigDto {
 
 	private Integer cexamen;
 	private String sexamen;
+	private String sexamenweb;
 	private BigDecimal mprecio;
+	private BigDecimal mpreciomadre;
 	private String scondicionpreanalitica;
 	private Boolean blunes;
 	private Boolean bmartes;
@@ -28,5 +30,6 @@ public class ExamenConfigDto {
 	private BigDecimal mpreciosiniva;
 	private Integer cdepartamento;
 	private String sdepartamento;
-	
+	private Integer ctipocomercial;
+	private String stipocomercial;	
 }
