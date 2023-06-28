@@ -15,6 +15,8 @@ public class SucursalMapper implements RowMapper<SucursalDto>{
 		dto.setCsucursal(rs.getInt("csucursal"));
 		dto.setNemonico(rs.getString("ssucursal"));
 		dto.setNombresucursal(rs.getString("snombresucursal"));
+		dto.setNlatitud(rs.getFloat("nlatitud"));
+		dto.setNlongitud(rs.getFloat("nlongitud"));
 		return dto;
 	}
 

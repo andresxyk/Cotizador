@@ -32,4 +32,6 @@ public class ExamenConfigDto {
 	private String sdepartamento;
 	private Integer ctipocomercial;
 	private String stipocomercial;	
+	private String sincluye;	
+	private Boolean brequierecita;
 }

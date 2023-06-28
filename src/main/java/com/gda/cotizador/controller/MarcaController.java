@@ -45,8 +45,8 @@ public class MarcaController {
 
 		try {
 			if (request.validarlineaNegocio(request)) {
-				if (request.validarFechaRegistro(request)) {
-					if (request.validarFiltro(request)) {
+//				if (request.validarFechaRegistro(request)) {
+//					if (request.validarFiltro(request)) {
 						if (request.validarMarca(request)) {
 							if (request.validarFiltroMarca(request)) {
 								request = cotizador.procesarRequestMarca(request);
@@ -70,19 +70,19 @@ public class MarcaController {
 							request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 							return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.BAD_REQUEST);
 						}
-					} else {
-						request.getGDA_menssage().setMenssage("error");
-						request.getGDA_menssage().setDescripcion(
-								"Los campos filtro.cmarca, filtro.smarca no pueden ir nulos o vacios o deben contener mas de 1 caracteres");
-						request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
-						return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.NOT_ACCEPTABLE);
-					}
-				} else {
-					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
-					return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.NOT_ACCEPTABLE);
-				}
+//					} else {
+//						request.getGDA_menssage().setMenssage("error");
+//						request.getGDA_menssage().setDescripcion(
+//								"Los campos filtro.cmarca, filtro.smarca no pueden ir nulos o vacios o deben contener mas de 1 caracteres");
+//						request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+//						return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.NOT_ACCEPTABLE);
+//					}
+//				} else {
+//					request.getGDA_menssage().setMenssage("error");
+//					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
+//					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+//					return new ResponseEntity<RequestMarcaDto>(request, HttpStatus.NOT_ACCEPTABLE);
+//				}
 			} else {
 				request.getGDA_menssage().setMenssage("error");
 				request.getGDA_menssage().setDescripcion("La linea de negocio no es la correcta, linea de negocio: COTIZACION");

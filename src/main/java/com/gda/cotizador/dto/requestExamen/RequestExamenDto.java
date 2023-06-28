@@ -49,7 +49,8 @@ public class RequestExamenDto {
 		if ((request.getFiltro().getSexamen() == null && request.getFiltro().getCconvenio() > -1)
 				|| (request.getFiltro().getSexamen() != null && request.getFiltro().getSexamen() == ""
 						&& request.getFiltro().getCconvenio() > -1)
-				|| (request.getFiltro().getSexamen().length() > 4 && request.getFiltro().getCconvenio() > -1)) {
+				|| (request.getFiltro().getSexamen().length() > 4 && request.getFiltro().getCconvenio() > -1)
+				) {
 			return true;
 		} else {
 			return false;

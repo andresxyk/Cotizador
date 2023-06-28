@@ -45,7 +45,7 @@ public class ConvenioController {
 		request.setGDA_menssage(msg);
 		try {
 			if (request.validarlineaNegocio(request)) {
-				if (request.validarFechaRegistro(request)) {
+//				if (request.validarFechaRegistro(request)) {
 					if (request.validarFiltro(request)) {
 						if (request.validarMarca(request)) {
 							if (request.validarFiltroConvenio(request)) {
@@ -78,12 +78,12 @@ public class ConvenioController {
 						request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
 						return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.NOT_ACCEPTABLE);
 					}
-				} else {
-					request.getGDA_menssage().setMenssage("error");
-					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
-					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
-					return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.NOT_ACCEPTABLE);
-				}
+//				} else {
+//					request.getGDA_menssage().setMenssage("error");
+//					request.getGDA_menssage().setDescripcion("El formato de la fecha es incorrecto o no es la actual, validar");
+//					request.getGDA_menssage().setCodeHttp(HttpStatus.NOT_ACCEPTABLE.value());
+//					return new ResponseEntity<RequestConvenioDto>(request, HttpStatus.NOT_ACCEPTABLE);
+//				}
 			} else {
 				request.getGDA_menssage().setMenssage("error");
 				request.getGDA_menssage().setDescripcion("La linea de negocio no es la correcta, linea de negocio: COTIZACION");
