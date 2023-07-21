@@ -1,5 +1,6 @@
 package com.gda.cotizador.service.impl.dominio;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +99,11 @@ public class CotizadorServiceImpl implements Cotizador {
 				examenDto.setCtipocomercial(examenConfigDto.getCtipocomercial());
 				examenDto.setStipocomercial(examenConfigDto.getStipocomercial());
 				examenDto.setSincluye(examenConfigDto.getSincluye());
+				String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
+				if(porcentajePuntos!=null) {
+					BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+					examenDto.setPuntos(generalUtil.calculoPuntos(examenConfigDto.getMprecio(), porcentaje));
+				}
 				examenes.add(examenDto);
 			}
 			request.setExamenes(examenes);
@@ -237,6 +243,7 @@ public class CotizadorServiceImpl implements Cotizador {
 						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,
 								listAcceso.get(0));
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+						consultasCotizacionDao.updateTOrdenSucursalCotizacion(tosc.getKordensucursalcotizacion(), request.getRequisition().getPuntos());
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
 						request.setBase64(new String(generateReport.doIndicaciones(tosc)));
@@ -251,6 +258,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,
 						listAcceso.get(0));
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
+				consultasCotizacionDao.updateTOrdenSucursalCotizacion(tosc.getKordensucursalcotizacion(), request.getRequisition().getPuntos());
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
 				request.setBase64(new String(generateReport.doIndicaciones(tosc)));

@@ -31,5 +31,5 @@ public class TOrdenExamenSucursalCotizacionDto {
     private String smotivocancelacion;
     private Integer cperfil;
     private Integer uvolumenexamen; 
-    
+    private BigDecimal mpuntosexamen;
 }

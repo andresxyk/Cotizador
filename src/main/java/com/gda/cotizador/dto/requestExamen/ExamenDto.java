@@ -48,5 +48,8 @@ public class ExamenDto {
 	private String stipocomercial;
 
 	@Schema(description = "Response nombre de todos los examenes que incluye el perfil o checkup")
-	private String sincluye;		
+	private String sincluye;	
+	
+	@Schema(description = "Response Puntos")
+    private BigDecimal puntos;
 }

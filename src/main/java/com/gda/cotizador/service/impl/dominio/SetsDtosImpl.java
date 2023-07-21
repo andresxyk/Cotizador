@@ -41,7 +41,7 @@ public interface SetsDtosImpl {
     TOrdenExamenSucursalCotizacionDto setForTOrdenExamenSucursalCotizacionDto(Integer Kordensucursalcotizacion,Integer Cexamen, 
                     String Sexamen,BigDecimal Msubtotal,BigDecimal Mdescuentopromocion,BigDecimal Mdescuentoempresa,BigDecimal Mdescuentomedico, BigDecimal Mfacturaempresa,
                     BigDecimal Mpagopaciente,BigDecimal Miva,BigDecimal Mtotal, Integer Userid,Integer Cestadoregistro,Integer Cconvenio,
-                    String Smotivocancelacion, Integer Cperfil,Integer Uvolumenexamen);
+                    String Smotivocancelacion, Integer Cperfil,Integer Uvolumenexamen, BigDecimal mpuntosexamen);
 
      /**
       * Funcion para setera los valores al dto TOrdenSucursalCotizacionDto

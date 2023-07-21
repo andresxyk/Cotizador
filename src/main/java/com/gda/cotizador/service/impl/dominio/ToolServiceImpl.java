@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -46,25 +47,38 @@ public class ToolServiceImpl implements ToolDominio{
 	@Autowired
 	private GeneralUtil generalUtil;
 	@Autowired
+	private Environment env;
+	@Autowired
 	private SetsDtosImpl setsDtosImpl;
 	@Override
 		public RequestCotizacionDto addConvenioDetalle(RequestCotizacionDto request) {
 			List<Coding> lisCodings = new ArrayList<>();
+			Boolean isPuntosGda = false;
 			BigDecimal ttotal= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 			BigDecimal tsubtotal= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+			BigDecimal ttotalPuntos= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 			for (Coding coding : request.getCode().getCoding()) {
 				List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(Integer.parseInt(coding.getCode()), coding.getConvenio());
 				List<EConvenioDetalleDto> listECD = consultasDao.getListEConvenioDetalle(coding.getConvenio(), Integer.parseInt(coding.getCode()));
+				logger.info("list.size():::"+list.size());
 				if(list.size()>0) {
 					coding.setPreciolistamadretotal(list.get(0).getMprecio());
 					coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
 					coding.setDescuentopromocion(BigDecimal.ZERO);
 					coding.setRequiere_cita((list.get(0).getBrequierecita())?"SI":"NO");
+					logger.info("listECD.size():::"+listECD.size());
 					if(listECD.size()>0) {
 						coding.setSubtotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setTotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setPagopaciente(listECD.get(0).getMpreciofacturarconiva());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
+						String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
+						if(porcentajePuntos!=null) {
+							isPuntosGda = true;
+							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+							coding.setPuntos(generalUtil.calculoPuntos(listECD.get(0).getMpreciofacturarconiva(), porcentaje));
+							ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
+						}
 						ttotal = ttotal.add(listECD.get(0).getMpreciofacturarconiva().setScale(2, BigDecimal.ROUND_HALF_UP));
 						tsubtotal = tsubtotal.add(listECD.get(0).getMpreciofacturarsiniva().setScale(2, BigDecimal.ROUND_HALF_UP));
 					}else {
@@ -72,6 +86,13 @@ public class ToolServiceImpl implements ToolDominio{
 						coding.setTotal(list.get(0).getMprecio());
 						coding.setPagopaciente(list.get(0).getMprecio());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
+						String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
+						if(porcentajePuntos!=null) {
+							isPuntosGda = true;
+							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+							coding.setPuntos(generalUtil.calculoPuntos(list.get(0).getMprecio(), porcentaje));
+							ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
+						}
 						ttotal = ttotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
 						tsubtotal = tsubtotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));					
 					}
@@ -84,6 +105,9 @@ public class ToolServiceImpl implements ToolDominio{
 		request.getRequisition().setTotal(ttotal);
 		request.getRequisition().setSubtotal(tsubtotal);
 		request.getRequisition().setFechaentrega("");
+		if(isPuntosGda) {
+			request.getRequisition().setPuntos(ttotalPuntos);			
+		}
 		return request;
 	}
 	@Override
@@ -147,7 +171,12 @@ public class ToolServiceImpl implements ToolDominio{
 	public CotizacionDto saveTordenExamenSucursalCotizacion(CotizacionDto cotizacionDto,
 			TOrdenSucursalCotizacionDto ordenCotizacionDto) throws Exception {
 				cotizacionDto.setGDA_menssage(setsDtosImpl.setForGdaMessage(0," "," "));
+		List<CodingCotizacionDto> codingCotizacionDtos = new ArrayList<>();
+		BigDecimal ttotalPuntos = BigDecimal.ZERO;
+		Boolean isPuntosGda = true;
+		String porcentajePuntos = env.getProperty("puntos.gda.marca."+cotizacionDto.getRequisition().getMarca());
 		for (CodingCotizacionDto coding : cotizacionDto.getCode().getCoding()) {
+			coding.setPuntos(BigDecimal.ZERO);
 			try {
 				// BigDecimal mIVATotal = coding.getTotal().add(tasaIVA);
 				double mIVATotal =  coding.getTotal().doubleValue()-(coding.getTotal().doubleValue() / tasaIVA) ;
@@ -157,6 +186,12 @@ public class ToolServiceImpl implements ToolDominio{
 							cotizacionDto.getRequisition().getConvenio());
 	
 					if (examenDto != null && examenDto.size() > 0) {		
+						if(porcentajePuntos!=null) {
+							isPuntosGda = true;
+							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+							coding.setPuntos(generalUtil.calculoPuntos(coding.getTotal(), porcentaje));
+							ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
+						}
 						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
 							ordenCotizacionDto.getKordensucursalcotizacion(),
 							examenDto.get(0).getCexamen(),
@@ -173,7 +208,7 @@ public class ToolServiceImpl implements ToolDominio{
 									13,
 									coding.getConvenio(),
 									"",
-									-1,1));
+									-1,1,coding.getPuntos()));
 					} else {
 						logger.error("ERROR:El estudio no se encuentra en convenio");
 						throw new Exception("El estudio " + coding.getCode()
@@ -193,6 +228,12 @@ public class ToolServiceImpl implements ToolDominio{
 						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
 						+ " en el convenio " + coding.getConvenio());
 					}else{
+						if(porcentajePuntos!=null) {
+							isPuntosGda = true;
+							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+							coding.setPuntos(generalUtil.calculoPuntos(coding.getTotal(), porcentaje));
+							ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
+						}
 						consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
 						ordenCotizacionDto.getKordensucursalcotizacion(),
 						Integer.parseInt(coding.getCode()),
@@ -208,7 +249,8 @@ public class ToolServiceImpl implements ToolDominio{
 						coding.getConvenio(),
 						"",
 						-1,
-						1));
+						1,
+						coding.getPuntos()));
 					}
 				}
 			} catch (DataIntegrityViolationException e) {
@@ -228,7 +270,13 @@ public class ToolServiceImpl implements ToolDominio{
 						for (PerfilDto perfilDto : listExamenesPerfil) {
 							//BigDecimal mIVATotal = perfilDto.getMpagopacienteytotal().add(tasaIVA);
 							double mIVATotal = cotizacionDto.getRequisition().getTotal().doubleValue() / tasaIVA;
-
+							
+							if(porcentajePuntos!=null) {
+								isPuntosGda = true;
+								BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+								coding.setPuntos(generalUtil.calculoPuntos(coding.getTotal(), porcentaje));
+								ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
+							}
 
 							consultasCotizacionDao.insertTOrdenExamenSucursalCotizacion(setsDtosImpl.setForTOrdenExamenSucursalCotizacionDto(
 									ordenCotizacionDto.getKordensucursalcotizacion(),
@@ -247,7 +295,8 @@ public class ToolServiceImpl implements ToolDominio{
 									perfilDto.getCconvenio(),
 									"",
 									perfilDto.getCperfil(),
-									perfilDto.getUvolumenexamen()));
+									perfilDto.getUvolumenexamen(),
+									coding.getPuntos()));
 						}
 					} else {
 						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
@@ -255,7 +304,12 @@ public class ToolServiceImpl implements ToolDominio{
 					}
 				}
 			}
+			
+			codingCotizacionDtos.add(coding);
 		}
+		
+		cotizacionDto.getCode().setCoding(codingCotizacionDtos);
+		cotizacionDto.getRequisition().setPuntos(ttotalPuntos);
 		return cotizacionDto;
 	}
 	// public boolean validarExamen(CodingDto coding) throws Exception {

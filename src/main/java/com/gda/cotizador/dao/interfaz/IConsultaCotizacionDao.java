@@ -1,5 +1,6 @@
 package com.gda.cotizador.dao.interfaz;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.gda.cotizador.dto.AccesoClienteDto;
@@ -46,4 +47,6 @@ public interface IConsultaCotizacionDao {
 	boolean validarExamenConvenio(CodingCotizacionDto codingdto);
 	
 	boolean validarPacienteMarca(Integer marca,String patient);
+
+	Integer updateTOrdenSucursalCotizacion(Integer kordensucursalcotizacion, BigDecimal mpuntosorden);
 	}

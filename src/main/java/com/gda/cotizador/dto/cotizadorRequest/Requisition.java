@@ -46,8 +46,18 @@ public class Requisition
     @Schema(description = "Fecha de entrega, formato: dd-mm-yyy, ejemplo: 09-01-2023")
     private String fechaentrega;
     
+    @Schema(description = "Puntos")
+    private BigDecimal puntos = BigDecimal.ZERO;
     
-    public String getNombreconvenio() {
+    
+    
+    public BigDecimal getPuntos() {
+		return puntos;
+	}
+	public void setPuntos(BigDecimal puntos) {
+		this.puntos = puntos;
+	}
+	public String getNombreconvenio() {
 		return nombreconvenio;
 	}
 	public void setNombreconvenio(String nombreconvenio) {
