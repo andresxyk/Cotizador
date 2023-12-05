@@ -53,6 +53,7 @@ public class ToolServiceImpl implements ToolDominio{
 	@Override
 		public RequestCotizacionDto addConvenioDetalle(RequestCotizacionDto request) {
 			List<Coding> lisCodings = new ArrayList<>();
+			String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
 			Boolean isPuntosGda = false;
 			BigDecimal ttotal= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 			BigDecimal tsubtotal= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -72,7 +73,6 @@ public class ToolServiceImpl implements ToolDominio{
 						coding.setTotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setPagopaciente(listECD.get(0).getMpreciofacturarconiva());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
-						String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
 						if(porcentajePuntos!=null) {
 							isPuntosGda = true;
 							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
@@ -86,7 +86,7 @@ public class ToolServiceImpl implements ToolDominio{
 						coding.setTotal(list.get(0).getMprecio());
 						coding.setPagopaciente(list.get(0).getMprecio());
 						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
-						String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
+						
 						if(porcentajePuntos!=null) {
 							isPuntosGda = true;
 							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
@@ -95,6 +95,46 @@ public class ToolServiceImpl implements ToolDominio{
 						}
 						ttotal = ttotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
 						tsubtotal = tsubtotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));					
+					}
+				}else {
+					BigDecimal ttotalPuntosPerfil = BigDecimal.ZERO;
+					List<PerfilDto> listExamenesPerfil = consultasCotizacionDao
+							.getListExamenesPerfil(Integer.parseInt(coding.getCode()), coding.getConvenio());
+					logger.info("listExamenesPerfil.size():"+listExamenesPerfil.size() );
+					if (listExamenesPerfil.size() > 0) {
+						BigDecimal bdSubtotal = BigDecimal.ZERO;
+						BigDecimal bdTotal = BigDecimal.ZERO;
+						for (PerfilDto perfilDto : listExamenesPerfil) {
+							bdSubtotal = bdSubtotal.add(perfilDto.getSubtotal());
+							bdTotal = bdTotal.add(perfilDto.getMpagopacienteytotal());
+						}
+						BigDecimal bdSubtotalTotal = bdSubtotal.divide(
+								new BigDecimal(listExamenesPerfil.get(0).getNcantidadexamen()), 2,
+								RoundingMode.HALF_UP);
+						BigDecimal bdDescuentoPromocion = bdSubtotalTotal
+								.subtract(listExamenesPerfil.get(0).getMpagopacienteytotal());
+						for (PerfilDto perfilDto : listExamenesPerfil) {
+							//BigDecimal mIVATotal = perfilDto.getMpagopacienteytotal().add(tasaIVA);
+							double mIVATotal = coding.getTotal().doubleValue()-(coding.getTotal().doubleValue() / tasaIVA) ;
+							
+							if(porcentajePuntos!=null) {
+								isPuntosGda = true;
+								BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+								coding.setPuntos(generalUtil.calculoPuntos(perfilDto.getMpagopacienteytotal(), porcentaje));
+								ttotalPuntosPerfil = ttotalPuntosPerfil.add(coding.getPuntos());
+								ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
+							}
+						}
+						coding.setSubtotal(bdSubtotal);
+						coding.setTotal(bdTotal);
+						coding.setPagopaciente(bdTotal);
+						coding.setFechaentrega("");
+						
+						ttotal = ttotal.add(bdTotal);
+						tsubtotal = tsubtotal.add(bdSubtotal);
+					}
+					if(isPuntosGda) {
+						coding.setPuntos(ttotalPuntosPerfil);
 					}
 				}
 			lisCodings.add(coding);
@@ -253,8 +293,9 @@ public class ToolServiceImpl implements ToolDominio{
 						coding.getPuntos()));
 					}
 				}
-			} catch (DataIntegrityViolationException e) {
+			} catch (Exception e) {
 				if (cotizacionDto.getRequisition().getMarca() != 16) {
+					BigDecimal ttotalPuntosPerfil = BigDecimal.ZERO;
 					List<PerfilDto> listExamenesPerfil = consultasCotizacionDao
 							.getListExamenesPerfil(Integer.parseInt(coding.getCode()), coding.getConvenio());
 					if (listExamenesPerfil.size() > 0) {
@@ -269,12 +310,13 @@ public class ToolServiceImpl implements ToolDominio{
 								.subtract(listExamenesPerfil.get(0).getMpagopacienteytotal());
 						for (PerfilDto perfilDto : listExamenesPerfil) {
 							//BigDecimal mIVATotal = perfilDto.getMpagopacienteytotal().add(tasaIVA);
-							double mIVATotal = cotizacionDto.getRequisition().getTotal().doubleValue() / tasaIVA;
+							double mIVATotal = coding.getTotal().doubleValue()-(coding.getTotal().doubleValue() / tasaIVA) ;
 							
 							if(porcentajePuntos!=null) {
 								isPuntosGda = true;
 								BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
-								coding.setPuntos(generalUtil.calculoPuntos(coding.getTotal(), porcentaje));
+								coding.setPuntos(generalUtil.calculoPuntos(perfilDto.getMpagopacienteytotal(), porcentaje));
+								ttotalPuntosPerfil = ttotalPuntosPerfil.add(coding.getPuntos());
 								ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
 							}
 
@@ -288,7 +330,7 @@ public class ToolServiceImpl implements ToolDominio{
 									BigDecimal.ZERO,
 									BigDecimal.ZERO,
 									perfilDto.getMpagopacienteytotal(),
-									new BigDecimal(mIVATotal),
+									BigDecimal.ZERO,
 									perfilDto.getMpagopacienteytotal(),
 									1,
 									13,
@@ -302,9 +344,11 @@ public class ToolServiceImpl implements ToolDominio{
 						throw new Exception("No se encontraron registros con el perfil " + coding.getCode()
 								+ " en el convenio " + coding.getConvenio());
 					}
+					if(isPuntosGda) {
+						coding.setPuntos(ttotalPuntosPerfil);
+					}
 				}
 			}
-			
 			codingCotizacionDtos.add(coding);
 		}
 		
