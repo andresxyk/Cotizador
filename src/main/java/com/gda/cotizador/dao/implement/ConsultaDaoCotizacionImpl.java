@@ -1,5 +1,6 @@
 package com.gda.cotizador.dao.implement;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -36,6 +37,17 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 	@Autowired
     @Qualifier("jdbcSlave")
     private JdbcTemplate jdbcTemplate;
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public Integer updateTOrdenSucursalCotizacion(Integer kordensucursalcotizacion, BigDecimal mpuntosorden){
+		logger.info("ejecutando updateTOrdenSucursalCotizacion::"+kordensucursalcotizacion+", mpuntosorden:"+mpuntosorden);
+		Integer registros = 0;
+		String query = "update t_orden_sucursal_cotizacion set mpuntosorden = ? where kordensucursalcotizacion = ?";
+		registros = jdbcTemplate.update(query, new Object[] {mpuntosorden,kordensucursalcotizacion});
+		logger.info("updateTOrdenSucursalCotizacion ejecutado");
+		return registros;
+	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
@@ -146,12 +158,12 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 				+ "	msubtotal, mdescuentopromocion, mdescuentoempresa, mdescuentomedico, \r\n"
 				+ "	mfacturaempresa, mpagopaciente, miva, mtotal, \r\n"
 				+ "	user_id, cestadoregistro, dregistro, cconvenio, \r\n"
-				+ "	smotivocancelacion, cperfil, uvolumenexamen)\r\n"
+				+ "	smotivocancelacion, cperfil, uvolumenexamen, mpuntosexamen)\r\n"
 				+ "	VALUES (tordenexamensucursalcotizacion_sequence.nextval, ?, ?, ?, \r\n"
 				+ "			?, ?, ?, ?, \r\n"
 				+ "			?, ?, ?, ?, \r\n"
 				+ "			?, ?, ?, ?, \r\n"
-				+ "			?, ?, ?) RETURNING kordenexamensucursalcotizacion; " ;
+				+ "			?, ?, ?, ?) RETURNING kordenexamensucursalcotizacion; " ;
 		
 		try {
 			insert = jdbcTemplate.queryForObject(query, new Object[]{
@@ -159,7 +171,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 					dto.getMsubtotal(), dto.getMdescuentopromocion(), dto.getMdescuentoempresa(), dto.getMdescuentomedico(),
 					dto.getMfacturaempresa(), dto.getMpagopaciente(), dto.getMiva(), dto.getMtotal(),
 					dto.getUserid(), dto.getCestadoregistro(), dto.getDregistro(), dto.getCconvenio(),
-					dto.getSmotivocancelacion(), dto.getCperfil(), dto.getUvolumenexamen()
+					dto.getSmotivocancelacion(), dto.getCperfil(), dto.getUvolumenexamen(), dto.getMpuntosexamen()
 			},Integer.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
