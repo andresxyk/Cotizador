@@ -49,5 +49,8 @@ public class RequisitionCotizacion {
 	@NotNull
 	@Schema(description = "Total de la cotización, especificar dos decimales, ejemplo:4231.00")
 	private BigDecimal total;
+	
+	@Schema(description =  "Puntos")
+	private BigDecimal puntos = BigDecimal.ZERO;
 
 }
