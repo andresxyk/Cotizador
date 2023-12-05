@@ -58,8 +58,19 @@ public class Coding
 	private String fechaentrega;
 
 	@Schema(description =  "Indica si el examen requiere cita SI o NO")
-	private String requiere_cita = "NO";	
+	private String requiere_cita = "NO";
+	
+	@Schema(description = "Puntos")
+    private BigDecimal puntos = BigDecimal.ZERO;
+	
+	
 
+	public BigDecimal getPuntos() {
+		return puntos;
+	}
+	public void setPuntos(BigDecimal puntos) {
+		this.puntos = puntos;
+	}
 	public String getNombreconvenio() {
 		return nombreconvenio;
 	}

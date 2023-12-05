@@ -50,5 +50,8 @@ public class CodingCotizacionDto
 	@NotNull
 	@Schema(description =  "Id convenio examen, ejemplo: 6304")
 	private Integer convenio;
+	
+	@Schema(description =  "Puntos")
+	private BigDecimal puntos = BigDecimal.ZERO;
     
 }
