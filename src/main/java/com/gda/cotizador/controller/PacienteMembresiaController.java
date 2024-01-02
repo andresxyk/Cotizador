@@ -54,7 +54,11 @@ public class PacienteMembresiaController {
 								log.error("Error inesperado");
 								request.getGDA_menssage().setMenssage("error");
 								request.getGDA_menssage().setDescripcion(
-										"Los campos del filtro no se pueden validar");
+										"Los campos del filtro no son válidos, se puede buscar por las siguientes combinaciones:\n"
+										+ "1.- Membresia\n"
+										+ "2.- Nombre, Apellido Paterno y Apellido Materno\n"
+										+ "2.- Membresia, Nombre, Apellido Paterno y Apellido Materno\n"
+										+ "2.- Fecha de Nacimiento, Nombre, Apellido Paterno y Apellido Materno\n");
 								request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 								return new ResponseEntity<RequestPacienteMembresiaDto>(request, HttpStatus.BAD_REQUEST);
 							}
