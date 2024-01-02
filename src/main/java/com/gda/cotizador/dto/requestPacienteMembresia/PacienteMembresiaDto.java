@@ -1,7 +1,5 @@
 package com.gda.cotizador.dto.requestPacienteMembresia;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
@@ -10,22 +8,24 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-@RequestMapping("/infogda-fullV3")
-
 public class PacienteMembresiaDto {
-	@Schema(description = "Response código de la sucursal")
-	private Integer csucursal;
-	
-	@Schema(description = "Response nemonico")
-	private String nemonico;
-	
-	@Schema(description = "Response nombre de la sucursal")
-	private String nombresucursal;
 
-	@Schema(description = "Coordenada latitud")
-	private float nlatitud;
+	@Schema(description = "Membresia del paciente")
+	private String membresia;
 
-	@Schema(description = "Coordenada longitud")
-	private float nlongitud;
+	@Schema(description = "Nombre del paciente")
+	private String nombre;
+	
+	@Schema(description = "Apellido paterno del paciente")
+	private String apellidoPaterno;
+	
+	@Schema(description = "Apellido materno del paciente")
+	private String apellidoMaterno;
+	
+	@Schema(description = "Fecha de nacimiento del paciente")
+	private String fechaNacimiento;
+	
+	@Schema(description = "Marca")
+	private Integer marca;
 	
 }

@@ -1,6 +1,8 @@
 package com.gda.cotizador.dto.requestPacienteMembresia;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Pattern;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,13 +14,27 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@RequestMapping("/infogda-fullV3")
 public class FiltroPacienteMembresiaDto {
-
-	@Schema(description = "Código de la sucursal, -1 Todas las sucursales")
-	private String csucursal;
 	
-	@Schema(description = "Nombre de la sucursal")
-	private String ssucursal;
+	@NotNull
+	@Schema(description = "Membresia del paciente")
+	private String membresia;
+
+	@NotNull
+	@Schema(description = "Nombre del paciente")
+	private String nombre;
+	
+	@NotNull
+	@Schema(description = "Apellido paterno del paciente")
+	private String apellidoPaterno;
+	
+	@NotNull
+	@Schema(description = "Apellido materno del paciente")
+	private String apellidoMaterno;
+	
+	@Null
+	@Pattern(regexp = "^$|^\\d{2}-\\d{2}-\\d{4}$", message = "El formato debe ser dd-mm-yyyy o estar vacío")
+	@Schema(description = "Fecha de nacimiento del paciente")
+	private String fechaNacimiento;
 	
 }

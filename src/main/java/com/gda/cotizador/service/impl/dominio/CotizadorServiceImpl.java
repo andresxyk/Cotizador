@@ -31,6 +31,8 @@ import com.gda.cotizador.dto.requestExamen.ExamenDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
 import com.gda.cotizador.dto.requestMarca.MarcaDto;
 import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.PacienteMembresiaDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.RequestPacienteMembresiaDto;
 import com.gda.cotizador.dto.requestPerfil.PerfilDto;
 import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
@@ -273,5 +275,17 @@ public class CotizadorServiceImpl implements Cotizador {
 		}
 
 	}
+	
+	@Override
+	public RequestPacienteMembresiaDto procesarPacienteMembresia(RequestPacienteMembresiaDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			List<PacienteMembresiaDto> list = consultasCotizacionDao.getListSearchMembresiaDto(request.getFiltro(),
+					request.getHeader().getMarca());
+			request.setPacienteMembresia(list);
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}	
 	
 }

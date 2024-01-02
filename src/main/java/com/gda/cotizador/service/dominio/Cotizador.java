@@ -7,6 +7,7 @@ import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
 import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.RequestPacienteMembresiaDto;
 import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 
@@ -36,5 +37,7 @@ public interface Cotizador {
 	RequestComercialDto procesarRequestComercial(RequestComercialDto request) throws Exception;
 
 	RequestTipoComercialDto procesarRequestTipoComercial(RequestTipoComercialDto request) throws Exception;
+
+	RequestPacienteMembresiaDto procesarPacienteMembresia(RequestPacienteMembresiaDto request) throws Exception;
 
 }

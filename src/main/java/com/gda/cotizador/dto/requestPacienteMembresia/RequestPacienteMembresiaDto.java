@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Data
 @Setter
 @Getter
@@ -29,8 +30,8 @@ public class RequestPacienteMembresiaDto {
 	@Schema(description = "Revisar estructura filtro")
 	private FiltroPacienteMembresiaDto filtro;
 
-	@Schema(description = "Revisar estructura sucursales")
-	private List<PacienteMembresiaDto> sucursales;
+	@Schema(description = "Revisar estructura PacienteMembresia")
+	private List<PacienteMembresiaDto> pacienteMembresia;
 
 	@Schema(description = "Revisar estructura GDAMenssage")
 	private GDAMenssageDto GDA_menssage;
@@ -43,23 +44,30 @@ public class RequestPacienteMembresiaDto {
 		}
 	}
 
-	public Boolean validarFiltroSucursal(RequestPacienteMembresiaDto request) {
-		if (request.getFiltro().getCsucursal().isEmpty() && request.getFiltro().getSsucursal().isEmpty()) {
-			return false;
-		} else {
+	public Boolean validarFiltroMembresia(RequestPacienteMembresiaDto request) {
+//		return true;
+		if (!request.getFiltro().getNombre().isEmpty() && !request.getFiltro().getApellidoPaterno().isEmpty() && !request.getFiltro().getApellidoMaterno().isEmpty() && !request.getFiltro().getFechaNacimiento().isEmpty()) {
 			return true;
+		} else if (!request.getFiltro().getNombre().isEmpty() && !request.getFiltro().getApellidoPaterno().isEmpty() && !request.getFiltro().getApellidoMaterno().isEmpty() && !request.getFiltro().getMembresia().isEmpty()){
+			return true;
+		} else if (!request.getFiltro().getNombre().isEmpty() && !request.getFiltro().getApellidoPaterno().isEmpty() && !request.getFiltro().getApellidoMaterno().isEmpty()){
+			return true;
+		}else if(!request.getFiltro().getMembresia().isEmpty()) {
+			return true;
+		}else {
+			return false;
 		}
 	}
 
-	public Boolean validarFiltro(RequestPacienteMembresiaDto request) throws Exception {
-		if (request.getFiltro().getCsucursal().contains("-1") && request.getFiltro().getSsucursal().length() >= 4
-				|| request.getFiltro().getCsucursal() == "" && request.getFiltro().getSsucursal().length() >= 4
-				|| request.getFiltro().getCsucursal().length() > 2 || request.getFiltro().getSsucursal().length() >= 4) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public Boolean validarFiltro(RequestPacienteMembresiaDto request) throws Exception {
+//		if (request.getFiltro().getCsucursal().contains("-1") && request.getFiltro().getSsucursal().length() >= 4
+//				|| request.getFiltro().getCsucursal() == "" && request.getFiltro().getSsucursal().length() >= 4
+//				|| request.getFiltro().getCsucursal().length() > 2 || request.getFiltro().getSsucursal().length() >= 4) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 
 	public Boolean validarFechaRegistro(RequestPacienteMembresiaDto request) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(ZoneOffset.UTC);

@@ -11,6 +11,8 @@ import com.gda.cotizador.dto.cotizacion.RequisitionCotizacion;
 import com.gda.cotizador.dto.cotizacion.Subject;
 import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.FiltroPacienteMembresiaDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.PacienteMembresiaDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 public interface IConsultaCotizacionDao {
@@ -49,4 +51,6 @@ public interface IConsultaCotizacionDao {
 	boolean validarPacienteMarca(Integer marca,String patient);
 
 	Integer updateTOrdenSucursalCotizacion(Integer kordensucursalcotizacion, BigDecimal mpuntosorden);
+
+	List<PacienteMembresiaDto> getListSearchMembresiaDto(FiltroPacienteMembresiaDto filtro, Integer cmarca);
 	}

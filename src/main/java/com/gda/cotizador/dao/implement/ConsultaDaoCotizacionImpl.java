@@ -15,15 +15,17 @@ import org.springframework.stereotype.Repository;
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dao.mapper.AccesoClienteMapper;
 import com.gda.cotizador.dao.mapper.CExamenMapper;
+import com.gda.cotizador.dao.mapper.PacienteMembresiaMapper;
 import com.gda.cotizador.dao.mapper.PerfilMapper;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizacion.CExamenDto;
 import com.gda.cotizador.dto.cotizacion.CodingCotizacionDto;
-import com.gda.cotizador.dto.cotizacion.RequisitionCotizacion;
-import com.gda.cotizador.dto.cotizacion.Subject;
 import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.FiltroPacienteMembresiaDto;
+import com.gda.cotizador.dto.requestPacienteMembresia.PacienteMembresiaDto;
+import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 @Repository("ConsultaDaoCotizacionImpl")
@@ -240,4 +242,35 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		, new Object[] {cexamen,conveion},
 		Integer.class);
 	}
+	
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<PacienteMembresiaDto> getListSearchMembresiaDto(FiltroPacienteMembresiaDto filtro,
+			Integer cmarca) {
+		List<PacienteMembresiaDto> list;
+		String complemento = "";
+		if (filtro.getMembresia() != "") {
+			complemento += "and smembresia = '" + filtro.getMembresia() + "' \r\n";
+		}
+		if (filtro.getNombre() != "") {
+			complemento += "and snombre like '%" + filtro.getNombre() + "%' \r\n";
+		}
+		if (filtro.getApellidoPaterno() != "") {
+			complemento += "and sapellidopaterno like '%" + filtro.getApellidoPaterno() + "%' \r\n";
+		}
+		if (filtro.getApellidoMaterno() != "") {
+			complemento += "and sapellidomaterno like '%" + filtro.getApellidoMaterno() + "%' \r\n";
+		}
+		if (filtro.getFechaNacimiento() != "") {
+			complemento += "and dnacimiento = '" + filtro.getFechaNacimiento() + "' \r\n";
+		}
+
+		String query = "select smembresia, snombre, sapellidopaterno, sapellidomaterno, to_char(dnacimiento, 'dd-mm-yyyy') dnacimiento, cmarca 	\r\n" + 
+					   "FROM t_paciente					 						\r\n" +
+				 	   "WHERE cmarca = ?													\r\n" + complemento;
+		list = jdbcTemplate.query(query, new Object[] { cmarca }, new PacienteMembresiaMapper());
+		return list;
+	}
+	
 }

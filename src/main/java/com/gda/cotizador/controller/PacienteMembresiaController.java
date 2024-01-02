@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.requestPacienteMembresia.RequestPacienteMembresiaDto;
-import com.gda.cotizador.service.dominio.PacienteMembresia;
+import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.utils.GeneralUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +28,7 @@ public class PacienteMembresiaController {
 	private GeneralUtil generalUtil;
 
 	@Autowired
-	private PacienteMembresia pacientemembresia;
+	private Cotizador cotizador;
 
 	final static Logger log = LogManager.getLogger(PacienteMembresiaController.class);
 
@@ -44,8 +44,8 @@ public class PacienteMembresiaController {
 		try {
 			if (request.validarlineaNegocio(request)) {
 						if (request.validarMarca(request)) {
-							if (request.validarFiltroSucursal(request)) {
-								request = pacientemembresia.procesarPacienteMembresia(request);
+							if (request.validarFiltroMembresia(request)) {
+								request = cotizador.procesarPacienteMembresia(request);
 								request.getGDA_menssage().setMenssage("success");
 								request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
 								request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
@@ -54,7 +54,7 @@ public class PacienteMembresiaController {
 								log.error("Error inesperado");
 								request.getGDA_menssage().setMenssage("error");
 								request.getGDA_menssage().setDescripcion(
-										"Los campos ssucursal y csucursal son vacios, no se puede validar");
+										"Los campos del filtro no se pueden validar");
 								request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
 								return new ResponseEntity<RequestPacienteMembresiaDto>(request, HttpStatus.BAD_REQUEST);
 							}
