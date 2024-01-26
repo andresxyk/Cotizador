@@ -59,7 +59,10 @@ public class Coding
 
 	@Schema(description =  "Indica si el examen requiere cita SI o NO")
 	private String requiere_cita = "NO";
-	
+
+	@Schema(description = "Arreglo de  número de Csucural que pueden procesas el examen en laboratorio* imagenologia")
+	private String[] sucursalesProcesa;
+
 	@Schema(description = "Puntos")
     private BigDecimal puntos = BigDecimal.ZERO;
 	
@@ -149,5 +152,7 @@ public class Coding
     public String getDisplay(){
         return this.display;
     }
+	public String[] getSucursalesProcesa() {return sucursalesProcesa;}
+	public void setSucursalesProcesa(String[] sucursalesProcesa) {this.sucursalesProcesa = sucursalesProcesa;}
     
 }

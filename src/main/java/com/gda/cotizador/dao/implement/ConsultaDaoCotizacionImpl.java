@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.gda.cotizador.dao.mapper.*;
+import com.gda.cotizador.dao.mapper.db.StringArrayRowMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
-import com.gda.cotizador.dao.mapper.AccesoClienteMapper;
-import com.gda.cotizador.dao.mapper.CExamenMapper;
-import com.gda.cotizador.dao.mapper.PacienteMembresiaMapper;
-import com.gda.cotizador.dao.mapper.PerfilMapper;
 import com.gda.cotizador.dto.AccesoClienteDto;
 import com.gda.cotizador.dto.PerfilDto;
 import com.gda.cotizador.dto.cotizacion.CExamenDto;
@@ -25,7 +23,6 @@ import com.gda.cotizador.dto.cotizacion.TOrdenExamenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.requestPacienteMembresia.FiltroPacienteMembresiaDto;
 import com.gda.cotizador.dto.requestPacienteMembresia.PacienteMembresiaDto;
-import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 import com.gda.cotizador.dto.seguridad.UssersDTO;
 
 @Repository("ConsultaDaoCotizacionImpl")
@@ -272,5 +269,28 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 		list = jdbcTemplate.query(query, new Object[] { cmarca }, new PacienteMembresiaMapper());
 		return list;
 	}
-	
+
+	@Override
+	public String[] getListSucursalesProcesa(Integer cexamen) {
+
+		String query = "select array_agg(distinct(cs.csucursal))           \r\n" +
+				 "from agendaelectronicav2.c_sucursal cs                  \r\n" +
+				 "inner join agendaelectronicav2.e_modalidad_sucursal ems on cs.csucursal = ems.csucursal \r\n" +
+				 "inner join agendaelectronicav2.c_modalidad cm on ems.cmodalidad = cm.cmodalidad  \r\n" +
+				 "inner join agendaelectronicav2.e_asigna_examen_modalidad eaem on ems.kmodalidadsucursal = eaem.kmodalidadsucursal  \r\n" +
+				 "inner join agendaelectronicav2.e_asigna_modalidad_medico eamm on eaem.kasignaexamenmodalidad = eamm.kasignaexamenmodalidad  \r\n" +
+				 "inner join agendaelectronicav2.e_trabajador_gda etg on eamm.ktrabajadorgda = etg.ktrabajadorgda  \r\n" +
+				 "inner join agendaelectronicav2.e_rol_persona erp on etg.krolpersona = erp.krolpersona \r\n" +
+				 "inner join agendaelectronicav2.t_persona tp on erp.kpersona = tp.kpersona \r\n" +
+				 "inner join agendaelectronicav2.c_examen ce on eamm.cexamen = ce.cexamen \r\n" +
+				 "inner join web2lablis.c_examen cep on cep.cexamenproceso = ce.cexamen and cs.cmarca = cep.cmarca \r\n" +
+				 "inner join agendaelectronicav2.c_codigo_postal ccp on cs.ccodigopostal = ccp.ccodigopostal  \r\n" +
+				 "where cep.cexamen = ?  \r\n" +
+				 " and cm.cestadoregistro = 3 and etg.cestadoregistro = 9 and eamm.cestadoregistro = 22" ;
+
+		String[] result = jdbcTemplate.queryForObject(query, new Object[]{cexamen}, new StringArrayRowMapper());
+
+		return result;
+	}
+
 }

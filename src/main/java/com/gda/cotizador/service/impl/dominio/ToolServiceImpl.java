@@ -59,20 +59,27 @@ public class ToolServiceImpl implements ToolDominio{
 			BigDecimal tsubtotal= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 			BigDecimal ttotalPuntos= BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 			for (Coding coding : request.getCode().getCoding()) {
-				List<ExamenConfigDto> list = consultasDao.getListSearchExamenDto(Integer.parseInt(coding.getCode()), coding.getConvenio());
+				List<ExamenConfigDto> listExamenesConfigDto = consultasDao.getListSearchExamenDto(Integer.parseInt(coding.getCode()), coding.getConvenio());
 				List<EConvenioDetalleDto> listECD = consultasDao.getListEConvenioDetalle(coding.getConvenio(), Integer.parseInt(coding.getCode()));
-				logger.info("list.size():::"+list.size());
-				if(list.size()>0) {
-					coding.setPreciolistamadretotal(list.get(0).getMprecio());
-					coding.setIndicacionespaciente(list.get(0).getScondicionpreanalitica());
+				logger.info("list.size():::"+listExamenesConfigDto.size());
+				if(listExamenesConfigDto.size()>0) {
+					coding.setPreciolistamadretotal(listExamenesConfigDto.get(0).getMprecio());
+					coding.setIndicacionespaciente(listExamenesConfigDto.get(0).getScondicionpreanalitica());
 					coding.setDescuentopromocion(BigDecimal.ZERO);
-					coding.setRequiere_cita((list.get(0).getBrequierecita())?"SI":"NO");
+					//coding.setRequiere_cita((listExamenesConfigDto.get(0).getBrequierecita())?"SI":"NO");
+					if(listExamenesConfigDto.get(0).getBrequierecita()){
+						coding.setRequiere_cita("SI");
+						coding.setSucursalesProcesa(consultasCotizacionDao.getListSucursalesProcesa(listExamenesConfigDto.get(0).getCexamen()));
+					}else{
+						coding.setRequiere_cita("NO");
+						coding.setSucursalesProcesa(new String[]{ "*" });
+					}
 					logger.info("listECD.size():::"+listECD.size());
 					if(listECD.size()>0) {
 						coding.setSubtotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setTotal(listECD.get(0).getMpreciofacturarconiva());
 						coding.setPagopaciente(listECD.get(0).getMpreciofacturarconiva());
-						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
+						coding.setFechaentrega(generalUtil.calcularFechaPromesa(listExamenesConfigDto.get(0)));
 						if(porcentajePuntos!=null) {
 							isPuntosGda = true;
 							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
@@ -82,19 +89,19 @@ public class ToolServiceImpl implements ToolDominio{
 						ttotal = ttotal.add(listECD.get(0).getMpreciofacturarconiva().setScale(2, BigDecimal.ROUND_HALF_UP));
 						tsubtotal = tsubtotal.add(listECD.get(0).getMpreciofacturarsiniva().setScale(2, BigDecimal.ROUND_HALF_UP));
 					}else {
-						coding.setSubtotal(list.get(0).getMprecio());
-						coding.setTotal(list.get(0).getMprecio());
-						coding.setPagopaciente(list.get(0).getMprecio());
-						coding.setFechaentrega(generalUtil.calcularFechaPromesa(list.get(0)));
+						coding.setSubtotal(listExamenesConfigDto.get(0).getMprecio());
+						coding.setTotal(listExamenesConfigDto.get(0).getMprecio());
+						coding.setPagopaciente(listExamenesConfigDto.get(0).getMprecio());
+						coding.setFechaentrega(generalUtil.calcularFechaPromesa(listExamenesConfigDto.get(0)));
 						
 						if(porcentajePuntos!=null) {
 							isPuntosGda = true;
 							BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
-							coding.setPuntos(generalUtil.calculoPuntos(list.get(0).getMprecio(), porcentaje));
+							coding.setPuntos(generalUtil.calculoPuntos(listExamenesConfigDto.get(0).getMprecio(), porcentaje));
 							ttotalPuntos = ttotalPuntos.add(coding.getPuntos());
 						}
-						ttotal = ttotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
-						tsubtotal = tsubtotal.add(list.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));					
+						ttotal = ttotal.add(listExamenesConfigDto.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
+						tsubtotal = tsubtotal.add(listExamenesConfigDto.get(0).getMprecio().setScale(2, BigDecimal.ROUND_HALF_UP));
 					}
 				}else {
 					BigDecimal ttotalPuntosPerfil = BigDecimal.ZERO;

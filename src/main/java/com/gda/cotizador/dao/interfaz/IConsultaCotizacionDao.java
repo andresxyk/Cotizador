@@ -53,4 +53,7 @@ public interface IConsultaCotizacionDao {
 	Integer updateTOrdenSucursalCotizacion(Integer kordensucursalcotizacion, BigDecimal mpuntosorden);
 
 	List<PacienteMembresiaDto> getListSearchMembresiaDto(FiltroPacienteMembresiaDto filtro, Integer cmarca);
-	}
+
+	String[] getListSucursalesProcesa(Integer cexamen);
+
+}
