@@ -19,6 +19,8 @@ public interface Cotizador {
 	
 	RequestSucursalDto procesarRequestSucursal(RequestSucursalDto request) throws Exception;
 
+	RequestSucursalDto procesarRequestSucursalFiltroCP(RequestSucursalDto request) throws Exception;
+
 	RequestCotizacionDto procesarRequestCotizacion(RequestCotizacionDto request) throws Exception;
 	
 	RequestMarcaDto procesarRequestMarca(RequestMarcaDto request) throws Exception;

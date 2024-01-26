@@ -1,14 +1,18 @@
 package com.gda.cotizador.service.impl.dominio;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gda.cotizador.dto.requestSucursal.Distance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
@@ -42,6 +46,9 @@ import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.service.validate.cotizacion.ValidateCotizacion;
 import com.gda.cotizador.utils.GeneralUtil;
 import com.gda.cotizador.utils.GenerateReportPDF;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class CotizadorServiceImpl implements Cotizador {
@@ -68,6 +75,9 @@ public class CotizadorServiceImpl implements Cotizador {
 	private Seguridad seguridad;
 	@Autowired
 	private GenerateReportPDF generateReport;
+
+	@Value("${url.service.calcula.distancia}")
+	private String urlApiCalculaDistancia;
 
 	@Override
 	public RequestConvenioDto procesarRequestConvenio(RequestConvenioDto request) throws Exception {
@@ -286,6 +296,43 @@ public class CotizadorServiceImpl implements Cotizador {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
 		return request;
-	}	
+	}
+
+	@Override
+	public RequestSucursalDto procesarRequestSucursalFiltroCP(RequestSucursalDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+			List<SucursalDto> list = consultasDao.getListSearchSucursalDto(request.getFiltro(),
+					request.getHeader().getMarca());
+			List<SucursalDto> listResult = new ArrayList<>();;
+			for (int i = 0; i < list.size(); i++) {
+				Double distance = getDistanceBetweenTwoPoints(list.get(i).getCodigopostal(),request.getFiltro().getCodigopostal());
+				if( distance != null && distance < request.getFiltro().getDistancia()){
+					listResult.add(list.get(i));
+				}
+			}
+			request.setSucursales(listResult);
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}
+
+	private Double getDistanceBetweenTwoPoints(Integer zipCodeX, Integer zipCodeY) {
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlApiCalculaDistancia);
+			builder.queryParam("zipCodeX", zipCodeX);
+			builder.queryParam("zipCodeY", zipCodeY);
+			URI uri = builder.build().toUri();
+			ResponseEntity<Distance> response = restTemplate.getForEntity(uri, Distance.class);
+			return response.getBody().getKilometers();
+		} catch (RestClientResponseException e) {
+			logger.error("RestClientResponseException: " + e.getResponseBodyAsString());
+			return null;
+		} catch (Exception e) {
+			logger.error("Error: " + e.getMessage());
+			return null;
+		}
+	}
 	
 }

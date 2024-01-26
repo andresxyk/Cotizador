@@ -27,5 +27,7 @@ public class SucursalDto {
 
 	@Schema(description = "Coordenada longitud")
 	private float nlongitud;
-	
+
+	@Schema(description = "Codigo Postal de la Ubicación")
+	private Integer codigopostal;
 }

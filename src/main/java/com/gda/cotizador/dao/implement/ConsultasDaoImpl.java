@@ -283,6 +283,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 			Integer cmarca) {
 		List<SucursalDto> list;
 		String complemento = "";
+		String campoCodigoPostal = "" ;
 		if (filtro.getCsucursal() != "") {
 			if (filtro.getCsucursal().contains("0")) {
 				complemento = "";
@@ -294,7 +295,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 			complemento += "and snombresucursal like '%" + filtro.getSsucursal() + "%' \r\n";
 		}
 
-		String query = "SELECT csucursal, ssucursal, snombresucursal, nlatitud, nlongitud 	\r\n" + 
+		String query = "SELECT csucursal, ssucursal, snombresucursal, nlatitud, nlongitud, cpostal\r\n" +
 					   "FROM cotizador.c_sucursal					 						\r\n" +
 				 	   "WHERE cmarca = ?													\r\n" + complemento;
 		list = jdbcTemplate.query(query, new Object[] { cmarca }, new SucursalMapper());

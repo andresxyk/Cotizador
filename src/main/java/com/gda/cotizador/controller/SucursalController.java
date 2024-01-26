@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
-import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.utils.GeneralUtil;
@@ -54,12 +53,21 @@ public class SucursalController {
 								request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
 								return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.OK);
 							} else {
-								log.error("Error inesperado");
-								request.getGDA_menssage().setMenssage("error");
-								request.getGDA_menssage().setDescripcion(
-										"Los campos ssucursal y csucursal son vacios, no se puede validar");
-								request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
-								return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.BAD_REQUEST);
+								//Validar que exista Mínimo el ZipCode
+								if(request.getFiltro().getCodigopostal() != null && request.getFiltro().getCodigopostal() != 0 && request.getFiltro().getDistancia() != null){
+									request = cotizador.procesarRequestSucursalFiltroCP(request);
+									request.getGDA_menssage().setMenssage("success");
+									request.getGDA_menssage().setDescripcion("Petición procesada exitosamente.");
+									request.getGDA_menssage().setCodeHttp(HttpStatus.OK.value());
+									return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.OK);
+								}else{
+									log.error("Error inesperado");
+									request.getGDA_menssage().setMenssage("error");
+									request.getGDA_menssage().setDescripcion(
+											"Los campos ssucursal, csucursal  o zipCode son vacios, no se puede validar");
+									request.getGDA_menssage().setCodeHttp(HttpStatus.BAD_REQUEST.value());
+									return new ResponseEntity<RequestSucursalDto>(request, HttpStatus.BAD_REQUEST);
+								}
 							}
 
 						} else {

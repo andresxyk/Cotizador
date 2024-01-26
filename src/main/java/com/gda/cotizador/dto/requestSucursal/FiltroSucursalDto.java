@@ -20,5 +20,11 @@ public class FiltroSucursalDto {
 	
 	@Schema(description = "Nombre de la sucursal")
 	private String ssucursal;
-	
+
+	@Schema(description = "Codigo Postal de la Ubicación")
+	private Integer codigopostal;
+
+	@Schema(description = "Distancia Máxima de busqueda")
+	private Integer distancia;
+
 }
