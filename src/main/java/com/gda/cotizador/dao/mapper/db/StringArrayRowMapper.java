@@ -14,7 +14,7 @@ public class StringArrayRowMapper implements RowMapper<String[]> {
     @Override
     public String[] mapRow(ResultSet resultSet, int i) throws SQLException {
         try{
-            PgArray pgArray = (PgArray) resultSet.getObject(1); // Ajusta la posición según tu consulta
+            PgArray pgArray = (PgArray) resultSet.getObject(1);
             Object[] array = (Object[]) pgArray.getArray();
             String[] integerArray = new String[array.length];
 

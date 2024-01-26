@@ -60,7 +60,7 @@ public class Coding
 	@Schema(description =  "Indica si el examen requiere cita SI o NO")
 	private String requiere_cita = "NO";
 
-	@Schema(description = "Arreglo de  número de Csucural que pueden procesas el examen en laboratorio* imagenologia")
+	@Schema(description = "Arreglo de  número de Csucural que pueden procesas el examen,  para laboratorio return {*}")
 	private String[] sucursalesProcesa;
 
 	@Schema(description = "Puntos")
