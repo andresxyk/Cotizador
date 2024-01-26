@@ -111,6 +111,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				examenDto.setCtipocomercial(examenConfigDto.getCtipocomercial());
 				examenDto.setStipocomercial(examenConfigDto.getStipocomercial());
 				examenDto.setSincluye(examenConfigDto.getSincluye());
+				examenDto.setRequiere_cita(examenConfigDto.getBrequierecita() ? "SI" : "NO");
 				String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
 				if(porcentajePuntos!=null) {
 					BigDecimal porcentaje = new BigDecimal(porcentajePuntos);

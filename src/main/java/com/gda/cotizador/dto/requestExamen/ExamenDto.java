@@ -50,6 +50,9 @@ public class ExamenDto {
 	@Schema(description = "Response nombre de todos los examenes que incluye el perfil o checkup")
 	private String sincluye;	
 	
+	@Schema(description =  "Indica si el examen requiere cita SI o NO")
+	private String requiere_cita = "NO";
+	
 	@Schema(description = "Response Puntos")
     private BigDecimal puntos;
 }

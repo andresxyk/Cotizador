@@ -140,7 +140,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		"       ctc.sdescripcioncomercial, 																										\r\n" + 
 		  		"       clc.clistacorporativa,																											\r\n" + 
 		  		"       ecd.mpreciofacturarconiva mprecioconvenio,																						\r\n" + 
-		  		"       null incluye 				  																									\r\n" + 
+		  		"       null incluye, 				  																									\r\n" +
+		  		"       ce.brequierecita			  																									\r\n" +
 		  		"FROM cotizador.e_lista_corporativa_detalle elcd 																						\r\n" + 
 		  		" INNER JOIN cotizador.c_examen ce on elcd.cexamen = ce.cexamen       																	\r\n" + 
 		  		" INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = elcd.clistacorporativa 										\r\n" + 
@@ -172,7 +173,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		"     sdescripcioncomercial,     																										\r\n" + 
 		  		"     clc.clistacorporativa  ,																											\r\n" + 
 		  		"     ecp.mpreciofacturarconiva mprecioconvenio,																						\r\n" + 
-		  		"     array_to_string(array_agg(ce.sexamen order by ce.sexamen), ';') incluye   														\r\n" + 
+		  		"     array_to_string(array_agg(ce.sexamen order by ce.sexamen), ';') incluye,   														\r\n" + 
+		  		"     false brequierecita  														                                                        \r\n" + 
 		  		"FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil   									\r\n" + 
 		  		" INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil   																\r\n" + 
 		  		" INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen   																		\r\n" + 
@@ -214,7 +216,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		" sdescripcioncomercial,     																											\r\n" + 
 		  		" clc.clistacorporativa,																												\r\n" + 
 		  		" ecp.mpreciofacturarconiva mprecioconvenio,						   																	\r\n" + 
-		  		" array_to_string(array_agg(ce.sexamen order by ce.sexamen), ';') incluye 		  														\r\n" + 				  						  		
+		  		" array_to_string(array_agg(ce.sexamen order by ce.sexamen), ';') incluye, 		  														\r\n" + 
+		  		" false brequierecita  														                                                            \r\n" + 
 		  		"FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil        								\r\n" + 
 		  		" INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil   																\r\n" + 
 		  		" INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen   																		\r\n" + 
