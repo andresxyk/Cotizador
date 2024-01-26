@@ -136,12 +136,15 @@ public class ToolServiceImpl implements ToolDominio{
 						coding.setTotal(bdTotal);
 						coding.setPagopaciente(bdTotal);
 						coding.setFechaentrega("");
-						
+
 						ttotal = ttotal.add(bdTotal);
 						tsubtotal = tsubtotal.add(bdSubtotal);
 					}
 					if(isPuntosGda) {
 						coding.setPuntos(ttotalPuntosPerfil);
+					}
+					if(coding.getRequiere_cita().equals("NO")){
+						coding.setSucursalesProcesa(new String[]{ "*" });
 					}
 				}
 			lisCodings.add(coding);
@@ -152,6 +155,7 @@ public class ToolServiceImpl implements ToolDominio{
 		request.getRequisition().setTotal(ttotal);
 		request.getRequisition().setSubtotal(tsubtotal);
 		request.getRequisition().setFechaentrega("");
+
 		if(isPuntosGda) {
 			request.getRequisition().setPuntos(ttotalPuntos);			
 		}
