@@ -13,9 +13,8 @@ import javax.validation.constraints.Pattern;
 
 import com.gda.cotizador.dto.general.GDAMenssageDto;
 import com.gda.cotizador.dto.general.HeaderDto;
-import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
-import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 
+import com.gda.cotizador.dto.requestSucursal.FiltroSucursalDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public class RequestCotizacionDto {
@@ -44,6 +43,9 @@ public class RequestCotizacionDto {
 	@NotBlank
 	@Schema(description =  "Fijo = order")
 	private String intent;
+
+	@Schema(description = "Filtros para Sucursales, solo Imagenologia")
+	private FiltroSucursalDto filtro;
 
 	@NotNull
 	@Valid
@@ -132,6 +134,15 @@ public class RequestCotizacionDto {
 	public String getBase64() {
 		return this.base64;
 	}
+
+	public FiltroSucursalDto getFiltro() {
+		return filtro;
+	}
+
+	public void setFiltro(FiltroSucursalDto filtro) {
+		this.filtro = filtro;
+	}
+
 
 	public void setBase64(String base64) {
 		this.base64 = base64;
