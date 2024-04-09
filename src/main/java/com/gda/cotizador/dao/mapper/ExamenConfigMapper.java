@@ -37,6 +37,11 @@ public class ExamenConfigMapper implements RowMapper<ExamenConfigDto>{
 		} catch (Exception exp) {
 			dto.setBrequierecita(false);
 		}
+		try {
+			dto.setCconvenio(rs.getInt("cconvenio"));
+		} catch (Exception exp) {
+			dto.setCconvenio(null);
+		}
 		return dto;
 	}
 }

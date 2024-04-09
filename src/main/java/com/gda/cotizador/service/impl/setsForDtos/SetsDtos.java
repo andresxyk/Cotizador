@@ -40,7 +40,7 @@ public class SetsDtos implements SetsDtosImpl {
     public TOrdenExamenSucursalCotizacionDto setForTOrdenExamenSucursalCotizacionDto(Integer Kordensucursalcotizacion,Integer Cexamen, 
                     String Sexamen,BigDecimal Msubtotal,BigDecimal Mdescuentopromocion,BigDecimal Mdescuentoempresa,BigDecimal Mdescuentomedico, BigDecimal Mfacturaempresa,
                     BigDecimal Mpagopaciente,BigDecimal Miva,BigDecimal Mtotal, Integer Userid,Integer Cestadoregistro,Integer Cconvenio,
-                    String Smotivocancelacion, Integer Cperfil,Integer Uvolumenexamen, BigDecimal mpuntosexamen) {
+                    String Smotivocancelacion, Integer Cperfil,Integer Uvolumenexamen) {
         TOrdenExamenSucursalCotizacionDto toesc = new TOrdenExamenSucursalCotizacionDto();
         toesc.setKordensucursalcotizacion(Kordensucursalcotizacion);
         toesc.setCexamen(Cexamen);
@@ -61,7 +61,6 @@ public class SetsDtos implements SetsDtosImpl {
         toesc.setCperfil(Cperfil);
         toesc.setUvolumenexamen(Uvolumenexamen);
         toesc.setUserid(Userid);
-        toesc.setMpuntosexamen(mpuntosexamen);
         return toesc;
     }
 

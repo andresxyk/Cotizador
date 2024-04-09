@@ -1,5 +1,6 @@
 package com.gda.cotizador.dao.implement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -97,8 +98,43 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 			}
 		}
 		
-		logger.info(this.getQueryFilter(cmarca.intValue(), complemento, complementoperfiles));
-		list = jdbcTemplate.query(this.getQueryFilter(cmarca.intValue(), complemento, complementoperfiles), new Object[] { filtro.getCconvenio(), filtro.getCconvenio(), filtro.getCconvenio() }, new ExamenConfigMapper());
+		logger.info(this.getQueryFilter(cmarca.intValue(), complemento, complementoperfiles, false, filtro.getCconvenio().toString()));
+		list = jdbcTemplate.query(this.getQueryFilter(cmarca.intValue(), complemento, complementoperfiles, false, filtro.getCconvenio().toString()), new Object[] {}, new ExamenConfigMapper());
+		return list;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<ExamenConfigDto> getListSearchExamenConveniosDto(com.gda.cotizador.dto.requestExamen.FiltroExamenConveniosDto filtro,Integer cmarca) {
+		List<ExamenConfigDto> list;
+		String complemento = "";
+		String complementoperfiles = "";
+		List<Integer> listConvenios = new ArrayList<>();
+		for (com.gda.cotizador.dto.requestExamen.ConvenioDto convenioDto : filtro.getCconvenios()) {
+			listConvenios.add(convenioDto.getConvenio());
+		}
+		String convenios = String.join(",", listConvenios.stream().map(Object::toString).toArray(String[]::new));
+		
+		if (filtro.getCexamen() > 0) {
+			complemento = " and ce.cexamen = " + filtro.getCexamen() + " ";
+			complementoperfiles = " and cp.cperfil = " + filtro.getCexamen() + " ";
+		}
+		
+		if (filtro.getSexamen() != null) {
+			if (filtro.getSexamen().length() > 0) {
+				complemento = " and ce.sexamen like '%" + filtro.getSexamen().replaceAll(" ", "%") + "%' ";
+				complementoperfiles = " and sperfil like '%" + filtro.getSexamen().replaceAll(" ", "%") + "%' ";
+			}
+		}
+		if (filtro.getSexamenweb() != null) {
+			if (filtro.getSexamenweb().length() > 0) {
+				complemento = " and ce.sexamenweb like '%" + filtro.getSexamenweb().replaceAll(" ", "%") + "%' ";
+				complementoperfiles = " and sperfil like '%" + filtro.getSexamenweb().replaceAll(" ", "%") + "%' ";
+			}
+		}
+		
+		logger.info(this.getQueryFilter(cmarca.intValue(), complemento, complementoperfiles, true, convenios));
+		list = jdbcTemplate.query(this.getQueryFilter(cmarca.intValue(), complemento, complementoperfiles, true, convenios), new Object[] {}, new ExamenConfigMapper());
 		return list;
 	}
 	
@@ -114,12 +150,14 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 				complemento = " and ctc.ctipocomercial = " + filtro.getCtipocomercial() + " ";
 			}
 		}						
-		logger.info(this.getQueryFilter(cmarca.intValue(), complemento, complemento));
-		list = jdbcTemplate.query(this.getQueryFilter(cmarca.intValue(), complemento, complemento), new Object[] { filtro.getCconvenio(), filtro.getCconvenio(), filtro.getCconvenio() }, new ExamenConfigMapper());
+		logger.info(this.getQueryFilter(cmarca.intValue(), complemento, complemento, false, filtro.getCconvenio().toString()));
+		list = jdbcTemplate.query(this.getQueryFilter(cmarca.intValue(), complemento, complemento, false, filtro.getCconvenio().toString()), new Object[] {}, new ExamenConfigMapper());
 		return list;
 	}
 	
-	private String getQueryFilter(int cmarca, String complemento, String complementoperfiles) {
+	private String getQueryFilter(int cmarca, String complemento, String complementoperfiles, Boolean isMultiConvenio, String convenios) {
+		String queryConvenio = isMultiConvenio ? "ec.cconvenio in ("+convenios+")" : "ec.cconvenio = "+convenios;
+		
 		return  "SELECT elcd.cexamen,																													\r\n" + 
 		  		"       ce.sexamen,									    																				\r\n" + 
 		  		"       ce.sexamenweb,																													\r\n" + 
@@ -141,7 +179,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		"       clc.clistacorporativa,																											\r\n" + 
 		  		"       ecd.mpreciofacturarconiva mprecioconvenio,																						\r\n" + 
 		  		"       null incluye, 				  																									\r\n" +
-		  		"       ce.brequierecita			  																									\r\n" +
+		  		"       ce.brequierecita,			  																									\r\n" +
+		  		"       ec.cconvenio			  																									    \r\n" +
 		  		"FROM cotizador.e_lista_corporativa_detalle elcd 																						\r\n" + 
 		  		" INNER JOIN cotizador.c_examen ce on elcd.cexamen = ce.cexamen       																	\r\n" + 
 		  		" INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = elcd.clistacorporativa 										\r\n" + 
@@ -150,7 +189,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		" INNER JOIN cotizador.c_departamento cd   on ce.cdepartamento = cd.cdepartamento      			   										\r\n" + 
 		  		" INNER JOIN cotizador.c_tipo_comercial ctc on ctc.ctipocomercial = ce.ctipocomercial  													\r\n" + 
 		  		" INNER JOIN cotizador.e_convenio_detalle ecd on ecd.cconvenio = ec.cconvenio  and ce.cexamen = ecd.cexamen 							\r\n" + 
-		  		"WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + "  and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") +" )  	\r\n" + 
+		  		"WHERE "+queryConvenio+" and ec.cmarca = " + cmarca + "  and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") +" )  	\r\n" + 
 		  			complemento +																															 
 		  		"--EXAMEN EN PERFIL   																													\r\n" + 
 		  		"UNION     																															\r\n" + 
@@ -174,7 +213,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		"     clc.clistacorporativa  ,																											\r\n" + 
 		  		"     ecp.mpreciofacturarconiva mprecioconvenio,																						\r\n" + 
 		  		"     array_to_string(array_agg(ce.sexamen order by ce.sexamen), ';') incluye,   														\r\n" + 
-		  		"     false brequierecita  														                                                        \r\n" + 
+		  		"     false brequierecita,  														                                                        \r\n" + 
+		  		"       ec.cconvenio			  																									    \r\n" +
 		  		"FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil   									\r\n" + 
 		  		" INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil   																\r\n" + 
 		  		" INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen   																		\r\n" + 
@@ -182,7 +222,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		" INNER JOIN cotizador.e_convenio ec on ecp.cconvenio = ec.cconvenio   																	\r\n" + 
 		  		" INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = ec.clistacorporativa											\r\n" + 
 		  		" INNER JOIN cotizador.c_tipo_comercial ctc on ctc.ctipocomercial = cp.ctipocomercial  													\r\n" + 
-		  		"WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + "  and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") +" ) \r\n" + 
+		  		"WHERE "+queryConvenio+" and ec.cmarca = " + cmarca + "  and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") +" ) \r\n" + 
 		  		"    and cp.blistapublico = true      																									\r\n" + 
 		  		"    and ec.cestadoregistro = 22        																								\r\n" + 
 		  			complemento  +
@@ -194,7 +234,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		"  ctc.ctipocomercial,   																												\r\n" + 
 		  		"  sdescripcioncomercial,        																										\r\n" + 
 		  		"  clc.clistacorporativa,      																											\r\n" + 
-		  		"  ecp.mpreciofacturarconiva 	  																										\r\n" + 
+		  		"  ecp.mpreciofacturarconiva, 	  																										\r\n" + 
+		  		"  ec.cconvenio	   																														\r\n" +
 		  		"--NOMBRE PERFIL        																												\r\n" + 
 		  		"UNION     																															\r\n" + 
 		  		"SELECT  cp.cperfil,    																												\r\n" + 
@@ -217,7 +258,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		" clc.clistacorporativa,																												\r\n" + 
 		  		" ecp.mpreciofacturarconiva mprecioconvenio,						   																	\r\n" + 
 		  		" array_to_string(array_agg(ce.sexamen order by ce.sexamen), ';') incluye, 		  														\r\n" + 
-		  		" false brequierecita  														                                                            \r\n" + 
+		  		" false brequierecita,  														                                                        \r\n" + 
+		  		" ec.cconvenio			  																									    		\r\n" +
 		  		"FROM cotizador.c_perfil cp INNER JOIN cotizador.e_convenio_perfil ecp on ecp.cperfil = cp.cperfil        								\r\n" + 
 		  		" INNER JOIN cotizador.e_perfil_examen epe on epe.cperfil = cp.cperfil   																\r\n" + 
 		  		" INNER JOIN cotizador.c_examen ce on epe.cexamen = ce.cexamen   																		\r\n" + 
@@ -225,7 +267,7 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		" INNER JOIN cotizador.e_convenio ec on ecp.cconvenio = ec.cconvenio   																	\r\n" + 
 		  		" INNER JOIN cotizador.c_lista_corporativa clc on clc.clistacorporativa = ec.clistacorporativa   										\r\n" + 
 		  		" INNER JOIN cotizador.c_tipo_comercial ctc on ctc.ctipocomercial = cp.ctipocomercial  													\r\n" + 
-		  		"WHERE ec.cconvenio = ? and ec.cmarca = " + cmarca + "  and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") +" )  	\r\n" + 
+		  		"WHERE "+queryConvenio+" and ec.cmarca = " + cmarca + "  and clc.clistacorporativa in ("+ env.getProperty("list.clistacorporativa.marca") +" )  	\r\n" + 
 		  		"    and cp.blistapublico = true      																									\r\n" + 
 		  		"    and ec.cestadoregistro = 22 																										\r\n" + 
 		  			complementoperfiles + 
@@ -237,7 +279,8 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		  		"  ctc.ctipocomercial,   																												\r\n" + 
 		  		"  sdescripcioncomercial,        																										\r\n" + 
 		  		"  clc.clistacorporativa,																												\r\n" + 
-		  		"  ecp.mpreciofacturarconiva	   																										\r\n" + 
+		  		"  ecp.mpreciofacturarconiva,	   																										\r\n" + 
+		  		"  ec.cconvenio	   																														\r\n" + 
 		  		"    order by 1,2   "; 				
 	}
 

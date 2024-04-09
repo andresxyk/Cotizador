@@ -3,9 +3,10 @@ package com.gda.cotizador.service.impl.dominio;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.gda.cotizador.dto.requestSucursal.Distance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
 import com.gda.cotizador.dto.AccesoClienteDto;
+import com.gda.cotizador.dto.ConvenioPrecioDto;
 import com.gda.cotizador.dto.ExamenConfigDto;
 import com.gda.cotizador.dto.comercial.HeaderResponseDto;
 import com.gda.cotizador.dto.comercial.RequestComercialDto;
@@ -32,6 +37,7 @@ import com.gda.cotizador.dto.general.Base64Const;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.RequestConvenioDto;
 import com.gda.cotizador.dto.requestExamen.ExamenDto;
+import com.gda.cotizador.dto.requestExamen.RequestExamenConveniosDto;
 import com.gda.cotizador.dto.requestExamen.RequestExamenDto;
 import com.gda.cotizador.dto.requestMarca.MarcaDto;
 import com.gda.cotizador.dto.requestMarca.RequestMarcaDto;
@@ -39,6 +45,7 @@ import com.gda.cotizador.dto.requestPacienteMembresia.PacienteMembresiaDto;
 import com.gda.cotizador.dto.requestPacienteMembresia.RequestPacienteMembresiaDto;
 import com.gda.cotizador.dto.requestPerfil.PerfilDto;
 import com.gda.cotizador.dto.requestPerfil.RequestPerfilDto;
+import com.gda.cotizador.dto.requestSucursal.Distance;
 import com.gda.cotizador.dto.requestSucursal.RequestSucursalDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 import com.gda.cotizador.seguridad.Seguridad;
@@ -46,9 +53,6 @@ import com.gda.cotizador.service.dominio.Cotizador;
 import com.gda.cotizador.service.validate.cotizacion.ValidateCotizacion;
 import com.gda.cotizador.utils.GeneralUtil;
 import com.gda.cotizador.utils.GenerateReportPDF;
-import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class CotizadorServiceImpl implements Cotizador {
@@ -120,6 +124,54 @@ public class CotizadorServiceImpl implements Cotizador {
 				examenes.add(examenDto);
 			}
 			request.setExamenes(examenes);
+		} else {
+			throw new Exception("El token es incorrecto, favor de validar el acceso.");
+		}
+		return request;
+	}
+	
+	@Override
+	public RequestExamenConveniosDto procesarRequestExamenConvenios(RequestExamenConveniosDto request) throws Exception {
+		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
+
+			List<ExamenDto> examenes = new ArrayList<>();
+			List<ExamenConfigDto> list = consultasDao.getListSearchExamenConveniosDto(request.getFiltro(),request.getHeader().getMarca());
+			List<ExamenConfigDto> listExamenConfAgrupado =toolServiceImpl.agruparPorExamen(list);
+//			for (ExamenConfigDto examenConfigDto : listExamenConfAgrupado) {
+//				logger.info(examenConfigDto.toString());
+//			}
+			
+	        List<Map<String, Object>> resultadoFinal = new ArrayList<>();
+
+	        for (ExamenConfigDto examenConfigDto : listExamenConfAgrupado) {
+	            Map<String, Object> resultadoExamen = new LinkedHashMap<>();
+	            resultadoExamen.put("cexamen", examenConfigDto.getCexamen());
+	            resultadoExamen.put("sexamen", examenConfigDto.getSexamen());
+	            resultadoExamen.put("sexamenweb", examenConfigDto.getSexamenweb());
+	            // Agregar precios por convenio
+	            for (ConvenioPrecioDto convenioPrecio : examenConfigDto.getListConvenioPrecio()) {
+	                String precioKey = "precio_" + convenioPrecio.getCconvenio();
+	                resultadoExamen.put(precioKey, convenioPrecio.getMprecio());
+	            }
+	            resultadoExamen.put("preciomadre", examenConfigDto.getMpreciomadre());
+	            resultadoExamen.put("indicacionespaciente", examenConfigDto.getScondicionpreanalitica());
+	            resultadoExamen.put("fechaentrega", generalUtil.calcularFechaPromesa(examenConfigDto));
+	            resultadoExamen.put("cdepartamento", examenConfigDto.getCdepartamento());
+	            resultadoExamen.put("sdepartamento", examenConfigDto.getSdepartamento());
+	            resultadoExamen.put("ctipocomercial", examenConfigDto.getCtipocomercial());
+	            resultadoExamen.put("stipocomercial", examenConfigDto.getStipocomercial());
+	            resultadoExamen.put("sincluye", examenConfigDto.getSincluye());
+	            resultadoExamen.put("requiere_cita", examenConfigDto.getBrequierecita() ? "SI" : "NO");
+	            String porcentajePuntos = env.getProperty("puntos.gda.marca."+request.getHeader().getMarca());
+				if(porcentajePuntos!=null) {
+					BigDecimal porcentaje = new BigDecimal(porcentajePuntos);
+					resultadoExamen.put("puntos", generalUtil.calculoPuntos(examenConfigDto.getMprecio(), porcentaje)); 
+				}
+
+	            resultadoFinal.add(resultadoExamen);
+	        }
+	        
+			request.setExamenes(resultadoFinal);
 		} else {
 			throw new Exception("El token es incorrecto, favor de validar el acceso.");
 		}
@@ -256,7 +308,7 @@ public class CotizadorServiceImpl implements Cotizador {
 						TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,
 								listAcceso.get(0));
 						request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
-						consultasCotizacionDao.updateTOrdenSucursalCotizacion(tosc.getKordensucursalcotizacion(), request.getRequisition().getPuntos());
+//						consultasCotizacionDao.updateTOrdenSucursalCotizacion(tosc.getKordensucursalcotizacion(), request.getRequisition().getPuntos());
 						request.setId(tosc.getKordensucursalcotizacion());
 						request.setStatus("completed");
 						request.setBase64(new String(generateReport.doIndicaciones(tosc)));
@@ -271,7 +323,7 @@ public class CotizadorServiceImpl implements Cotizador {
 				TOrdenSucursalCotizacionDto tosc = toolServiceImpl.saveTOrdenSucursalCotizacion(request,
 						listAcceso.get(0));
 				request = toolServiceImpl.saveTordenExamenSucursalCotizacion(request, tosc);
-				consultasCotizacionDao.updateTOrdenSucursalCotizacion(tosc.getKordensucursalcotizacion(), request.getRequisition().getPuntos());
+//				consultasCotizacionDao.updateTOrdenSucursalCotizacion(tosc.getKordensucursalcotizacion(), request.getRequisition().getPuntos());
 				request.setId(tosc.getKordensucursalcotizacion());
 				request.setStatus("completed");
 				request.setBase64(new String(generateReport.doIndicaciones(tosc)));

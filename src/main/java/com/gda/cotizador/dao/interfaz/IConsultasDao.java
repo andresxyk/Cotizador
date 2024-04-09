@@ -9,6 +9,7 @@ import com.gda.cotizador.dto.comercial.TipoComercialDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
 import com.gda.cotizador.dto.requestConvenio.ConvenioDto;
 import com.gda.cotizador.dto.requestConvenio.FiltroConvenioDto;
+import com.gda.cotizador.dto.requestExamen.FiltroExamenConveniosDto;
 import com.gda.cotizador.dto.requestMarca.MarcaDto;
 import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 
@@ -32,6 +33,8 @@ public interface IConsultasDao {
 	List<ExamenConfigDto> getListSearchExamenDtoComercial(FiltroComercialDto filtro, Integer cmarca);
 
 	List<TipoComercialDto> getListSearchTipoComercialDto(FiltroTipoComercialDto filtro, Integer cmarca);
+
+	List<ExamenConfigDto> getListSearchExamenConveniosDto(FiltroExamenConveniosDto filtro, Integer cmarca);
 
 	
 }

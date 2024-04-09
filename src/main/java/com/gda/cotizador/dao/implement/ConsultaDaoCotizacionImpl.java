@@ -157,12 +157,12 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 				+ "	msubtotal, mdescuentopromocion, mdescuentoempresa, mdescuentomedico, \r\n"
 				+ "	mfacturaempresa, mpagopaciente, miva, mtotal, \r\n"
 				+ "	user_id, cestadoregistro, dregistro, cconvenio, \r\n"
-				+ "	smotivocancelacion, cperfil, uvolumenexamen, mpuntosexamen)\r\n"
+				+ "	smotivocancelacion, cperfil, uvolumenexamen)\r\n"
 				+ "	VALUES (tordenexamensucursalcotizacion_sequence.nextval, ?, ?, ?, \r\n"
 				+ "			?, ?, ?, ?, \r\n"
 				+ "			?, ?, ?, ?, \r\n"
 				+ "			?, ?, ?, ?, \r\n"
-				+ "			?, ?, ?, ?) RETURNING kordenexamensucursalcotizacion; " ;
+				+ "			?, ?, ?) RETURNING kordenexamensucursalcotizacion; " ;
 		
 		try {
 			insert = jdbcTemplate.queryForObject(query, new Object[]{
@@ -170,7 +170,7 @@ public class ConsultaDaoCotizacionImpl implements IConsultaCotizacionDao{
 					dto.getMsubtotal(), dto.getMdescuentopromocion(), dto.getMdescuentoempresa(), dto.getMdescuentomedico(),
 					dto.getMfacturaempresa(), dto.getMpagopaciente(), dto.getMiva(), dto.getMtotal(),
 					dto.getUserid(), dto.getCestadoregistro(), dto.getDregistro(), dto.getCconvenio(),
-					dto.getSmotivocancelacion(), dto.getCperfil(), dto.getUvolumenexamen(), dto.getMpuntosexamen()
+					dto.getSmotivocancelacion(), dto.getCperfil(), dto.getUvolumenexamen()
 			},Integer.class);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
