@@ -80,9 +80,6 @@ public class CotizadorServiceImpl implements Cotizador {
 	@Autowired
 	private GenerateReportPDF generateReport;
 
-	@Value("${url.service.calcula.distancia}")
-	private String urlApiCalculaDistancia;
-
 	@Override
 	public RequestConvenioDto procesarRequestConvenio(RequestConvenioDto request) throws Exception {
 		validateCotizacion.validateRequestConvenio(request);
@@ -356,9 +353,9 @@ public class CotizadorServiceImpl implements Cotizador {
 		if (env.getProperty("access.token.api").equals(request.getHeader().getToken())) {
 			List<SucursalDto> list = consultasDao.getListSearchSucursalDto(request.getFiltro(),
 					request.getHeader().getMarca());
-			List<SucursalDto> listResult = new ArrayList<>();;
+			List<SucursalDto> listResult = new ArrayList<>();
 			for (int i = 0; i < list.size(); i++) {
-				Double distance = getDistanceBetweenTwoPoints(list.get(i).getCodigopostal(),request.getFiltro().getCodigopostal());
+				Double distance = toolServiceImpl.getDistanceBetweenTwoPoints(list.get(i).getCodigopostal(),request.getFiltro().getCodigopostal());
 				if( distance != null && distance < request.getFiltro().getDistancia()){
 					listResult.add(list.get(i));
 				}
@@ -370,22 +367,5 @@ public class CotizadorServiceImpl implements Cotizador {
 		return request;
 	}
 
-	private Double getDistanceBetweenTwoPoints(Integer zipCodeX, Integer zipCodeY) {
-		RestTemplate restTemplate = new RestTemplate();
-		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlApiCalculaDistancia);
-			builder.queryParam("zipCodeX", zipCodeX);
-			builder.queryParam("zipCodeY", zipCodeY);
-			URI uri = builder.build().toUri();
-			ResponseEntity<Distance> response = restTemplate.getForEntity(uri, Distance.class);
-			return response.getBody().getKilometers();
-		} catch (RestClientResponseException e) {
-			logger.error("RestClientResponseException: " + e.getResponseBodyAsString());
-			return null;
-		} catch (Exception e) {
-			logger.error("Error: " + e.getMessage());
-			return null;
-		}
-	}
-	
+
 }

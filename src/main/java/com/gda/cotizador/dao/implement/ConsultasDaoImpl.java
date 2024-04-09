@@ -330,14 +330,14 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 		List<SucursalDto> list;
 		String complemento = "";
 		String campoCodigoPostal = "" ;
-		if (filtro.getCsucursal() != "") {
+		if (filtro.getCsucursal() != null && filtro.getCsucursal() != "") {
 			if (filtro.getCsucursal().contains("0")) {
 				complemento = "";
 			} else {
 				complemento += "and csucursal in (" + filtro.getCsucursal() + ") \r\n";
 			}
 		}
-		if (filtro.getSsucursal() != "") {
+		if (filtro.getSsucursal() != null && filtro.getSsucursal() != "") {
 			complemento += "and snombresucursal like '%" + filtro.getSsucursal() + "%' \r\n";
 		}
 

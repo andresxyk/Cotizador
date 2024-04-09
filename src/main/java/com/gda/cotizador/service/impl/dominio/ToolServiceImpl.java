@@ -2,18 +2,26 @@ package com.gda.cotizador.service.impl.dominio;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.gda.cotizador.dao.interfaz.IConsultaCotizacionDao;
 import com.gda.cotizador.dao.interfaz.IConsultasDao;
@@ -27,6 +35,8 @@ import com.gda.cotizador.dto.cotizacion.TOrdenSucursalCotizacionDto;
 import com.gda.cotizador.dto.cotizadorRequest.Coding;
 import com.gda.cotizador.dto.cotizadorRequest.RequestCotizacionDto;
 import com.gda.cotizador.dto.db.EConvenioDetalleDto;
+import com.gda.cotizador.dto.requestSucursal.Distance;
+import com.gda.cotizador.dto.requestSucursal.SucursalDto;
 import com.gda.cotizador.service.dominio.ToolDominio;
 import com.gda.cotizador.utils.GeneralUtil;
 
@@ -47,6 +57,8 @@ public class ToolServiceImpl implements ToolDominio {
 	private Environment env;
 	@Autowired
 	private SetsDtosImpl setsDtosImpl;
+	@Value("${url.service.calcula.distancia}")
+	private String URLAPICALCULADISTANCIA;
 
 	@Override
 	public RequestCotizacionDto addConvenioDetalle(RequestCotizacionDto request) {
@@ -69,8 +81,17 @@ public class ToolServiceImpl implements ToolDominio {
 				// coding.setRequiere_cita((listExamenesConfigDto.get(0).getBrequierecita())?"SI":"NO");
 				if (listExamenesConfigDto.get(0).getBrequierecita()) {
 					coding.setRequiere_cita("SI");
-					coding.setSucursalesProcesa(
-							consultasCotizacionDao.getListSucursalesProcesa(listExamenesConfigDto.get(0).getCexamen()));
+					// Si existe el Filtro de Distancia y codigo postal regresa las sucursales
+					// Filtradas
+					if (request.getFiltro() != null && request.getFiltro().getCodigopostal() != null
+							&& request.getFiltro().getCodigopostal() != 0
+							&& request.getFiltro().getDistancia() != null) {
+						coding.setSucursalesProcesa(filterByDistanceAndZipCode(request, consultasCotizacionDao
+								.getListSucursalesProcesa(listExamenesConfigDto.get(0).getCexamen())));
+					} else {
+						coding.setSucursalesProcesa(consultasCotizacionDao
+								.getListSucursalesProcesa(listExamenesConfigDto.get(0).getCexamen()));
+					}
 				} else {
 					coding.setRequiere_cita("NO");
 					coding.setSucursalesProcesa(new String[] { "*" });
@@ -368,11 +389,11 @@ public class ToolServiceImpl implements ToolDominio {
 	}
 
 	public List<ExamenConfigDto> agruparPorExamen(List<ExamenConfigDto> listExamenConfig) {
-		if(listExamenConfig.size()>0) {			
+		if (listExamenConfig.size() > 0) {
 			Map<Integer, ExamenConfigDto> mapaAgrupado = new HashMap<>();
 			for (ExamenConfigDto examen : listExamenConfig) {
 				int cexamen = examen.getCexamen();
-				
+
 				if (mapaAgrupado.containsKey(cexamen)) {
 					// Si ya existe en el mapa, acumula la información
 					ExamenConfigDto examenExistente = mapaAgrupado.get(cexamen);
@@ -383,16 +404,16 @@ public class ToolServiceImpl implements ToolDominio {
 				}
 			}
 			List<ExamenConfigDto> newlistAgrupada = new ArrayList<>(mapaAgrupado.values());
-			// Crear un comparador compuesto que primero compara por cexamen y luego por sexamen
-			Comparator<ExamenConfigDto> comparador = Comparator
-	                .comparingInt(ExamenConfigDto::getCexamen)
-	                .thenComparing(ExamenConfigDto::getSexamen);
+			// Crear un comparador compuesto que primero compara por cexamen y luego por
+			// sexamen
+			Comparator<ExamenConfigDto> comparador = Comparator.comparingInt(ExamenConfigDto::getCexamen)
+					.thenComparing(ExamenConfigDto::getSexamen);
 
-	        // Ordenar la lista utilizando el comparador compuesto
-	        Collections.sort(newlistAgrupada, comparador);
-			
+			// Ordenar la lista utilizando el comparador compuesto
+			Collections.sort(newlistAgrupada, comparador);
+
 			return newlistAgrupada;
-		}else {
+		} else {
 			return new ArrayList<>();
 		}
 	}
@@ -413,4 +434,57 @@ public class ToolServiceImpl implements ToolDominio {
 	// }
 
 	// }
+
+	/**
+	 *
+	 * @param request
+	 * @param listaIdSucursales
+	 * @return retorna la lista de las sucursales cuya distancia entre el codigo
+	 *         postal del filtro de de la sucursal sea menor a la distancia del
+	 *         filtro
+	 */
+	private String[] filterByDistanceAndZipCode(RequestCotizacionDto request, String[] listaIdSucursales) {
+		List<SucursalDto> sucuralesByMarca = consultasDao.getListSearchSucursalDto(request.getFiltro(),
+				request.getHeader().getMarca());
+		logger.info("A ver que show");
+		List<String> listResult = new ArrayList<>();
+
+		// Obtener la informacion de las sucursales usando listIdSucutsales
+		List<SucursalDto> sucursales = sucuralesByMarca.stream()
+				.filter(x -> Arrays.asList(listaIdSucursales).contains(x.getCsucursal().toString()))
+				.collect(Collectors.toList());
+
+		// Obteniene la distancia y valida si es menor a la del filtro
+		for (int i = 0; i < sucursales.size(); i++) {
+			Double distance = getDistanceBetweenTwoPoints(sucursales.get(i).getCodigopostal(),
+					request.getFiltro().getCodigopostal());
+			if (distance != null && distance < request.getFiltro().getDistancia()) {
+				listResult.add(sucursales.get(i).getCsucursal().toString());
+			}
+		}
+		return listResult.toArray(new String[0]);
+	}
+
+	/**
+	 * @param zipCodeX
+	 * @param zipCodeY
+	 * @return renorna la distancia entre dos codigos postales
+	 */
+	public Double getDistanceBetweenTwoPoints(Integer zipCodeX, Integer zipCodeY) {
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URLAPICALCULADISTANCIA);
+			builder.queryParam("zipCodeX", zipCodeX);
+			builder.queryParam("zipCodeY", zipCodeY);
+			URI uri = builder.build().toUri();
+			ResponseEntity<Distance> response = restTemplate.getForEntity(uri, Distance.class);
+			return response.getBody().getKilometers();
+		} catch (RestClientResponseException e) {
+			logger.error("RestClientResponseException: " + e.getResponseBodyAsString());
+			return null;
+		} catch (Exception e) {
+			logger.error("Error: " + e.getMessage());
+			return null;
+		}
+	}
 }
