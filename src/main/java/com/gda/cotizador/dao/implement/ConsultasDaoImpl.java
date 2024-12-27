@@ -358,20 +358,22 @@ public class ConsultasDaoImpl extends JdbcDaoSupport implements IConsultasDao {
 			if (filtro.getCtipocomercial().contains("-1")) {
 				complemento = "";
 			} else {
-				complemento += "where ctipocomercial in (" + filtro.getCtipocomercial() + ") \r\n";
+				complemento += "and ctipocomercial in (" + filtro.getCtipocomercial() + ") \r\n";
 			}
 		}
 		if (filtro.getSdescripcioncomercial() != "") {
-			if(complemento=="") {
-				complemento += "where sdescripcioncomercial like '%" + filtro.getSdescripcioncomercial() + "%' \r\n";
-			}else {
-				complemento += "and sdescripcioncomercial like '%" + filtro.getSdescripcioncomercial() + "%' \r\n";
-			}
+			complemento += "and sdescripcioncomercial like '%" + filtro.getSdescripcioncomercial() + "%' \r\n";
+//			if(complemento=="") {
+//				complemento += "where sdescripcioncomercial like '%" + filtro.getSdescripcioncomercial() + "%' \r\n";
+//			}else {
+//			}
 		}
 
-		String query = "select * \r\n" + "from cotizador.c_tipo_comercial\r\n"
+		String query = "select * from cotizador.c_tipo_comercial\r\n"
+				+ "where bactivo = true \r\n"
+				+ "and cmarca = ?\r\n"
 				+ complemento;
-		list = jdbcTemplate.query(query, new Object[] { }, new TipoComercialMapper());
+		list = jdbcTemplate.query(query, new Object[] {cmarca}, new TipoComercialMapper());
 		return list;
 	}
 
