@@ -67,6 +67,9 @@ public class GenerateReportPDF {
 			} else if (aObjDatos.getCmarca() == 19) {
 				strImagen = getClass().getResourceAsStream("/images/marca/AsesoresNorte.jpg");            
 				strImagenSLogan = getClass().getResourceAsStream("/images/marca/AsesoresNorte_Slogan.png");   
+			} else if (aObjDatos.getCmarca() == 20) {
+				strImagen = getClass().getResourceAsStream("/images/marca/Exakta.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Exakta_Slogan.png");   
 			}
 			int intCotizacion = aObjDatos.getKordensucursalcotizacion();
 		    String strNomArchivo = "RepIndicacionPaciente" + Calendar.getInstance().getTimeInMillis() + ".pdf";
@@ -99,6 +102,10 @@ public class GenerateReportPDF {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenAsesoresNorte.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteAsesoresNorte.jasper");            
 	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesAsesoresNorte.jasper", strNomArchivo, params, subreportes, objCon);            
+			} else if (aObjDatos.getCmarca() == 20) {
+	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenExakta.jasper");
+	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteExakta.jasper");            
+	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesExakta.jasper", strNomArchivo, params, subreportes, objCon);            
 			}
            iObjLog.debug("Saliendo la Admision doRecibofactura " +intCotizacion);
            byte[] inFileBytes = Files.readAllBytes(Paths.get(ruta)); 
