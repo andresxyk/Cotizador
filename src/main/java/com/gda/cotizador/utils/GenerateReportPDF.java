@@ -70,6 +70,18 @@ public class GenerateReportPDF {
 			} else if (aObjDatos.getCmarca() == 20) {
 				strImagen = getClass().getResourceAsStream("/images/marca/Exakta.jpg");            
 				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Exakta_Slogan.png");   
+			} else if (aObjDatos.getCmarca() == 25) {
+				strImagen = getClass().getResourceAsStream("/images/marca/Biomedica.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Biomedica_Slogan.png");   
+			} else if (aObjDatos.getCmarca() == 22) {
+				strImagen = getClass().getResourceAsStream("/images/marca/Polab.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Polab_Slogan.png");   
+			} else if (aObjDatos.getCmarca() == 23) {
+				strImagen = getClass().getResourceAsStream("/images/marca/Lister.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Lister_Slogan.png");   
+			} else if (aObjDatos.getCmarca() == 28) {
+				strImagen = getClass().getResourceAsStream("/images/marca/Moreira.jpg");            
+				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Moreira_Slogan.png");   
 			}
 			int intCotizacion = aObjDatos.getKordensucursalcotizacion();
 		    String strNomArchivo = "RepIndicacionPaciente" + Calendar.getInstance().getTimeInMillis() + ".pdf";
@@ -106,12 +118,29 @@ public class GenerateReportPDF {
 	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenExakta.jasper");
 	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteExakta.jasper");            
 	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesExakta.jasper", strNomArchivo, params, subreportes, objCon);            
+			} else if (aObjDatos.getCmarca() == 25) {
+	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenBiomedica.jasper");
+	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteBiomedica.jasper");            
+	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesBiomedica.jasper", strNomArchivo, params, subreportes, objCon);            
+			} else if (aObjDatos.getCmarca() == 22) {
+	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenPolab.jasper");
+	            subreportes.put("repindicacionpaciente","RepIndicacionPacientePolab.jasper");            
+	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesPolab.jasper", strNomArchivo, params, subreportes, objCon);            
+			} else if (aObjDatos.getCmarca() == 23) {
+	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenLister.jasper");
+	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteLister.jasper");            
+	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesLister.jasper", strNomArchivo, params, subreportes, objCon);            
+			} else if (aObjDatos.getCmarca() == 28) {
+	            subreportes.put("repprocedimientoexamen","RepProcedimientoExamenMoreira.jasper");
+	            subreportes.put("repindicacionpaciente","RepIndicacionPacienteMoreira.jasper");            
+	            ruta = GeneraReporte.generaReportePdf("RepIndicacionesMoreira.jasper", strNomArchivo, params, subreportes, objCon);            
 			}
            iObjLog.debug("Saliendo la Admision doRecibofactura " +intCotizacion);
            byte[] inFileBytes = Files.readAllBytes(Paths.get(ruta)); 
            byte[] encoded = java.util.Base64.getEncoder().encode(inFileBytes);
            return encoded;
 		}catch (Exception aError) {
+			aError.printStackTrace();
 		    iObjLog.error("Error en ReporteAction.doRecibofactura ",aError);
 		    throw aError;
 		} finally {
