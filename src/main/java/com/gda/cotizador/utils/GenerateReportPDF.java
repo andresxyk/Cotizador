@@ -51,7 +51,12 @@ public class GenerateReportPDF {
 			InputStream strImagenSLogan = null;
 			if (aObjDatos.getCmarca() == 1) {
 			    strImagen = getClass().getResourceAsStream("/images/marca/Olab.jpg");   
-			    strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");   
+			    if(aObjDatos.getCconvenio() == 25751 || aObjDatos.getCconvenio() == 26782 
+			    		|| aObjDatos.getCconvenio() == 26781) {
+				    strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan_Queretaro.png");   
+			    }else {
+				    strImagenSLogan = getClass().getResourceAsStream("/images/marca/Olab_Slogan.png");   
+			    }
 			} else if (aObjDatos.getCmarca() == 4) {
 				strImagen = getClass().getResourceAsStream("/images/marca/Azteca.jpg");            
 				strImagenSLogan = getClass().getResourceAsStream("/images/marca/Azteca_Slogan.png");   

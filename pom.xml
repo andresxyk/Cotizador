@@ -125,7 +125,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>service-cotizador-1.0.07052025</finalName>
+		<finalName>service-cotizador-1.0.24092025</finalName>
 	</build>
 
 </project>
